@@ -1,0 +1,885 @@
+import XCTest
+@testable import PaimonToolbox
+
+final class AccountSessionStateTests: XCTestCase {
+    func testMetadataMapsToSignedInStatus() {
+        let account = MiHoYoAccount(
+            accountID: "10001",
+            mid: "mid",
+            nickname: "旅行者",
+            avatarURL: URL(string: "https://bbs-static.miyoushe.com/avatar/avatar123.png")
+        )
+        let role = GenshinRole(uid: "100000001", region: "cn_gf01", nickname: "空", level: 60, isSelected: true)
+        let metadata = AccountMetadata(account: account, selectedRole: role, lastSummary: nil)
+        let status = LocalAccountSessionService.status(from: metadata)
+        XCTAssertTrue(status.isSignedIn)
+        XCTAssertEqual(status.nickname, "旅行者")
+        XCTAssertEqual(status.avatarURL?.absoluteString, "https://bbs-static.miyoushe.com/avatar/avatar123.png")
+        XCTAssertEqual(status.selectedRole?.uid, "100000001")
+    }
+
+    @MainActor
+    func testVerificationContextUsesSavedAccountAvatarURL() throws {
+        let metadata = AccountMetadata(
+            account: MiHoYoAccount(
+                accountID: "10001",
+                mid: "mid",
+                nickname: "派蒙",
+                avatarURL: URL(string: "https://bbs-static.miyoushe.com/avatar/avatar123.png")
+            ),
+            selectedRole: GenshinRole(uid: "100000001", region: "cn_gf01", nickname: "空", level: 60, isSelected: true),
+            lastSummary: nil
+        )
+        let metadataStore = MockMetadataStore(metadata: metadata)
+        let secretStore = MockSecretStore(
+            secretsByAccountID: [
+                "10001": AccountSecrets(stuid: "10001", stoken: "stoken", mid: "mid", cookieToken: "cookie-token", ltoken: "ltoken")
+            ]
+        )
+        let service = LocalAccountSessionService(metadataStore: metadataStore, secretStore: secretStore)
+
+        let context = try service.signInWebVerificationContext()
+
+        XCTAssertEqual(context.nickname, "派蒙")
+        XCTAssertEqual(context.avatarURL?.absoluteString, "https://bbs-static.miyoushe.com/avatar/avatar123.png")
+        XCTAssertEqual(context.userInfo["avatar_url"] as? String, "https://bbs-static.miyoushe.com/avatar/avatar123.png")
+    }
+
+    @MainActor
+    func testLoadStatusClearsMetadataWhenSecretIsMissing() {
+        let metadataStore = MockMetadataStore(
+            metadata: AccountMetadata(
+                account: MiHoYoAccount(accountID: "10001", mid: "mid", nickname: "旅行者"),
+                selectedRole: GenshinRole(uid: "100000001", region: "cn_gf01", nickname: "空", level: 60, isSelected: true),
+                lastSummary: nil
+            )
+        )
+        let secretStore = MockSecretStore()
+        let service = LocalAccountSessionService(metadataStore: metadataStore, secretStore: secretStore)
+
+        let status = service.loadStatus()
+
+        XCTAssertEqual(status, .signedOut)
+        XCTAssertEqual(metadataStore.clearCallCount, 1)
+        XCTAssertNil(try? metadataStore.load())
+    }
+
+    func testValidateClaimResultThrowsWhenVerificationIsRequired() {
+        let payload = SignInResultPayload(success: 0, riskCode: -5003, gt: "gt-value", challenge: "challenge-value")
+
+        XCTAssertThrowsError(try LocalAccountSessionService.validateClaimResult(payload)) { error in
+            guard case let AccountSessionError.requiresVerification(result) = error else {
+                return XCTFail("Expected requiresVerification, got \(error)")
+            }
+            XCTAssertEqual(result, payload)
+        }
+    }
+
+    func testValidateClaimResultThrowsWhenRiskFlagIsReturnedWithoutRiskCode() {
+        let payload = SignInResultPayload(success: 1, riskCode: nil, isRisk: true, gt: nil, challenge: nil)
+
+        XCTAssertThrowsError(try LocalAccountSessionService.validateClaimResult(payload)) { error in
+            guard case let AccountSessionError.requiresVerification(result) = error else {
+                return XCTFail("Expected requiresVerification, got \(error)")
+            }
+            XCTAssertTrue(result.isRisk == true)
+        }
+    }
+
+    func testDefaultAccountStoresReportInitializationFailureInsteadOfUsingEphemeralStorage() throws {
+        let sourceURL = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .appendingPathComponent("Services/AccountSessionService.swift")
+        let source = try String(contentsOf: sourceURL, encoding: .utf8)
+
+        XCTAssertTrue(source.contains("UnavailableAccountMetadataStore"))
+        XCTAssertTrue(source.contains("UnavailableAccountSecretStore"))
+        XCTAssertFalse(source.contains("return EphemeralAccountMetadataStore()"))
+        XCTAssertFalse(source.contains("return EphemeralAccountSecretStore()"))
+    }
+
+    @MainActor
+    func testAppStoreClaimDailyRewardStoresStructuredVerificationState() async {
+        let payload = SignInResultPayload(success: 0, riskCode: -5003, gt: "gt-value", challenge: "challenge-value")
+        let webContext = SignInWebVerificationContext(
+            url: HoYoConstants.signInVerificationURL,
+            accountID: "10001",
+            cookieToken: "cookie-token",
+            ltoken: "ltoken"
+        )
+        let accountService = MockAccountSessionService()
+        accountService.claimError = AccountSessionError.requiresVerification(payload)
+        accountService.webVerificationContext = webContext
+        let autoSignInStore = MockAutoSignInStore(isEnabled: true)
+        let store = AppStore(accountService: accountService, autoSignInStore: autoSignInStore)
+        store.accountStatus = Self.signedInStatus(isTodaySigned: false)
+
+        await store.claimDailyReward()
+
+        XCTAssertEqual(store.accountVerification?.message, AccountSessionError.requiresVerification(payload).localizedDescription)
+        XCTAssertEqual(store.accountVerification?.url, HoYoConstants.signInVerificationURL)
+        XCTAssertEqual(store.accountVerification?.payload, payload)
+        XCTAssertEqual(store.accountVerification?.webContext, webContext)
+        XCTAssertEqual(store.accountVerification?.purpose, .dailySignIn)
+        XCTAssertEqual(store.errorMessage, AccountSessionError.requiresVerification(payload).localizedDescription)
+        XCTAssertNil(store.successMessage)
+    }
+
+    @MainActor
+    func testLoadStoresResignInfoWhenAccountIsSignedIn() async {
+        let accountService = MockAccountSessionService()
+        accountService.loadStatusResult = Self.signedInStatus(isTodaySigned: false)
+        accountService.resignInfoResult = Self.resignInfo(canResign: true)
+        let store = AppStore(accountService: accountService)
+
+        await store.load(autoRefreshRemoteMetadata: false)
+
+        XCTAssertEqual(accountService.loadResignInfoCallCount, 1)
+        XCTAssertEqual(store.accountResignInfo?.signCountMissed, 2)
+        XCTAssertTrue(store.accountResignInfo?.canResign == true)
+    }
+
+    @MainActor
+    func testClaimResignRewardRefreshesStatusAndResignInfo() async {
+        let accountService = MockAccountSessionService()
+        accountService.claimResignRewardResult = Self.signedInStatus(isTodaySigned: false)
+        accountService.resignInfoResult = Self.resignInfo(canResign: false)
+        let store = AppStore(accountService: accountService)
+
+        await store.claimResignReward()
+
+        XCTAssertEqual(accountService.claimResignRewardCallCount, 1)
+        XCTAssertEqual(accountService.loadResignInfoCallCount, 1)
+        XCTAssertEqual(store.successMessage, "补签完成")
+        XCTAssertFalse(store.accountResignInfo?.canResign == true)
+    }
+
+    @MainActor
+    func testClaimResignRewardStoresStructuredVerificationState() async {
+        let payload = SignInResultPayload(success: 0, riskCode: -5003, gt: "gt-value", challenge: "challenge-value")
+        let webContext = SignInWebVerificationContext(
+            url: HoYoConstants.signInVerificationURL,
+            accountID: "10001",
+            cookieToken: "cookie-token",
+            ltoken: "ltoken"
+        )
+        let accountService = MockAccountSessionService()
+        accountService.claimResignError = AccountSessionError.requiresVerification(payload)
+        accountService.webVerificationContext = webContext
+        let store = AppStore(accountService: accountService)
+
+        await store.claimResignReward()
+
+        XCTAssertEqual(store.accountVerification?.payload, payload)
+        XCTAssertEqual(store.accountVerification?.webContext, webContext)
+        XCTAssertEqual(store.accountVerification?.purpose, .resign)
+        XCTAssertEqual(store.errorMessage, AccountSessionError.requiresVerification(payload).localizedDescription)
+        XCTAssertNil(store.successMessage)
+    }
+
+    @MainActor
+    func testLoadSkipsAutoSignInWhenSettingIsDisabled() async {
+        let accountService = MockAccountSessionService()
+        accountService.loadStatusResult = Self.signedInStatus(isTodaySigned: false)
+        let autoSignInStore = MockAutoSignInStore(isEnabled: false)
+        let tokenRefreshStore = MockAccountTokenRefreshStore()
+        tokenRefreshStore.setLastRefreshDate(Date(timeIntervalSince1970: 1_788_476_400), accountID: "10001")
+        let store = AppStore(accountService: accountService, autoSignInStore: autoSignInStore, tokenRefreshStore: tokenRefreshStore)
+
+        await store.load(autoRefreshRemoteMetadata: false)
+
+        XCTAssertEqual(accountService.refreshLoginTokensCallCount, 0)
+        XCTAssertEqual(accountService.claimDailyRewardCallCount, 0)
+        XCTAssertNil(autoSignInStore.completedDay(accountID: "10001", uid: "100000001"))
+    }
+
+    @MainActor
+    func testLoadRefreshesLoginTokensWhenRefreshIsStale() async {
+        let accountService = MockAccountSessionService()
+        accountService.loadStatusResult = Self.signedInStatus(isTodaySigned: true)
+        accountService.refreshLoginTokensResult = Self.signedInStatus(isTodaySigned: true)
+        let tokenRefreshStore = MockAccountTokenRefreshStore()
+        tokenRefreshStore.setLastRefreshDate(Date(timeIntervalSince1970: 1_788_390_000), accountID: "10001")
+        let store = AppStore(accountService: accountService, tokenRefreshStore: tokenRefreshStore)
+
+        await store.load(autoRefreshRemoteMetadata: false, now: Date(timeIntervalSince1970: 1_788_480_000))
+
+        XCTAssertEqual(accountService.refreshLoginTokensCallCount, 1)
+        XCTAssertEqual(tokenRefreshStore.lastRefreshDate(accountID: "10001"), Date(timeIntervalSince1970: 1_788_480_000))
+    }
+
+    @MainActor
+    func testLoadSkipsLoginTokenRefreshWhenRefreshIsRecent() async {
+        let accountService = MockAccountSessionService()
+        accountService.loadStatusResult = Self.signedInStatus(isTodaySigned: true)
+        let tokenRefreshStore = MockAccountTokenRefreshStore()
+        tokenRefreshStore.setLastRefreshDate(Date(timeIntervalSince1970: 1_788_476_400), accountID: "10001")
+        let store = AppStore(accountService: accountService, tokenRefreshStore: tokenRefreshStore)
+
+        await store.load(autoRefreshRemoteMetadata: false, now: Date(timeIntervalSince1970: 1_788_480_000))
+
+        XCTAssertEqual(accountService.refreshLoginTokensCallCount, 0)
+    }
+
+    @MainActor
+    func testLoadAutomaticallySignsInOnceWhenScheduledTimeHasArrived() async {
+        let accountService = MockAccountSessionService()
+        accountService.loadStatusResult = Self.signedInStatus(isTodaySigned: false)
+        accountService.refreshLoginTokensResult = Self.signedInStatus(isTodaySigned: false)
+        accountService.refreshSignInStatusResult = Self.signedInStatus(isTodaySigned: false)
+        accountService.claimDailyRewardResult = Self.signedInStatus(isTodaySigned: true)
+        let autoSignInStore = MockAutoSignInStore(isEnabled: true)
+        let now = Self.cnDate(year: 2026, month: 9, day: 4, hour: 10)
+        autoSignInStore.setScheduledAttemptDate(
+            now.addingTimeInterval(-60),
+            accountID: "10001",
+            uid: "100000001",
+            serverDay: "cn_gf01:2026-09-04"
+        )
+        let tokenRefreshStore = MockAccountTokenRefreshStore()
+        let store = AppStore(
+            accountService: accountService,
+            autoSignInStore: autoSignInStore,
+            tokenRefreshStore: tokenRefreshStore
+        )
+
+        await store.load(autoRefreshRemoteMetadata: false, now: now)
+
+        XCTAssertEqual(accountService.refreshLoginTokensCallCount, 1)
+        XCTAssertEqual(accountService.refreshSignInStatusCallCount, 1)
+        XCTAssertEqual(accountService.claimDailyRewardCallCount, 1)
+        XCTAssertEqual(store.accountStatus.signInSummary?.isTodaySigned, true)
+        XCTAssertEqual(store.successMessage, "自动签到完成")
+        XCTAssertEqual(autoSignInStore.completedDay(accountID: "10001", uid: "100000001"), "cn_gf01:2026-09-04")
+    }
+
+    @MainActor
+    func testAutomaticSignInCheckRunsAfterAppStaysOpenAcrossDays() async {
+        let accountService = MockAccountSessionService()
+        accountService.refreshLoginTokensResult = Self.signedInStatus(isTodaySigned: false)
+        accountService.refreshSignInStatusResult = Self.signedInStatus(isTodaySigned: false)
+        accountService.claimDailyRewardResult = Self.signedInStatus(isTodaySigned: true)
+        let autoSignInStore = MockAutoSignInStore(isEnabled: true)
+        autoSignInStore.setCompletedDay("cn_gf01:2026-09-04", accountID: "10001", uid: "100000001")
+        let now = Self.cnDate(year: 2026, month: 9, day: 5, hour: 10)
+        autoSignInStore.setScheduledAttemptDate(
+            now.addingTimeInterval(-60),
+            accountID: "10001",
+            uid: "100000001",
+            serverDay: "cn_gf01:2026-09-05"
+        )
+        let tokenRefreshStore = MockAccountTokenRefreshStore()
+        let store = AppStore(
+            accountService: accountService,
+            autoSignInStore: autoSignInStore,
+            tokenRefreshStore: tokenRefreshStore
+        )
+        store.accountStatus = Self.signedInStatus(isTodaySigned: false)
+
+        await store.runAutomaticSignInCheck(now: now)
+
+        XCTAssertEqual(accountService.refreshLoginTokensCallCount, 1)
+        XCTAssertEqual(accountService.refreshSignInStatusCallCount, 1)
+        XCTAssertEqual(accountService.claimDailyRewardCallCount, 1)
+        XCTAssertEqual(store.successMessage, "自动签到完成")
+        XCTAssertEqual(autoSignInStore.completedDay(accountID: "10001", uid: "100000001"), "cn_gf01:2026-09-05")
+    }
+
+    @MainActor
+    func testAutomaticSignInSchedulesMorningTimeAndSkipsNetworkBeforeIt() async {
+        let accountService = MockAccountSessionService()
+        let autoSignInStore = MockAutoSignInStore(isEnabled: true)
+        let store = AppStore(accountService: accountService, autoSignInStore: autoSignInStore)
+        store.accountStatus = Self.signedInStatus(isTodaySigned: false)
+        let now = Self.cnDate(year: 2026, month: 9, day: 5, hour: 7)
+
+        await store.runAutomaticSignInCheck(now: now)
+
+        XCTAssertEqual(accountService.refreshLoginTokensCallCount, 0)
+        XCTAssertEqual(accountService.refreshSignInStatusCallCount, 0)
+        XCTAssertEqual(accountService.claimDailyRewardCallCount, 0)
+        let scheduled = autoSignInStore.scheduledAttemptDate(
+            accountID: "10001",
+            uid: "100000001",
+            serverDay: "cn_gf01:2026-09-05"
+        )
+        XCTAssertNotNil(scheduled)
+        guard let scheduledDate = scheduled else { return }
+        XCTAssertGreaterThan(scheduledDate, now)
+        let components = Self.cnCalendar.dateComponents([.hour], from: scheduledDate)
+        XCTAssertGreaterThanOrEqual(components.hour ?? 0, AutoSignInSettings.morningWindowStartHour)
+        XCTAssertLessThan(components.hour ?? 24, AutoSignInSettings.morningWindowEndHour)
+    }
+
+    @MainActor
+    func testAutomaticSignInSkipsNetworkBeforeSavedScheduledTime() async {
+        let accountService = MockAccountSessionService()
+        let autoSignInStore = MockAutoSignInStore(isEnabled: true)
+        let now = Self.cnDate(year: 2026, month: 9, day: 5, hour: 9)
+        autoSignInStore.setScheduledAttemptDate(
+            now.addingTimeInterval(30 * 60),
+            accountID: "10001",
+            uid: "100000001",
+            serverDay: "cn_gf01:2026-09-05"
+        )
+        let store = AppStore(accountService: accountService, autoSignInStore: autoSignInStore)
+        store.accountStatus = Self.signedInStatus(isTodaySigned: false)
+
+        await store.runAutomaticSignInCheck(now: now)
+
+        XCTAssertEqual(accountService.refreshLoginTokensCallCount, 0)
+        XCTAssertEqual(accountService.refreshSignInStatusCallCount, 0)
+        XCTAssertEqual(accountService.claimDailyRewardCallCount, 0)
+    }
+
+    @MainActor
+    func testAutomaticSignInRefreshesTokenAndRetriesOnceWhenLoginExpired() async {
+        let accountService = MockAccountSessionService()
+        accountService.refreshLoginTokensResult = Self.signedInStatus(isTodaySigned: false)
+        accountService.refreshSignInStatusResults = [
+            .failure(AccountSessionError.apiFailure("登录状态失效，请重新登录")),
+            .success(Self.signedInStatus(isTodaySigned: false))
+        ]
+        accountService.claimDailyRewardResult = Self.signedInStatus(isTodaySigned: true)
+        let autoSignInStore = MockAutoSignInStore(isEnabled: true)
+        let now = Self.cnDate(year: 2026, month: 9, day: 5, hour: 10)
+        autoSignInStore.setScheduledAttemptDate(
+            now.addingTimeInterval(-60),
+            accountID: "10001",
+            uid: "100000001",
+            serverDay: "cn_gf01:2026-09-05"
+        )
+        let tokenRefreshStore = MockAccountTokenRefreshStore()
+        tokenRefreshStore.setLastRefreshDate(now.addingTimeInterval(-10 * 60), accountID: "10001")
+        let store = AppStore(
+            accountService: accountService,
+            autoSignInStore: autoSignInStore,
+            tokenRefreshStore: tokenRefreshStore
+        )
+        store.accountStatus = Self.signedInStatus(isTodaySigned: false)
+
+        await store.runAutomaticSignInCheck(now: now)
+
+        XCTAssertEqual(accountService.refreshSignInStatusCallCount, 2)
+        XCTAssertEqual(accountService.refreshLoginTokensCallCount, 1)
+        XCTAssertEqual(accountService.claimDailyRewardCallCount, 1)
+        XCTAssertEqual(store.successMessage, "自动签到完成")
+        XCTAssertEqual(autoSignInStore.completedDay(accountID: "10001", uid: "100000001"), "cn_gf01:2026-09-05")
+    }
+
+    @MainActor
+    func testManualSignInRefreshesStatusAndSkipsClaimWhenAlreadySignedToday() async {
+        let accountService = MockAccountSessionService()
+        accountService.refreshSignInStatusResult = Self.signedInStatus(isTodaySigned: true)
+        let autoSignInStore = MockAutoSignInStore(isEnabled: true)
+        let store = AppStore(accountService: accountService, autoSignInStore: autoSignInStore)
+        store.accountStatus = Self.signedInStatus(isTodaySigned: false)
+
+        await store.claimDailyReward(now: Date(timeIntervalSince1970: 1_788_480_000))
+
+        XCTAssertEqual(accountService.refreshSignInStatusCallCount, 1)
+        XCTAssertEqual(accountService.claimDailyRewardCallCount, 0)
+        XCTAssertEqual(store.successMessage, "今日已签到")
+        XCTAssertEqual(autoSignInStore.completedDay(accountID: "10001", uid: "100000001"), "cn_gf01:2026-09-04")
+    }
+
+    @MainActor
+    func testManualSignInRefreshesStatusBeforeClaimingWhenUnsigned() async {
+        let accountService = MockAccountSessionService()
+        accountService.refreshSignInStatusResult = Self.signedInStatus(isTodaySigned: false)
+        accountService.claimDailyRewardResult = Self.signedInStatus(isTodaySigned: true)
+        let autoSignInStore = MockAutoSignInStore(isEnabled: true)
+        let store = AppStore(accountService: accountService, autoSignInStore: autoSignInStore)
+        store.accountStatus = Self.signedInStatus(isTodaySigned: false)
+
+        await store.claimDailyReward(now: Date(timeIntervalSince1970: 1_788_480_000))
+
+        XCTAssertEqual(accountService.refreshSignInStatusCallCount, 1)
+        XCTAssertEqual(accountService.claimDailyRewardCallCount, 1)
+        XCTAssertEqual(store.successMessage, "签到完成")
+    }
+
+    @MainActor
+    func testManualSignInSkipsClaimDuringFailureCooldown() async {
+        let accountService = MockAccountSessionService()
+        let autoSignInStore = MockAutoSignInStore(isEnabled: true)
+        autoSignInStore.setLastFailureDate(
+            Date(timeIntervalSince1970: 1_788_479_700),
+            accountID: "10001",
+            uid: "100000001"
+        )
+        let store = AppStore(accountService: accountService, autoSignInStore: autoSignInStore)
+        store.accountStatus = Self.signedInStatus(isTodaySigned: false)
+
+        await store.claimDailyReward(now: Date(timeIntervalSince1970: 1_788_480_000))
+
+        XCTAssertEqual(accountService.refreshSignInStatusCallCount, 0)
+        XCTAssertEqual(accountService.claimDailyRewardCallCount, 0)
+        XCTAssertEqual(store.errorMessage, "签到刚刚失败过，请稍后再试，避免频繁请求触发风控。")
+    }
+
+    @MainActor
+    func testClaimFailureStoresCooldownTimestamp() async {
+        let payload = SignInResultPayload(success: 0, riskCode: -5003, gt: nil, challenge: nil)
+        let accountService = MockAccountSessionService()
+        accountService.refreshSignInStatusResult = Self.signedInStatus(isTodaySigned: false)
+        accountService.claimError = AccountSessionError.requiresVerification(payload)
+        let autoSignInStore = MockAutoSignInStore(isEnabled: true)
+        let store = AppStore(accountService: accountService, autoSignInStore: autoSignInStore)
+        store.accountStatus = Self.signedInStatus(isTodaySigned: false)
+        let now = Date(timeIntervalSince1970: 1_788_480_000)
+
+        await store.claimDailyReward(now: now)
+
+        XCTAssertEqual(accountService.refreshSignInStatusCallCount, 1)
+        XCTAssertEqual(accountService.claimDailyRewardCallCount, 1)
+        XCTAssertEqual(autoSignInStore.lastFailureDate(accountID: "10001", uid: "100000001"), now)
+        XCTAssertNotNil(store.accountVerification)
+    }
+
+    @MainActor
+    func testRefreshSignInStatusRefreshesTokenAndRetriesOnceWhenLoginExpired() async {
+        let accountService = MockAccountSessionService()
+        accountService.refreshSignInStatusResults = [
+            .failure(AccountSessionError.apiFailure("登录状态失效，请重新登录")),
+            .success(Self.signedInStatus(isTodaySigned: true))
+        ]
+        accountService.refreshLoginTokensResult = Self.signedInStatus(isTodaySigned: false)
+        let tokenRefreshStore = MockAccountTokenRefreshStore()
+        let store = AppStore(accountService: accountService, tokenRefreshStore: tokenRefreshStore)
+        store.accountStatus = Self.signedInStatus(isTodaySigned: false)
+
+        await store.refreshSignInStatus(now: Date(timeIntervalSince1970: 1_788_480_000))
+
+        XCTAssertEqual(accountService.refreshSignInStatusCallCount, 2)
+        XCTAssertEqual(accountService.refreshLoginTokensCallCount, 1)
+        XCTAssertEqual(store.accountStatus.signInSummary?.isTodaySigned, true)
+        XCTAssertEqual(tokenRefreshStore.lastRefreshDate(accountID: "10001"), Date(timeIntervalSince1970: 1_788_480_000))
+        XCTAssertEqual(store.successMessage, "签到状态已刷新")
+    }
+
+    @MainActor
+    func testClaimDailyRewardRefreshesTokenAndRetriesOnceWhenLoginExpired() async {
+        let accountService = MockAccountSessionService()
+        accountService.claimDailyRewardResults = [
+            .failure(AccountSessionError.apiFailure("cookie token 失效")),
+            .success(Self.signedInStatus(isTodaySigned: true))
+        ]
+        accountService.refreshSignInStatusResult = Self.signedInStatus(isTodaySigned: false)
+        accountService.refreshLoginTokensResult = Self.signedInStatus(isTodaySigned: false)
+        let autoSignInStore = MockAutoSignInStore(isEnabled: true)
+        let tokenRefreshStore = MockAccountTokenRefreshStore()
+        let store = AppStore(
+            accountService: accountService,
+            autoSignInStore: autoSignInStore,
+            tokenRefreshStore: tokenRefreshStore
+        )
+        store.accountStatus = Self.signedInStatus(isTodaySigned: false)
+
+        await store.claimDailyReward(now: Date(timeIntervalSince1970: 1_788_480_000))
+
+        XCTAssertEqual(accountService.claimDailyRewardCallCount, 2)
+        XCTAssertEqual(accountService.refreshLoginTokensCallCount, 2)
+        XCTAssertEqual(store.accountStatus.signInSummary?.isTodaySigned, true)
+        XCTAssertEqual(store.successMessage, "签到完成")
+    }
+
+    @MainActor
+    func testLoadDoesNotRepeatAutoSignInAfterAttemptToday() async {
+        let accountService = MockAccountSessionService()
+        accountService.loadStatusResult = Self.signedInStatus(isTodaySigned: false)
+        let autoSignInStore = MockAutoSignInStore(isEnabled: true)
+        autoSignInStore.setCompletedDay("cn_gf01:2026-09-04", accountID: "10001", uid: "100000001")
+        let store = AppStore(accountService: accountService, autoSignInStore: autoSignInStore)
+        let now = Date(timeIntervalSince1970: 1_788_480_000)
+
+        await store.load(autoRefreshRemoteMetadata: false, now: now)
+
+        XCTAssertEqual(accountService.refreshLoginTokensCallCount, 0)
+        XCTAssertEqual(accountService.claimDailyRewardCallCount, 0)
+    }
+
+    @MainActor
+    func testFinishConfirmedQrLoginRunsAutoSignInWhenEnabled() async {
+        let result = QrLoginResultPayload(
+            status: "Confirmed",
+            tokens: [QrLoginToken(tokenType: 1, token: "stoken-value")],
+            userInfo: QrLoginUserInfo(aid: "10001", mid: "mid-value", nickname: "旅行者")
+        )
+        let accountService = MockAccountSessionService()
+        accountService.completeQrLoginResult = Self.signedInStatus(isTodaySigned: false)
+        accountService.refreshSignInStatusResult = Self.signedInStatus(isTodaySigned: false)
+        accountService.claimDailyRewardResult = Self.signedInStatus(isTodaySigned: true)
+        let autoSignInStore = MockAutoSignInStore(isEnabled: true)
+        let now = Self.cnDate(year: 2026, month: 9, day: 4, hour: 10)
+        autoSignInStore.setScheduledAttemptDate(
+            now.addingTimeInterval(-60),
+            accountID: "10001",
+            uid: "100000001",
+            serverDay: "cn_gf01:2026-09-04"
+        )
+        let store = AppStore(accountService: accountService, autoSignInStore: autoSignInStore)
+        store.confirmedQrLoginResult = result
+
+        await store.finishConfirmedQrLogin(now: now)
+
+        XCTAssertEqual(accountService.completeQrLoginResultCallCount, 1)
+        XCTAssertEqual(accountService.claimDailyRewardCallCount, 1)
+        XCTAssertEqual(store.successMessage, "自动签到完成")
+    }
+
+    @MainActor
+    func testStartQrLoginClearsStructuredVerificationState() async {
+        let accountService = MockAccountSessionService()
+        accountService.startQrLoginResult = QrLoginSession(
+            qrURL: URL(string: "https://example.com/qr")!,
+            ticket: "ticket-1"
+        )
+        let store = AppStore(accountService: accountService)
+        store.accountVerification = AccountVerificationState(
+            message: "需要验证",
+            url: HoYoConstants.signInVerificationURL,
+            payload: SignInResultPayload(success: 0, riskCode: -5003, gt: nil, challenge: nil),
+            webContext: nil
+        )
+
+        await store.startQrLogin()
+
+        XCTAssertNil(store.accountVerification)
+        XCTAssertEqual(store.qrLoginState, .waiting)
+        XCTAssertEqual(store.qrLoginSession?.ticket, "ticket-1")
+    }
+
+    @MainActor
+    func testFinishConfirmedQrLoginFailureDoesNotMarkQrCodeFailed() async {
+        let result = QrLoginResultPayload(
+            status: "Confirmed",
+            tokens: [QrLoginToken(tokenType: 1, token: "stoken-value")],
+            userInfo: QrLoginUserInfo(aid: "10001", mid: "mid-value", nickname: "旅行者")
+        )
+        let accountService = MockAccountSessionService()
+        accountService.completeError = AccountSessionError.apiFailure("登录状态失效，请重新登录")
+        let store = AppStore(accountService: accountService)
+        store.confirmedQrLoginResult = result
+        store.qrLoginState = .confirmed
+
+        await store.finishConfirmedQrLogin()
+
+        XCTAssertEqual(store.qrLoginState, .confirmed)
+        XCTAssertEqual(store.errorMessage, "登录已确认，但同步账号数据失败：接口返回错误：登录状态失效，请重新登录")
+    }
+
+    @MainActor
+    func testFinishConfirmedQrLoginShowsSyncStepFailure() async {
+        let result = QrLoginResultPayload(
+            status: "Confirmed",
+            tokens: [QrLoginToken(tokenType: 1, token: "stoken-value")],
+            userInfo: QrLoginUserInfo(aid: "10001", mid: "mid-value", nickname: "旅行者")
+        )
+        let accountService = MockAccountSessionService()
+        accountService.completeError = AccountSessionError.stepFailed("获取 CookieToken", "接口返回错误：登录状态失效，请重新登录")
+        let store = AppStore(accountService: accountService)
+        store.confirmedQrLoginResult = result
+        store.qrLoginState = .confirmed
+
+        await store.finishConfirmedQrLogin()
+
+        XCTAssertEqual(store.errorMessage, "登录已确认，但同步账号数据失败：获取 CookieToken失败：接口返回错误：登录状态失效，请重新登录")
+    }
+
+    @MainActor
+    func testFinishConfirmedQrLoginCancellationKeepsPendingResultForRetry() async {
+        let result = QrLoginResultPayload(
+            status: "Confirmed",
+            tokens: [QrLoginToken(tokenType: 1, token: "stoken-value")],
+            userInfo: QrLoginUserInfo(aid: "10001", mid: "mid-value", nickname: "旅行者")
+        )
+        let accountService = MockAccountSessionService()
+        accountService.completeError = CancellationError()
+        let store = AppStore(accountService: accountService)
+        store.confirmedQrLoginResult = result
+        store.qrLoginState = .confirmed
+
+        await store.finishConfirmedQrLogin()
+
+        XCTAssertEqual(store.qrLoginState, .confirmed)
+        XCTAssertNotNil(store.confirmedQrLoginResult)
+        XCTAssertEqual(store.errorMessage, "登录已确认，正在同步账号数据，请稍候。")
+    }
+
+    @MainActor
+    func testSignOutKeepsMetadataWhenSecretDeleteFails() throws {
+        let metadata = AccountMetadata(
+            account: MiHoYoAccount(accountID: "10001", mid: "mid", nickname: "旅行者"),
+            selectedRole: GenshinRole(uid: "100000001", region: "cn_gf01", nickname: "空", level: 60, isSelected: true),
+            lastSummary: nil
+        )
+        let metadataStore = MockMetadataStore(metadata: metadata)
+        let secretStore = MockSecretStore(
+            secretsByAccountID: [
+                "10001": AccountSecrets(stuid: "10001", stoken: "stoken", mid: "mid", cookieToken: nil, ltoken: nil)
+            ],
+            deleteError: AccountSessionError.localStorageUnavailable("fixture delete failure")
+        )
+        let service = LocalAccountSessionService(metadataStore: metadataStore, secretStore: secretStore)
+
+        XCTAssertThrowsError(try service.signOut()) { error in
+            guard case AccountSessionError.localStorageUnavailable("fixture delete failure") = error else {
+                return XCTFail("Expected localStorageUnavailable, got \\(error)")
+            }
+        }
+        XCTAssertEqual(metadataStore.clearCallCount, 0)
+        XCTAssertEqual(try metadataStore.load()?.account.accountID, "10001")
+    }
+
+    private static var cnCalendar: Calendar {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(secondsFromGMT: 8 * 60 * 60)!
+        return calendar
+    }
+
+    private static func cnDate(year: Int, month: Int, day: Int, hour: Int, minute: Int = 0) -> Date {
+        cnCalendar.date(from: DateComponents(year: year, month: month, day: day, hour: hour, minute: minute))!
+    }
+
+    private static func signedInStatus(isTodaySigned: Bool) -> LocalAccountStatus {
+        LocalAccountStatus(
+            isSignedIn: true,
+            nickname: "旅行者",
+            accountID: "10001",
+            selectedRole: GenshinRole(uid: "100000001", region: "cn_gf01", nickname: "空", level: 60, isSelected: true),
+            signInSummary: SignInSummary(uid: "100000001", month: 9, totalSignDay: isTodaySigned ? 3 : 2, isTodaySigned: isTodaySigned, rewards: []),
+            sessionMessage: nil,
+            lastCheckInDate: nil
+        )
+    }
+
+    private static func resignInfo(canResign: Bool) -> SignInResignInfoPayload {
+        SignInResignInfoPayload(
+            resignCountDaily: canResign ? 0 : 1,
+            resignCountMonthly: canResign ? 1 : 3,
+            resignLimitDaily: 1,
+            resignLimitMonthly: 3,
+            signCountMissed: canResign ? 2 : 0,
+            coinCount: canResign ? 5 : 0,
+            coinCost: 1,
+            rule: "rule",
+            signed: false,
+            signDays: 7,
+            cost: 0,
+            monthQualityCount: 0,
+            qualityCount: 0
+        )
+    }
+}
+
+private final class MockMetadataStore: AccountMetadataStoring {
+    private var metadata: AccountMetadata?
+    private(set) var clearCallCount = 0
+
+    init(metadata: AccountMetadata? = nil) {
+        self.metadata = metadata
+    }
+
+    func load() throws -> AccountMetadata? {
+        metadata
+    }
+
+    func save(_ metadata: AccountMetadata) throws {
+        self.metadata = metadata
+    }
+
+    func clear() throws {
+        clearCallCount += 1
+        metadata = nil
+    }
+}
+
+@MainActor
+private final class MockAccountSessionService: AccountSessionServicing {
+    var startQrLoginResult: QrLoginSession?
+    var queryQrLoginResult: QrLoginResultPayload?
+    var completeQrLoginResult: LocalAccountStatus = .signedOut
+    var refreshSignInStatusResult: LocalAccountStatus = .signedOut
+    var refreshLoginTokensResult: LocalAccountStatus?
+    var claimDailyRewardResult: LocalAccountStatus = .signedOut
+    var claimResignRewardResult: LocalAccountStatus = .signedOut
+    var resignInfoResult: SignInResignInfoPayload?
+    var signOutResult: LocalAccountStatus = .signedOut
+    var loadStatusResult: LocalAccountStatus = .signedOut
+    var startError: Error?
+    var completeError: Error?
+    var refreshError: Error?
+    var claimError: Error?
+    var claimResignError: Error?
+    var signOutError: Error?
+    var webVerificationContext: SignInWebVerificationContext?
+    var refreshSignInStatusResults: [Result<LocalAccountStatus, Error>] = []
+    var claimDailyRewardResults: [Result<LocalAccountStatus, Error>] = []
+    private(set) var refreshLoginTokensCallCount = 0
+    private(set) var refreshSignInStatusCallCount = 0
+    private(set) var claimDailyRewardCallCount = 0
+    private(set) var claimResignRewardCallCount = 0
+    private(set) var loadResignInfoCallCount = 0
+    private(set) var completeQrLoginResultCallCount = 0
+
+    func loadStatus() -> LocalAccountStatus { loadStatusResult }
+
+    func startQrLogin() async throws -> QrLoginSession {
+        if let startError { throw startError }
+        guard let startQrLoginResult else {
+            throw AccountSessionError.invalidResponse("missing startQrLoginResult")
+        }
+        return startQrLoginResult
+    }
+
+    func queryQrLoginResult(ticket: String) async throws -> QrLoginResultPayload {
+        if let completeError { throw completeError }
+        guard let queryQrLoginResult else {
+            throw AccountSessionError.invalidResponse("missing queryQrLoginResult")
+        }
+        return queryQrLoginResult
+    }
+
+    func completeQrLogin(result: QrLoginResultPayload) async throws -> LocalAccountStatus {
+        completeQrLoginResultCallCount += 1
+        if let completeError { throw completeError }
+        return completeQrLoginResult
+    }
+
+    func completeQrLogin(ticket: String) async throws -> LocalAccountStatus {
+        if let completeError { throw completeError }
+        return completeQrLoginResult
+    }
+
+    func refreshSignInStatus() async throws -> LocalAccountStatus {
+        refreshSignInStatusCallCount += 1
+        if !refreshSignInStatusResults.isEmpty {
+            return try refreshSignInStatusResults.removeFirst().get()
+        }
+        if let refreshError { throw refreshError }
+        return refreshSignInStatusResult
+    }
+
+    func claimDailyReward(verification: SignInVerificationResult?) async throws -> LocalAccountStatus {
+        claimDailyRewardCallCount += 1
+        if !claimDailyRewardResults.isEmpty {
+            return try claimDailyRewardResults.removeFirst().get()
+        }
+        if let claimError { throw claimError }
+        return claimDailyRewardResult
+    }
+
+    func loadResignInfo() async throws -> SignInResignInfoPayload {
+        loadResignInfoCallCount += 1
+        guard let resignInfoResult else {
+            throw AccountSessionError.missingAccount
+        }
+        return resignInfoResult
+    }
+
+    func claimResignReward(verification: SignInVerificationResult?) async throws -> LocalAccountStatus {
+        claimResignRewardCallCount += 1
+        if let claimResignError { throw claimResignError }
+        return claimResignRewardResult
+    }
+
+    func refreshLoginTokens() async throws -> LocalAccountStatus {
+        refreshLoginTokensCallCount += 1
+        if let refreshError { throw refreshError }
+        return refreshLoginTokensResult ?? loadStatusResult
+    }
+
+    func signInWebVerificationContext() throws -> SignInWebVerificationContext {
+        guard let webVerificationContext else {
+            throw AccountSessionError.missingAccount
+        }
+        return webVerificationContext
+    }
+
+    func loadGachaRecords() async throws -> [GachaRecord] {
+        []
+    }
+
+    func signOut() throws -> LocalAccountStatus {
+        if let signOutError { throw signOutError }
+        return signOutResult
+    }
+}
+
+private final class MockAutoSignInStore: AutoSignInStoring {
+    var isEnabled: Bool
+    private var completedDays: [String: String] = [:]
+    private var failureDates: [String: Date] = [:]
+    private var scheduledAttemptDates: [String: Date] = [:]
+
+    init(isEnabled: Bool) {
+        self.isEnabled = isEnabled
+    }
+
+    func completedDay(accountID: String, uid: String) -> String? {
+        completedDays[key(accountID: accountID, uid: uid)]
+    }
+
+    func setCompletedDay(_ day: String, accountID: String, uid: String) {
+        completedDays[key(accountID: accountID, uid: uid)] = day
+    }
+
+    func lastFailureDate(accountID: String, uid: String) -> Date? {
+        failureDates[key(accountID: accountID, uid: uid)]
+    }
+
+    func setLastFailureDate(_ date: Date?, accountID: String, uid: String) {
+        let key = key(accountID: accountID, uid: uid)
+        if let date {
+            failureDates[key] = date
+        } else {
+            failureDates.removeValue(forKey: key)
+        }
+    }
+
+    func scheduledAttemptDate(accountID: String, uid: String, serverDay: String) -> Date? {
+        scheduledAttemptDates[scheduledAttemptKey(accountID: accountID, uid: uid, serverDay: serverDay)]
+    }
+
+    func setScheduledAttemptDate(_ date: Date, accountID: String, uid: String, serverDay: String) {
+        scheduledAttemptDates[scheduledAttemptKey(accountID: accountID, uid: uid, serverDay: serverDay)] = date
+    }
+
+    private func key(accountID: String, uid: String) -> String {
+        "\(accountID).\(uid)"
+    }
+
+    private func scheduledAttemptKey(accountID: String, uid: String, serverDay: String) -> String {
+        "\(accountID).\(uid).\(serverDay)"
+    }
+}
+
+private final class MockAccountTokenRefreshStore: AccountTokenRefreshStoring {
+    private var refreshDates: [String: Date] = [:]
+
+    func lastRefreshDate(accountID: String) -> Date? {
+        refreshDates[accountID]
+    }
+
+    func setLastRefreshDate(_ date: Date, accountID: String) {
+        refreshDates[accountID] = date
+    }
+}
+
+private struct MockSecretStore: AccountSecretStoring {
+    var secretsByAccountID: [String: AccountSecrets] = [:]
+    var deleteError: Error?
+
+    func load(accountID: String) throws -> AccountSecrets? {
+        secretsByAccountID[accountID]
+    }
+
+    func save(_ secrets: AccountSecrets, accountID: String) throws {}
+
+    func delete(accountID: String) throws {
+        if let deleteError { throw deleteError }
+    }
+}

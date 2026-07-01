@@ -1,0 +1,5545 @@
+[
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "燃愿玛瑙碎屑",
+        "燃愿玛瑙断片",
+        "燃愿玛瑙块",
+        "燃愿玛瑙"
+      ],
+      "bossMaterialName": "魇翼枯骸",
+      "commonMaterialNames": [
+        "磨损的执凭",
+        "精致的执凭",
+        "霜镌的执凭"
+      ],
+      "localSpecialtyName": "松珀香",
+      "talentBookNames": [
+        "「乐园」的教导",
+        "「乐园」的指引",
+        "「乐园」的哲学"
+      ],
+      "weeklyBossMaterialName": "赝作的树脂"
+    },
+    "element": "火",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Nicole.png",
+    "id": 10000131,
+    "materials": [
+      "燃愿玛瑙碎屑",
+      "松珀香",
+      "磨损的执凭",
+      "燃愿玛瑙断片",
+      "魇翼枯骸",
+      "精致的执凭",
+      "燃愿玛瑙块",
+      "霜镌的执凭",
+      "燃愿玛瑙",
+      "「乐园」的哲学",
+      "赝作的树脂",
+      "智识之冕",
+      "「乐园」的教导",
+      "「乐园」的指引"
+    ],
+    "name": "尼可",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Nicole.png",
+    "rarity": 5,
+    "region": "魔女会",
+    "weaponType": "法器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "坚牢黄玉碎屑",
+        "坚牢黄玉断片",
+        "坚牢黄玉块",
+        "坚牢黄玉"
+      ],
+      "bossMaterialName": "堕天的落羽",
+      "commonMaterialNames": [
+        "磨损的执凭",
+        "精致的执凭",
+        "霜镌的执凭"
+      ],
+      "localSpecialtyName": "空羽蛾",
+      "talentBookNames": [
+        "「浪迹」的教导",
+        "「浪迹」的指引",
+        "「浪迹」的哲学"
+      ],
+      "weeklyBossMaterialName": "异端的瓶剂"
+    },
+    "element": "岩",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Linnea.png",
+    "id": 10000130,
+    "materials": [
+      "坚牢黄玉碎屑",
+      "空羽蛾",
+      "磨损的执凭",
+      "坚牢黄玉断片",
+      "堕天的落羽",
+      "精致的执凭",
+      "坚牢黄玉块",
+      "霜镌的执凭",
+      "坚牢黄玉",
+      "「浪迹」的哲学",
+      "异端的瓶剂",
+      "智识之冕",
+      "「浪迹」的教导",
+      "「浪迹」的指引"
+    ],
+    "name": "莉奈娅",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Linnea.png",
+    "rarity": 5,
+    "region": "挪德卡莱",
+    "weaponType": "弓"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "哀叙冰玉碎屑",
+        "哀叙冰玉断片",
+        "哀叙冰玉块",
+        "哀叙冰玉"
+      ],
+      "bossMaterialName": "棱光的断尾",
+      "commonMaterialNames": [
+        "牢固的箭簇",
+        "锐利的箭簇",
+        "历战的箭簇"
+      ],
+      "localSpecialtyName": "空羽蛾",
+      "talentBookNames": [
+        "「抗争」的教导",
+        "「抗争」的指引",
+        "「抗争」的哲学"
+      ],
+      "weeklyBossMaterialName": "升扬样本·骑士"
+    },
+    "element": "冰",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Lohen.png",
+    "id": 10000129,
+    "materials": [
+      "哀叙冰玉碎屑",
+      "空羽蛾",
+      "牢固的箭簇",
+      "哀叙冰玉断片",
+      "棱光的断尾",
+      "锐利的箭簇",
+      "哀叙冰玉块",
+      "历战的箭簇",
+      "哀叙冰玉",
+      "「抗争」的哲学",
+      "升扬样本·骑士",
+      "智识之冕",
+      "「抗争」的教导",
+      "「抗争」的指引"
+    ],
+    "name": "洛恩",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Lohen.png",
+    "rarity": 5,
+    "region": "蒙德",
+    "weaponType": "长柄武器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "自在松石碎屑",
+        "自在松石断片",
+        "自在松石块",
+        "自在松石"
+      ],
+      "bossMaterialName": "棱光的断尾",
+      "commonMaterialNames": [
+        "毁损机轴",
+        "加固机轴",
+        "精制机轴"
+      ],
+      "localSpecialtyName": "钩钩果",
+      "talentBookNames": [
+        "「自由」的教导",
+        "「自由」的指引",
+        "「自由」的哲学"
+      ],
+      "weeklyBossMaterialName": "升扬样本·战车"
+    },
+    "element": "风",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Varka.png",
+    "id": 10000128,
+    "materials": [
+      "自在松石碎屑",
+      "钩钩果",
+      "毁损机轴",
+      "自在松石断片",
+      "棱光的断尾",
+      "加固机轴",
+      "自在松石块",
+      "精制机轴",
+      "自在松石",
+      "「自由」的哲学",
+      "升扬样本·战车",
+      "智识之冕",
+      "「自由」的教导",
+      "「自由」的指引"
+    ],
+    "name": "法尔伽",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Varka.png",
+    "rarity": 5,
+    "region": "蒙德",
+    "weaponType": "双手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "坚牢黄玉碎屑",
+        "坚牢黄玉断片",
+        "坚牢黄玉块",
+        "坚牢黄玉"
+      ],
+      "bossMaterialName": "魇翼枯骸",
+      "commonMaterialNames": [
+        "磨损的执凭",
+        "精致的执凭",
+        "霜镌的执凭"
+      ],
+      "localSpecialtyName": "琉璃百合",
+      "talentBookNames": [
+        "「黄金」的教导",
+        "「黄金」的指引",
+        "「黄金」的哲学"
+      ],
+      "weeklyBossMaterialName": "升扬样本·王族"
+    },
+    "element": "岩",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Zibai.png",
+    "id": 10000126,
+    "materials": [
+      "坚牢黄玉碎屑",
+      "琉璃百合",
+      "磨损的执凭",
+      "坚牢黄玉断片",
+      "魇翼枯骸",
+      "精致的执凭",
+      "坚牢黄玉块",
+      "霜镌的执凭",
+      "坚牢黄玉",
+      "「黄金」的哲学",
+      "升扬样本·王族",
+      "智识之冕",
+      "「黄金」的教导",
+      "「黄金」的指引"
+    ],
+    "name": "兹白",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Zibai.png",
+    "rarity": 5,
+    "region": "璃月港",
+    "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "涤净青金碎屑",
+        "涤净青金断片",
+        "涤净青金块",
+        "涤净青金"
+      ],
+      "bossMaterialName": "漫光的辉角",
+      "commonMaterialNames": [
+        "史莱姆凝液",
+        "史莱姆清",
+        "史莱姆原浆"
+      ],
+      "localSpecialtyName": "冬凌草",
+      "talentBookNames": [
+        "「月光」的教导",
+        "「月光」的指引",
+        "「月光」的哲学"
+      ],
+      "weeklyBossMaterialName": "贤医的假面"
+    },
+    "element": "水",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Columbina.png",
+    "id": 10000125,
+    "materials": [
+      "涤净青金碎屑",
+      "冬凌草",
+      "史莱姆凝液",
+      "涤净青金断片",
+      "漫光的辉角",
+      "史莱姆清",
+      "涤净青金块",
+      "史莱姆原浆",
+      "涤净青金",
+      "「月光」的哲学",
+      "贤医的假面",
+      "智识之冕",
+      "「月光」的教导",
+      "「月光」的指引"
+    ],
+    "name": "哥伦比娅",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Columbina.png",
+    "rarity": 5,
+    "region": "挪德卡莱",
+    "weaponType": "法器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "燃愿玛瑙碎屑",
+        "燃愿玛瑙断片",
+        "燃愿玛瑙块",
+        "燃愿玛瑙"
+      ],
+      "bossMaterialName": "循环式军用月矩核心",
+      "commonMaterialNames": [
+        "磨损的执凭",
+        "精致的执凭",
+        "霜镌的执凭"
+      ],
+      "localSpecialtyName": "霜盏花",
+      "talentBookNames": [
+        "「诗文」的教导",
+        "「诗文」的指引",
+        "「诗文」的哲学"
+      ],
+      "weeklyBossMaterialName": "蚀灭的阳焰"
+    },
+    "element": "火",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Durin.png",
+    "id": 10000123,
+    "materials": [
+      "燃愿玛瑙碎屑",
+      "霜盏花",
+      "磨损的执凭",
+      "燃愿玛瑙断片",
+      "循环式军用月矩核心",
+      "精致的执凭",
+      "燃愿玛瑙块",
+      "霜镌的执凭",
+      "燃愿玛瑙",
+      "「诗文」的哲学",
+      "蚀灭的阳焰",
+      "智识之冕",
+      "「诗文」的教导",
+      "「诗文」的指引"
+    ],
+    "name": "杜林",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Durin.png",
+    "rarity": 5,
+    "region": "蒙德",
+    "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "生长碧翡碎屑",
+        "生长碧翡断片",
+        "生长碧翡块",
+        "生长碧翡"
+      ],
+      "bossMaterialName": "漫光的辉角",
+      "commonMaterialNames": [
+        "磨损的执凭",
+        "精致的执凭",
+        "霜镌的执凭"
+      ],
+      "localSpecialtyName": "月落银",
+      "talentBookNames": [
+        "「乐园」的教导",
+        "「乐园」的指引",
+        "「乐园」的哲学"
+      ],
+      "weeklyBossMaterialName": "升扬样本·战车"
+    },
+    "element": "草",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Nefer.png",
+    "id": 10000122,
+    "materials": [
+      "生长碧翡碎屑",
+      "月落银",
+      "磨损的执凭",
+      "生长碧翡断片",
+      "漫光的辉角",
+      "精致的执凭",
+      "生长碧翡块",
+      "霜镌的执凭",
+      "生长碧翡",
+      "「乐园」的哲学",
+      "升扬样本·战车",
+      "智识之冕",
+      "「乐园」的教导",
+      "「乐园」的指引"
+    ],
+    "name": "奈芙尔",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Nefer.png",
+    "rarity": 5,
+    "region": "挪德卡莱",
+    "weaponType": "法器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "最胜紫晶碎屑",
+        "最胜紫晶断片",
+        "最胜紫晶块",
+        "最胜紫晶"
+      ],
+      "bossMaterialName": "精密型月矩力冲鸭模具",
+      "commonMaterialNames": [
+        "毁损机轴",
+        "加固机轴",
+        "精制机轴"
+      ],
+      "localSpecialtyName": "霜盏花",
+      "talentBookNames": [
+        "「浪迹」的教导",
+        "「浪迹」的指引",
+        "「浪迹」的哲学"
+      ],
+      "weeklyBossMaterialName": "升扬样本·王族"
+    },
+    "element": "雷",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Flins.png",
+    "id": 10000120,
+    "materials": [
+      "最胜紫晶碎屑",
+      "霜盏花",
+      "毁损机轴",
+      "最胜紫晶断片",
+      "精密型月矩力冲鸭模具",
+      "加固机轴",
+      "最胜紫晶块",
+      "精制机轴",
+      "最胜紫晶",
+      "「浪迹」的哲学",
+      "升扬样本·王族",
+      "智识之冕",
+      "「浪迹」的教导",
+      "「浪迹」的指引"
+    ],
+    "name": "菲林斯",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Flins.png",
+    "rarity": 5,
+    "region": "挪德卡莱",
+    "weaponType": "长柄武器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "生长碧翡碎屑",
+        "生长碧翡断片",
+        "生长碧翡块",
+        "生长碧翡"
+      ],
+      "bossMaterialName": "承光的鳞羽",
+      "commonMaterialNames": [
+        "磨损的执凭",
+        "精致的执凭",
+        "霜镌的执凭"
+      ],
+      "localSpecialtyName": "月落银",
+      "talentBookNames": [
+        "「月光」的教导",
+        "「月光」的指引",
+        "「月光」的哲学"
+      ],
+      "weeklyBossMaterialName": "蚀灭的鳞羽"
+    },
+    "element": "草",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Lauma.png",
+    "id": 10000119,
+    "materials": [
+      "生长碧翡碎屑",
+      "月落银",
+      "磨损的执凭",
+      "生长碧翡断片",
+      "承光的鳞羽",
+      "精致的执凭",
+      "生长碧翡块",
+      "霜镌的执凭",
+      "生长碧翡",
+      "「月光」的哲学",
+      "蚀灭的鳞羽",
+      "智识之冕",
+      "「月光」的教导",
+      "「月光」的指引"
+    ],
+    "name": "菈乌玛",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Lauma.png",
+    "rarity": 5,
+    "region": "挪德卡莱",
+    "weaponType": "法器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [],
+      "bossMaterialName": "",
+      "commonMaterialNames": [],
+      "localSpecialtyName": "",
+      "talentBookNames": [
+        "「纷争」的教导",
+        "「纷争」的指引",
+        "「纷争」的哲学"
+      ],
+      "weeklyBossMaterialName": "蚀灭的阳焰"
+    },
+    "element": "无",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_MannequinGirl.png",
+    "id": 10000118,
+    "materials": [
+      "「纷争」的哲学",
+      "龙冠武士的金哨",
+      "蚀灭的阳焰",
+      "智识之冕",
+      "「纷争」的教导",
+      "卫从的木哨",
+      "「纷争」的指引",
+      "战士的铁哨"
+    ],
+    "name": "奇偶·女性",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_MannequinGirl.png",
+    "rarity": 5,
+    "region": "——",
+    "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [],
+      "bossMaterialName": "",
+      "commonMaterialNames": [],
+      "localSpecialtyName": "",
+      "talentBookNames": [
+        "「纷争」的教导",
+        "「纷争」的指引",
+        "「纷争」的哲学"
+      ],
+      "weeklyBossMaterialName": "蚀灭的阳焰"
+    },
+    "element": "无",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_MannequinBoy.png",
+    "id": 10000117,
+    "materials": [
+      "「纷争」的哲学",
+      "龙冠武士的金哨",
+      "蚀灭的阳焰",
+      "智识之冕",
+      "「纷争」的教导",
+      "卫从的木哨",
+      "「纷争」的指引",
+      "战士的铁哨"
+    ],
+    "name": "奇偶·男性",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_MannequinBoy.png",
+    "rarity": 5,
+    "region": "——",
+    "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "最胜紫晶碎屑",
+        "最胜紫晶断片",
+        "最胜紫晶块",
+        "最胜紫晶"
+      ],
+      "bossMaterialName": "秘源积气喉",
+      "commonMaterialNames": [
+        "卫从的木哨",
+        "战士的铁哨",
+        "龙冠武士的金哨"
+      ],
+      "localSpecialtyName": "微光角菌",
+      "talentBookNames": [
+        "「纷争」的教导",
+        "「纷争」的指引",
+        "「纷争」的哲学"
+      ],
+      "weeklyBossMaterialName": "蚀灭的阳焰"
+    },
+    "element": "雷",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Ineffa.png",
+    "id": 10000116,
+    "materials": [
+      "最胜紫晶碎屑",
+      "微光角菌",
+      "卫从的木哨",
+      "最胜紫晶断片",
+      "秘源积气喉",
+      "战士的铁哨",
+      "最胜紫晶块",
+      "龙冠武士的金哨",
+      "最胜紫晶",
+      "「纷争」的哲学",
+      "蚀灭的阳焰",
+      "智识之冕",
+      "「纷争」的教导",
+      "「纷争」的指引"
+    ],
+    "name": "伊涅芙",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Ineffa.png",
+    "rarity": 5,
+    "region": "挪德卡莱",
+    "weaponType": "长柄武器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "哀叙冰玉碎屑",
+        "哀叙冰玉断片",
+        "哀叙冰玉块",
+        "哀叙冰玉"
+      ],
+      "bossMaterialName": "深邃纠缠的凝视",
+      "commonMaterialNames": [
+        "啮合齿轮",
+        "机关正齿轮",
+        "奇械机芯齿轮"
+      ],
+      "localSpecialtyName": "云岩裂叶",
+      "talentBookNames": [
+        "「角逐」的教导",
+        "「角逐」的指引",
+        "「角逐」的哲学"
+      ],
+      "weeklyBossMaterialName": "升扬样本·骑士"
+    },
+    "element": "冰",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_SkirkNew.png",
+    "id": 10000114,
+    "materials": [
+      "哀叙冰玉碎屑",
+      "云岩裂叶",
+      "啮合齿轮",
+      "哀叙冰玉断片",
+      "深邃纠缠的凝视",
+      "机关正齿轮",
+      "哀叙冰玉块",
+      "奇械机芯齿轮",
+      "哀叙冰玉",
+      "「角逐」的哲学",
+      "升扬样本·骑士",
+      "智识之冕",
+      "「角逐」的教导",
+      "「角逐」的指引"
+    ],
+    "name": "丝柯克",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_SkirkNew.png",
+    "rarity": 5,
+    "region": "寰宇劫灭",
+    "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "哀叙冰玉碎屑",
+        "哀叙冰玉断片",
+        "哀叙冰玉块",
+        "哀叙冰玉"
+      ],
+      "bossMaterialName": "秘源积气喉",
+      "commonMaterialNames": [
+        "啮合齿轮",
+        "机关正齿轮",
+        "奇械机芯齿轮"
+      ],
+      "localSpecialtyName": "苍晶螺",
+      "talentBookNames": [
+        "「正义」的教导",
+        "「正义」的指引",
+        "「正义」的哲学"
+      ],
+      "weeklyBossMaterialName": "蚀灭的灵犀"
+    },
+    "element": "冰",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Escoffier.png",
+    "id": 10000112,
+    "materials": [
+      "哀叙冰玉碎屑",
+      "苍晶螺",
+      "啮合齿轮",
+      "哀叙冰玉断片",
+      "秘源积气喉",
+      "机关正齿轮",
+      "哀叙冰玉块",
+      "奇械机芯齿轮",
+      "哀叙冰玉",
+      "「正义」的哲学",
+      "蚀灭的灵犀",
+      "智识之冕",
+      "「正义」的教导",
+      "「正义」的指引"
+    ],
+    "name": "爱可菲",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Escoffier.png",
+    "rarity": 5,
+    "region": "枫丹",
+    "weaponType": "长柄武器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "最胜紫晶碎屑",
+        "最胜紫晶断片",
+        "最胜紫晶块",
+        "最胜紫晶"
+      ],
+      "bossMaterialName": "龙像的无智核",
+      "commonMaterialNames": [
+        "稚嫩的尖齿",
+        "老练的坚齿",
+        "横行霸者的利齿"
+      ],
+      "localSpecialtyName": "云岩裂叶",
+      "talentBookNames": [
+        "「纷争」的教导",
+        "「纷争」的指引",
+        "「纷争」的哲学"
+      ],
+      "weeklyBossMaterialName": "蚀灭的鳞羽"
+    },
+    "element": "雷",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Varesa.png",
+    "id": 10000111,
+    "materials": [
+      "最胜紫晶碎屑",
+      "云岩裂叶",
+      "稚嫩的尖齿",
+      "最胜紫晶断片",
+      "龙像的无智核",
+      "老练的坚齿",
+      "最胜紫晶块",
+      "横行霸者的利齿",
+      "最胜紫晶",
+      "「纷争」的哲学",
+      "蚀灭的鳞羽",
+      "智识之冕",
+      "「纷争」的教导",
+      "「纷争」的指引"
+    ],
+    "name": "瓦雷莎",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Varesa.png",
+    "rarity": 5,
+    "region": "纳塔",
+    "weaponType": "法器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "自在松石碎屑",
+        "自在松石断片",
+        "自在松石块",
+        "自在松石"
+      ],
+      "bossMaterialName": "谜土的护符",
+      "commonMaterialNames": [
+        "破旧的刀镡",
+        "影打刀镡",
+        "名刀镡"
+      ],
+      "localSpecialtyName": "海灵芝",
+      "talentBookNames": [
+        "「浮世」的教导",
+        "「浮世」的指引",
+        "「浮世」的哲学"
+      ],
+      "weeklyBossMaterialName": "残火灯烛"
+    },
+    "element": "风",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Mizuki.png",
+    "id": 10000109,
+    "materials": [
+      "自在松石碎屑",
+      "海灵芝",
+      "破旧的刀镡",
+      "自在松石断片",
+      "谜土的护符",
+      "影打刀镡",
+      "自在松石块",
+      "名刀镡",
+      "自在松石",
+      "「浮世」的哲学",
+      "残火灯烛",
+      "智识之冕",
+      "「浮世」的教导",
+      "「浮世」的指引"
+    ],
+    "name": "梦见月瑞希",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Mizuki.png",
+    "rarity": 5,
+    "region": "稻妻",
+    "weaponType": "法器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "哀叙冰玉碎屑",
+        "哀叙冰玉断片",
+        "哀叙冰玉块",
+        "哀叙冰玉"
+      ],
+      "bossMaterialName": "谜土的护符",
+      "commonMaterialNames": [
+        "稚嫩的尖齿",
+        "老练的坚齿",
+        "横行霸者的利齿"
+      ],
+      "localSpecialtyName": "青蜜莓",
+      "talentBookNames": [
+        "「焚燔」的教导",
+        "「焚燔」的指引",
+        "「焚燔」的哲学"
+      ],
+      "weeklyBossMaterialName": "否定裁断"
+    },
+    "element": "冰",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Citlali.png",
+    "id": 10000107,
+    "materials": [
+      "哀叙冰玉碎屑",
+      "青蜜莓",
+      "稚嫩的尖齿",
+      "哀叙冰玉断片",
+      "谜土的护符",
+      "老练的坚齿",
+      "哀叙冰玉块",
+      "横行霸者的利齿",
+      "哀叙冰玉",
+      "「焚燔」的哲学",
+      "否定裁断",
+      "智识之冕",
+      "「焚燔」的教导",
+      "「焚燔」的指引"
+    ],
+    "name": "茜特菈莉",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Citlali.png",
+    "rarity": 5,
+    "region": "纳塔",
+    "weaponType": "法器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "燃愿玛瑙碎屑",
+        "燃愿玛瑙断片",
+        "燃愿玛瑙块",
+        "燃愿玛瑙"
+      ],
+      "bossMaterialName": "秘刻金纹的源核",
+      "commonMaterialNames": [
+        "卫从的木哨",
+        "战士的铁哨",
+        "龙冠武士的金哨"
+      ],
+      "localSpecialtyName": "枯叶紫英",
+      "talentBookNames": [
+        "「角逐」的教导",
+        "「角逐」的指引",
+        "「角逐」的哲学"
+      ],
+      "weeklyBossMaterialName": "蚀灭的灵犀"
+    },
+    "element": "火",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Mavuika.png",
+    "id": 10000106,
+    "materials": [
+      "燃愿玛瑙碎屑",
+      "枯叶紫英",
+      "卫从的木哨",
+      "燃愿玛瑙断片",
+      "秘刻金纹的源核",
+      "战士的铁哨",
+      "燃愿玛瑙块",
+      "龙冠武士的金哨",
+      "燃愿玛瑙",
+      "「角逐」的哲学",
+      "蚀灭的灵犀",
+      "智识之冕",
+      "「角逐」的教导",
+      "「角逐」的指引"
+    ],
+    "name": "玛薇卡",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Mavuika.png",
+    "rarity": 5,
+    "region": "纳塔",
+    "weaponType": "双手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "自在松石碎屑",
+        "自在松石断片",
+        "自在松石块",
+        "自在松石"
+      ],
+      "bossMaterialName": "深邃纠缠的凝视",
+      "commonMaterialNames": [
+        "稚嫩的尖齿",
+        "老练的坚齿",
+        "横行霸者的利齿"
+      ],
+      "localSpecialtyName": "枯叶紫英",
+      "talentBookNames": [
+        "「纷争」的教导",
+        "「纷争」的指引",
+        "「纷争」的哲学"
+      ],
+      "weeklyBossMaterialName": "丝织之羽"
+    },
+    "element": "风",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Chasca.png",
+    "id": 10000104,
+    "materials": [
+      "自在松石碎屑",
+      "枯叶紫英",
+      "稚嫩的尖齿",
+      "自在松石断片",
+      "深邃纠缠的凝视",
+      "老练的坚齿",
+      "自在松石块",
+      "横行霸者的利齿",
+      "自在松石",
+      "「纷争」的哲学",
+      "丝织之羽",
+      "智识之冕",
+      "「纷争」的教导",
+      "「纷争」的指引"
+    ],
+    "name": "恰斯卡",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Chasca.png",
+    "rarity": 5,
+    "region": "纳塔",
+    "weaponType": "弓"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "坚牢黄玉碎屑",
+        "坚牢黄玉断片",
+        "坚牢黄玉块",
+        "坚牢黄玉"
+      ],
+      "bossMaterialName": "秘刻金纹的源核",
+      "commonMaterialNames": [
+        "卫从的木哨",
+        "战士的铁哨",
+        "龙冠武士的金哨"
+      ],
+      "localSpecialtyName": "灼灼彩菊",
+      "talentBookNames": [
+        "「焚燔」的教导",
+        "「焚燔」的指引",
+        "「焚燔」的哲学"
+      ],
+      "weeklyBossMaterialName": "无心的渊镜"
+    },
+    "element": "岩",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Xilonen.png",
+    "id": 10000103,
+    "materials": [
+      "坚牢黄玉碎屑",
+      "灼灼彩菊",
+      "卫从的木哨",
+      "坚牢黄玉断片",
+      "秘刻金纹的源核",
+      "战士的铁哨",
+      "坚牢黄玉块",
+      "龙冠武士的金哨",
+      "坚牢黄玉",
+      "「焚燔」的哲学",
+      "无心的渊镜",
+      "智识之冕",
+      "「焚燔」的教导",
+      "「焚燔」的指引"
+    ],
+    "name": "希诺宁",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Xilonen.png",
+    "rarity": 5,
+    "region": "纳塔",
+    "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "涤净青金碎屑",
+        "涤净青金断片",
+        "涤净青金块",
+        "涤净青金"
+      ],
+      "bossMaterialName": "受祝所缚之印",
+      "commonMaterialNames": [
+        "卫从的木哨",
+        "战士的铁哨",
+        "龙冠武士的金哨"
+      ],
+      "localSpecialtyName": "浪沫羽鳃",
+      "talentBookNames": [
+        "「角逐」的教导",
+        "「角逐」的指引",
+        "「角逐」的哲学"
+      ],
+      "weeklyBossMaterialName": "无光质块"
+    },
+    "element": "水",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Mualani.png",
+    "id": 10000102,
+    "materials": [
+      "涤净青金碎屑",
+      "浪沫羽鳃",
+      "卫从的木哨",
+      "涤净青金断片",
+      "受祝所缚之印",
+      "战士的铁哨",
+      "涤净青金块",
+      "龙冠武士的金哨",
+      "涤净青金",
+      "「角逐」的哲学",
+      "无光质块",
+      "智识之冕",
+      "「角逐」的教导",
+      "「角逐」的指引"
+    ],
+    "name": "玛拉妮",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Mualani.png",
+    "rarity": 5,
+    "region": "纳塔",
+    "weaponType": "法器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "生长碧翡碎屑",
+        "生长碧翡断片",
+        "生长碧翡块",
+        "生长碧翡"
+      ],
+      "bossMaterialName": "过熟的火榴果",
+      "commonMaterialNames": [
+        "稚嫩的尖齿",
+        "老练的坚齿",
+        "横行霸者的利齿"
+      ],
+      "localSpecialtyName": "肉龙掌",
+      "talentBookNames": [
+        "「焚燔」的教导",
+        "「焚燔」的指引",
+        "「焚燔」的哲学"
+      ],
+      "weeklyBossMaterialName": "否定裁断"
+    },
+    "element": "草",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Kinich.png",
+    "id": 10000101,
+    "materials": [
+      "生长碧翡碎屑",
+      "肉龙掌",
+      "稚嫩的尖齿",
+      "生长碧翡断片",
+      "过熟的火榴果",
+      "老练的坚齿",
+      "生长碧翡块",
+      "横行霸者的利齿",
+      "生长碧翡",
+      "「焚燔」的哲学",
+      "否定裁断",
+      "智识之冕",
+      "「焚燔」的教导",
+      "「焚燔」的指引"
+    ],
+    "name": "基尼奇",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Kinich.png",
+    "rarity": 5,
+    "region": "纳塔",
+    "weaponType": "双手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "生长碧翡碎屑",
+        "生长碧翡断片",
+        "生长碧翡块",
+        "生长碧翡"
+      ],
+      "bossMaterialName": "金色旋律的断章",
+      "commonMaterialNames": [
+        "啮合齿轮",
+        "机关正齿轮",
+        "奇械机芯齿轮"
+      ],
+      "localSpecialtyName": "湖光铃兰",
+      "talentBookNames": [
+        "「秩序」的教导",
+        "「秩序」的指引",
+        "「秩序」的哲学"
+      ],
+      "weeklyBossMaterialName": "丝织之羽"
+    },
+    "element": "草",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Emilie.png",
+    "id": 10000099,
+    "materials": [
+      "生长碧翡碎屑",
+      "湖光铃兰",
+      "啮合齿轮",
+      "生长碧翡断片",
+      "金色旋律的断章",
+      "机关正齿轮",
+      "生长碧翡块",
+      "奇械机芯齿轮",
+      "生长碧翡",
+      "「秩序」的哲学",
+      "丝织之羽",
+      "智识之冕",
+      "「秩序」的教导",
+      "「秩序」的指引"
+    ],
+    "name": "艾梅莉埃",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Emilie.png",
+    "rarity": 5,
+    "region": "枫丹",
+    "weaponType": "长柄武器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "最胜紫晶碎屑",
+        "最胜紫晶断片",
+        "最胜紫晶块",
+        "最胜紫晶"
+      ],
+      "bossMaterialName": "原海麟角",
+      "commonMaterialNames": [
+        "异海凝珠",
+        "异海之块",
+        "异色结晶石"
+      ],
+      "localSpecialtyName": "幽光星星",
+      "talentBookNames": [
+        "「正义」的教导",
+        "「正义」的指引",
+        "「正义」的哲学"
+      ],
+      "weeklyBossMaterialName": "亘古树海之一瞬"
+    },
+    "element": "雷",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Clorinde.png",
+    "id": 10000098,
+    "materials": [
+      "最胜紫晶碎屑",
+      "幽光星星",
+      "异海凝珠",
+      "最胜紫晶断片",
+      "原海麟角",
+      "异海之块",
+      "最胜紫晶块",
+      "异色结晶石",
+      "最胜紫晶",
+      "「正义」的哲学",
+      "亘古树海之一瞬",
+      "智识之冕",
+      "「正义」的教导",
+      "「正义」的指引"
+    ],
+    "name": "克洛琳德",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Clorinde.png",
+    "rarity": 5,
+    "region": "枫丹",
+    "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "燃愿玛瑙碎屑",
+        "燃愿玛瑙断片",
+        "燃愿玛瑙块",
+        "燃愿玛瑙"
+      ],
+      "bossMaterialName": "金色旋律的断章",
+      "commonMaterialNames": [
+        "新兵的徽记",
+        "士官的徽记",
+        "尉官的徽记"
+      ],
+      "localSpecialtyName": "虹彩蔷薇",
+      "talentBookNames": [
+        "「秩序」的教导",
+        "「秩序」的指引",
+        "「秩序」的哲学"
+      ],
+      "weeklyBossMaterialName": "残火灯烛"
+    },
+    "element": "火",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Arlecchino.png",
+    "id": 10000096,
+    "materials": [
+      "燃愿玛瑙碎屑",
+      "虹彩蔷薇",
+      "新兵的徽记",
+      "燃愿玛瑙断片",
+      "金色旋律的断章",
+      "士官的徽记",
+      "燃愿玛瑙块",
+      "尉官的徽记",
+      "燃愿玛瑙",
+      "「秩序」的哲学",
+      "残火灯烛",
+      "智识之冕",
+      "「秩序」的教导",
+      "「秩序」的指引"
+    ],
+    "name": "阿蕾奇诺",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Arlecchino.png",
+    "rarity": 5,
+    "region": "至冬",
+    "weaponType": "长柄武器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "涤净青金碎屑",
+        "涤净青金断片",
+        "涤净青金块",
+        "涤净青金"
+      ],
+      "bossMaterialName": "未能达成超越之水",
+      "commonMaterialNames": [
+        "异海凝珠",
+        "异海之块",
+        "异色结晶石"
+      ],
+      "localSpecialtyName": "海露花",
+      "talentBookNames": [
+        "「公平」的教导",
+        "「公平」的指引",
+        "「公平」的哲学"
+      ],
+      "weeklyBossMaterialName": "无光涡眼"
+    },
+    "element": "水",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Sigewinne.png",
+    "id": 10000095,
+    "materials": [
+      "涤净青金碎屑",
+      "海露花",
+      "异海凝珠",
+      "涤净青金断片",
+      "未能达成超越之水",
+      "异海之块",
+      "涤净青金块",
+      "异色结晶石",
+      "涤净青金",
+      "「公平」的哲学",
+      "无光涡眼",
+      "智识之冕",
+      "「公平」的教导",
+      "「公平」的指引"
+    ],
+    "name": "希格雯",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Sigewinne.png",
+    "rarity": 5,
+    "region": "枫丹",
+    "weaponType": "弓"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "坚牢黄玉碎屑",
+        "坚牢黄玉断片",
+        "坚牢黄玉块",
+        "坚牢黄玉"
+      ],
+      "bossMaterialName": "奇械发条备件·歌裴莉娅",
+      "commonMaterialNames": [
+        "浮游干核",
+        "浮游幽核",
+        "浮游晶化核"
+      ],
+      "localSpecialtyName": "血斛",
+      "talentBookNames": [
+        "「天光」的教导",
+        "「天光」的指引",
+        "「天光」的哲学"
+      ],
+      "weeklyBossMaterialName": "无光丝线"
+    },
+    "element": "岩",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Chiori.png",
+    "id": 10000094,
+    "materials": [
+      "坚牢黄玉碎屑",
+      "血斛",
+      "浮游干核",
+      "坚牢黄玉断片",
+      "奇械发条备件·歌裴莉娅",
+      "浮游幽核",
+      "坚牢黄玉块",
+      "浮游晶化核",
+      "坚牢黄玉",
+      "「天光」的哲学",
+      "无光丝线",
+      "智识之冕",
+      "「天光」的教导",
+      "「天光」的指引"
+    ],
+    "name": "千织",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Chiori.png",
+    "rarity": 5,
+    "region": "稻妻",
+    "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "自在松石碎屑",
+        "自在松石断片",
+        "自在松石块",
+        "自在松石"
+      ],
+      "bossMaterialName": "凝云鳞甲",
+      "commonMaterialNames": [
+        "导能绘卷",
+        "封魔绘卷",
+        "禁咒绘卷"
+      ],
+      "localSpecialtyName": "清水玉",
+      "talentBookNames": [
+        "「黄金」的教导",
+        "「黄金」的指引",
+        "「黄金」的哲学"
+      ],
+      "weeklyBossMaterialName": "无光涡眼"
+    },
+    "element": "风",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Liuyun.png",
+    "id": 10000093,
+    "materials": [
+      "自在松石碎屑",
+      "清水玉",
+      "导能绘卷",
+      "自在松石断片",
+      "凝云鳞甲",
+      "封魔绘卷",
+      "自在松石块",
+      "禁咒绘卷",
+      "自在松石",
+      "「黄金」的哲学",
+      "无光涡眼",
+      "智识之冕",
+      "「黄金」的教导",
+      "「黄金」的指引"
+    ],
+    "name": "闲云",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Liuyun.png",
+    "rarity": 5,
+    "region": "璃月",
+    "weaponType": "法器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "坚牢黄玉碎屑",
+        "坚牢黄玉断片",
+        "坚牢黄玉块",
+        "坚牢黄玉"
+      ],
+      "bossMaterialName": "奇械发条备件·科培琉司",
+      "commonMaterialNames": [
+        "异海凝珠",
+        "异海之块",
+        "异色结晶石"
+      ],
+      "localSpecialtyName": "初露之源",
+      "talentBookNames": [
+        "「公平」的教导",
+        "「公平」的指引",
+        "「公平」的哲学"
+      ],
+      "weeklyBossMaterialName": "无光丝线"
+    },
+    "element": "岩",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Navia.png",
+    "id": 10000091,
+    "materials": [
+      "坚牢黄玉碎屑",
+      "初露之源",
+      "异海凝珠",
+      "坚牢黄玉断片",
+      "奇械发条备件·科培琉司",
+      "异海之块",
+      "坚牢黄玉块",
+      "异色结晶石",
+      "坚牢黄玉",
+      "「公平」的哲学",
+      "无光丝线",
+      "智识之冕",
+      "「公平」的教导",
+      "「公平」的指引"
+    ],
+    "name": "娜维娅",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Navia.png",
+    "rarity": 5,
+    "region": "枫丹",
+    "weaponType": "双手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "涤净青金碎屑",
+        "涤净青金断片",
+        "涤净青金块",
+        "涤净青金"
+      ],
+      "bossMaterialName": "未能达成超越之水",
+      "commonMaterialNames": [
+        "骗骗花蜜",
+        "微光花蜜",
+        "原素花蜜"
+      ],
+      "localSpecialtyName": "湖光铃兰",
+      "talentBookNames": [
+        "「正义」的教导",
+        "「正义」的指引",
+        "「正义」的哲学"
+      ],
+      "weeklyBossMaterialName": "无光质块"
+    },
+    "element": "水",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Furina.png",
+    "id": 10000089,
+    "materials": [
+      "涤净青金碎屑",
+      "湖光铃兰",
+      "骗骗花蜜",
+      "涤净青金断片",
+      "未能达成超越之水",
+      "微光花蜜",
+      "涤净青金块",
+      "原素花蜜",
+      "涤净青金",
+      "「正义」的哲学",
+      "无光质块",
+      "智识之冕",
+      "「正义」的教导",
+      "「正义」的指引"
+    ],
+    "name": "芙宁娜",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Furina.png",
+    "rarity": 5,
+    "region": "枫丹",
+    "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "涤净青金碎屑",
+        "涤净青金断片",
+        "涤净青金块",
+        "涤净青金"
+      ],
+      "bossMaterialName": "原海麟角",
+      "commonMaterialNames": [
+        "异海凝珠",
+        "异海之块",
+        "异色结晶石"
+      ],
+      "localSpecialtyName": "幽光星星",
+      "talentBookNames": [
+        "「公平」的教导",
+        "「公平」的指引",
+        "「公平」的哲学"
+      ],
+      "weeklyBossMaterialName": "亘古树海之一瞬"
+    },
+    "element": "水",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Neuvillette.png",
+    "id": 10000087,
+    "materials": [
+      "涤净青金碎屑",
+      "幽光星星",
+      "异海凝珠",
+      "涤净青金断片",
+      "原海麟角",
+      "异海之块",
+      "涤净青金块",
+      "异色结晶石",
+      "涤净青金",
+      "「公平」的哲学",
+      "亘古树海之一瞬",
+      "智识之冕",
+      "「公平」的教导",
+      "「公平」的指引"
+    ],
+    "name": "那维莱特",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Neuvillette.png",
+    "rarity": 5,
+    "region": "枫丹",
+    "weaponType": "法器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "哀叙冰玉碎屑",
+        "哀叙冰玉断片",
+        "哀叙冰玉块",
+        "哀叙冰玉"
+      ],
+      "bossMaterialName": "「图比昂装置」",
+      "commonMaterialNames": [
+        "啮合齿轮",
+        "机关正齿轮",
+        "奇械机芯齿轮"
+      ],
+      "localSpecialtyName": "子探测单元",
+      "talentBookNames": [
+        "「秩序」的教导",
+        "「秩序」的指引",
+        "「秩序」的哲学"
+      ],
+      "weeklyBossMaterialName": "原初绿洲之初绽"
+    },
+    "element": "冰",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Wriothesley.png",
+    "id": 10000086,
+    "materials": [
+      "哀叙冰玉碎屑",
+      "子探测单元",
+      "啮合齿轮",
+      "哀叙冰玉断片",
+      "「图比昂装置」",
+      "机关正齿轮",
+      "哀叙冰玉块",
+      "奇械机芯齿轮",
+      "哀叙冰玉",
+      "「秩序」的哲学",
+      "原初绿洲之初绽",
+      "智识之冕",
+      "「秩序」的教导",
+      "「秩序」的指引"
+    ],
+    "name": "莱欧斯利",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Wriothesley.png",
+    "rarity": 5,
+    "region": "枫丹",
+    "weaponType": "法器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "燃愿玛瑙碎屑",
+        "燃愿玛瑙断片",
+        "燃愿玛瑙块",
+        "燃愿玛瑙"
+      ],
+      "bossMaterialName": "帝皇的决断",
+      "commonMaterialNames": [
+        "新兵的徽记",
+        "士官的徽记",
+        "尉官的徽记"
+      ],
+      "localSpecialtyName": "虹彩蔷薇",
+      "talentBookNames": [
+        "「公平」的教导",
+        "「公平」的指引",
+        "「公平」的哲学"
+      ],
+      "weeklyBossMaterialName": "原初绿洲之初绽"
+    },
+    "element": "火",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Liney.png",
+    "id": 10000084,
+    "materials": [
+      "燃愿玛瑙碎屑",
+      "虹彩蔷薇",
+      "新兵的徽记",
+      "燃愿玛瑙断片",
+      "帝皇的决断",
+      "士官的徽记",
+      "燃愿玛瑙块",
+      "尉官的徽记",
+      "燃愿玛瑙",
+      "「公平」的哲学",
+      "原初绿洲之初绽",
+      "智识之冕",
+      "「公平」的教导",
+      "「公平」的指引"
+    ],
+    "name": "林尼",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Liney.png",
+    "rarity": 5,
+    "region": "枫丹",
+    "weaponType": "弓"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "生长碧翡碎屑",
+        "生长碧翡断片",
+        "生长碧翡块",
+        "生长碧翡"
+      ],
+      "bossMaterialName": "常暗圆环",
+      "commonMaterialNames": [
+        "蕈兽孢子",
+        "荧光孢粉",
+        "孢囊晶尘"
+      ],
+      "localSpecialtyName": "琉璃袋",
+      "talentBookNames": [
+        "「黄金」的教导",
+        "「黄金」的指引",
+        "「黄金」的哲学"
+      ],
+      "weeklyBossMaterialName": "生长天地之蕨草"
+    },
+    "element": "草",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Baizhuer.png",
+    "id": 10000082,
+    "materials": [
+      "生长碧翡碎屑",
+      "琉璃袋",
+      "蕈兽孢子",
+      "生长碧翡断片",
+      "常暗圆环",
+      "荧光孢粉",
+      "生长碧翡块",
+      "孢囊晶尘",
+      "生长碧翡",
+      "「黄金」的哲学",
+      "生长天地之蕨草",
+      "智识之冕",
+      "「黄金」的教导",
+      "「黄金」的指引"
+    ],
+    "name": "白术",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Baizhuer.png",
+    "rarity": 5,
+    "region": "璃月",
+    "weaponType": "法器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "燃愿玛瑙碎屑",
+        "燃愿玛瑙断片",
+        "燃愿玛瑙块",
+        "燃愿玛瑙"
+      ],
+      "bossMaterialName": "导光四面体",
+      "commonMaterialNames": [
+        "褪色红绸",
+        "镶边红绸",
+        "织金红绸"
+      ],
+      "localSpecialtyName": "沙脂蛹",
+      "talentBookNames": [
+        "「笃行」的教导",
+        "「笃行」的指引",
+        "「笃行」的哲学"
+      ],
+      "weeklyBossMaterialName": "傀儡的悬丝"
+    },
+    "element": "火",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Dehya.png",
+    "id": 10000079,
+    "materials": [
+      "燃愿玛瑙碎屑",
+      "沙脂蛹",
+      "褪色红绸",
+      "燃愿玛瑙断片",
+      "导光四面体",
+      "镶边红绸",
+      "燃愿玛瑙块",
+      "织金红绸",
+      "燃愿玛瑙",
+      "「笃行」的哲学",
+      "傀儡的悬丝",
+      "智识之冕",
+      "「笃行」的教导",
+      "「笃行」的指引"
+    ],
+    "name": "迪希雅",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Dehya.png",
+    "rarity": 5,
+    "region": "须弥",
+    "weaponType": "双手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "生长碧翡碎屑",
+        "生长碧翡断片",
+        "生长碧翡块",
+        "生长碧翡"
+      ],
+      "bossMaterialName": "苍砾蕊羽",
+      "commonMaterialNames": [
+        "褪色红绸",
+        "镶边红绸",
+        "织金红绸"
+      ],
+      "localSpecialtyName": "沙脂蛹",
+      "talentBookNames": [
+        "「巧思」的教导",
+        "「巧思」的指引",
+        "「巧思」的哲学"
+      ],
+      "weeklyBossMaterialName": "无心的渊镜"
+    },
+    "element": "草",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Alhatham.png",
+    "id": 10000078,
+    "materials": [
+      "生长碧翡碎屑",
+      "沙脂蛹",
+      "褪色红绸",
+      "生长碧翡断片",
+      "苍砾蕊羽",
+      "镶边红绸",
+      "生长碧翡块",
+      "织金红绸",
+      "生长碧翡",
+      "「巧思」的哲学",
+      "无心的渊镜",
+      "智识之冕",
+      "「巧思」的教导",
+      "「巧思」的指引"
+    ],
+    "name": "艾尔海森",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Alhatham.png",
+    "rarity": 5,
+    "region": "须弥",
+    "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "自在松石碎屑",
+        "自在松石断片",
+        "自在松石块",
+        "自在松石"
+      ],
+      "bossMaterialName": "永续机芯",
+      "commonMaterialNames": [
+        "破旧的刀镡",
+        "影打刀镡",
+        "名刀镡"
+      ],
+      "localSpecialtyName": "树王圣体菇",
+      "talentBookNames": [
+        "「笃行」的教导",
+        "「笃行」的指引",
+        "「笃行」的哲学"
+      ],
+      "weeklyBossMaterialName": "空行的虚铃"
+    },
+    "element": "风",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Wanderer.png",
+    "id": 10000075,
+    "materials": [
+      "自在松石碎屑",
+      "树王圣体菇",
+      "破旧的刀镡",
+      "自在松石断片",
+      "永续机芯",
+      "影打刀镡",
+      "自在松石块",
+      "名刀镡",
+      "自在松石",
+      "「笃行」的哲学",
+      "空行的虚铃",
+      "智识之冕",
+      "「笃行」的教导",
+      "「笃行」的指引"
+    ],
+    "name": "流浪者",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Wanderer.png",
+    "rarity": 5,
+    "region": "须弥",
+    "weaponType": "法器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "生长碧翡碎屑",
+        "生长碧翡断片",
+        "生长碧翡块",
+        "生长碧翡"
+      ],
+      "bossMaterialName": "灭诤草蔓",
+      "commonMaterialNames": [
+        "蕈兽孢子",
+        "荧光孢粉",
+        "孢囊晶尘"
+      ],
+      "localSpecialtyName": "劫波莲",
+      "talentBookNames": [
+        "「巧思」的教导",
+        "「巧思」的指引",
+        "「巧思」的哲学"
+      ],
+      "weeklyBossMaterialName": "傀儡的悬丝"
+    },
+    "element": "草",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Nahida.png",
+    "id": 10000073,
+    "materials": [
+      "生长碧翡碎屑",
+      "劫波莲",
+      "蕈兽孢子",
+      "生长碧翡断片",
+      "灭诤草蔓",
+      "荧光孢粉",
+      "生长碧翡块",
+      "孢囊晶尘",
+      "生长碧翡",
+      "「巧思」的哲学",
+      "傀儡的悬丝",
+      "智识之冕",
+      "「巧思」的教导",
+      "「巧思」的指引"
+    ],
+    "name": "纳西妲",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Nahida.png",
+    "rarity": 5,
+    "region": "须弥",
+    "weaponType": "法器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "最胜紫晶碎屑",
+        "最胜紫晶断片",
+        "最胜紫晶块",
+        "最胜紫晶"
+      ],
+      "bossMaterialName": "藏雷野实",
+      "commonMaterialNames": [
+        "导能绘卷",
+        "封魔绘卷",
+        "禁咒绘卷"
+      ],
+      "localSpecialtyName": "圣金虫",
+      "talentBookNames": [
+        "「诤言」的教导",
+        "「诤言」的指引",
+        "「诤言」的哲学"
+      ],
+      "weeklyBossMaterialName": "凶将之手眼"
+    },
+    "element": "雷",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Cyno.png",
+    "id": 10000071,
+    "materials": [
+      "最胜紫晶碎屑",
+      "圣金虫",
+      "导能绘卷",
+      "最胜紫晶断片",
+      "藏雷野实",
+      "封魔绘卷",
+      "最胜紫晶块",
+      "禁咒绘卷",
+      "最胜紫晶",
+      "「诤言」的哲学",
+      "凶将之手眼",
+      "智识之冕",
+      "「诤言」的教导",
+      "「诤言」的指引"
+    ],
+    "name": "赛诺",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Cyno.png",
+    "rarity": 5,
+    "region": "须弥",
+    "weaponType": "长柄武器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "涤净青金碎屑",
+        "涤净青金断片",
+        "涤净青金块",
+        "涤净青金"
+      ],
+      "bossMaterialName": "永续机芯",
+      "commonMaterialNames": [
+        "蕈兽孢子",
+        "荧光孢粉",
+        "孢囊晶尘"
+      ],
+      "localSpecialtyName": "帕蒂沙兰",
+      "talentBookNames": [
+        "「笃行」的教导",
+        "「笃行」的指引",
+        "「笃行」的哲学"
+      ],
+      "weeklyBossMaterialName": "祸神之禊泪"
+    },
+    "element": "水",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Nilou.png",
+    "id": 10000070,
+    "materials": [
+      "涤净青金碎屑",
+      "帕蒂沙兰",
+      "蕈兽孢子",
+      "涤净青金断片",
+      "永续机芯",
+      "荧光孢粉",
+      "涤净青金块",
+      "孢囊晶尘",
+      "涤净青金",
+      "「笃行」的哲学",
+      "祸神之禊泪",
+      "智识之冕",
+      "「笃行」的教导",
+      "「笃行」的指引"
+    ],
+    "name": "妮露",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Nilou.png",
+    "rarity": 5,
+    "region": "须弥",
+    "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "生长碧翡碎屑",
+        "生长碧翡断片",
+        "生长碧翡块",
+        "生长碧翡"
+      ],
+      "bossMaterialName": "蕈王钩喙",
+      "commonMaterialNames": [
+        "蕈兽孢子",
+        "荧光孢粉",
+        "孢囊晶尘"
+      ],
+      "localSpecialtyName": "月莲",
+      "talentBookNames": [
+        "「诤言」的教导",
+        "「诤言」的指引",
+        "「诤言」的哲学"
+      ],
+      "weeklyBossMaterialName": "万劫之真意"
+    },
+    "element": "草",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Tighnari.png",
+    "id": 10000069,
+    "materials": [
+      "生长碧翡碎屑",
+      "月莲",
+      "蕈兽孢子",
+      "生长碧翡断片",
+      "蕈王钩喙",
+      "荧光孢粉",
+      "生长碧翡块",
+      "孢囊晶尘",
+      "生长碧翡",
+      "「诤言」的哲学",
+      "万劫之真意",
+      "智识之冕",
+      "「诤言」的教导",
+      "「诤言」的指引"
+    ],
+    "name": "提纳里",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Tighnari.png",
+    "rarity": 5,
+    "region": "须弥",
+    "weaponType": "弓"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "涤净青金碎屑",
+        "涤净青金断片",
+        "涤净青金块",
+        "涤净青金"
+      ],
+      "bossMaterialName": "排异之露",
+      "commonMaterialNames": [
+        "破旧的刀镡",
+        "影打刀镡",
+        "名刀镡"
+      ],
+      "localSpecialtyName": "绯樱绣球",
+      "talentBookNames": [
+        "「风雅」的教导",
+        "「风雅」的指引",
+        "「风雅」的哲学"
+      ],
+      "weeklyBossMaterialName": "凶将之手眼"
+    },
+    "element": "水",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Ayato.png",
+    "id": 10000066,
+    "materials": [
+      "涤净青金碎屑",
+      "绯樱绣球",
+      "破旧的刀镡",
+      "涤净青金断片",
+      "排异之露",
+      "影打刀镡",
+      "涤净青金块",
+      "名刀镡",
+      "涤净青金",
+      "「风雅」的哲学",
+      "凶将之手眼",
+      "智识之冕",
+      "「风雅」的教导",
+      "「风雅」的指引"
+    ],
+    "name": "神里绫人",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Ayato.png",
+    "rarity": 5,
+    "region": "稻妻",
+    "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "哀叙冰玉碎屑",
+        "哀叙冰玉断片",
+        "哀叙冰玉块",
+        "哀叙冰玉"
+      ],
+      "bossMaterialName": "龙嗣伪鳍",
+      "commonMaterialNames": [
+        "骗骗花蜜",
+        "微光花蜜",
+        "原素花蜜"
+      ],
+      "localSpecialtyName": "清心",
+      "talentBookNames": [
+        "「繁荣」的教导",
+        "「繁荣」的指引",
+        "「繁荣」的哲学"
+      ],
+      "weeklyBossMaterialName": "狱火之蝶"
+    },
+    "element": "冰",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Shenhe.png",
+    "id": 10000063,
+    "materials": [
+      "哀叙冰玉碎屑",
+      "清心",
+      "骗骗花蜜",
+      "哀叙冰玉断片",
+      "龙嗣伪鳍",
+      "微光花蜜",
+      "哀叙冰玉块",
+      "原素花蜜",
+      "哀叙冰玉",
+      "「繁荣」的哲学",
+      "狱火之蝶",
+      "智识之冕",
+      "「繁荣」的教导",
+      "「繁荣」的指引"
+    ],
+    "name": "申鹤",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Shenhe.png",
+    "rarity": 5,
+    "region": "璃月",
+    "weaponType": "长柄武器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "哀叙冰玉碎屑",
+        "哀叙冰玉断片",
+        "哀叙冰玉块",
+        "哀叙冰玉"
+      ],
+      "bossMaterialName": "晶凝之华",
+      "commonMaterialNames": [
+        "浮游干核",
+        "浮游幽核",
+        "浮游晶化核"
+      ],
+      "localSpecialtyName": "晶化骨髓",
+      "talentBookNames": [
+        "「自由」的教导",
+        "「自由」的指引",
+        "「自由」的哲学"
+      ],
+      "weeklyBossMaterialName": "熔毁之刻"
+    },
+    "element": "冰",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Aloy.png",
+    "id": 10000062,
+    "materials": [
+      "哀叙冰玉碎屑",
+      "晶化骨髓",
+      "浮游干核",
+      "哀叙冰玉断片",
+      "晶凝之华",
+      "浮游幽核",
+      "哀叙冰玉块",
+      "浮游晶化核",
+      "哀叙冰玉",
+      "「自由」的哲学",
+      "熔毁之刻",
+      "智识之冕",
+      "「自由」的教导",
+      "「自由」的指引"
+    ],
+    "name": "埃洛伊",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Aloy.png",
+    "rarity": 5,
+    "region": "游侠",
+    "weaponType": "弓"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "涤净青金碎屑",
+        "涤净青金断片",
+        "涤净青金块",
+        "涤净青金"
+      ],
+      "bossMaterialName": "符纹之齿",
+      "commonMaterialNames": [
+        "新兵的徽记",
+        "士官的徽记",
+        "尉官的徽记"
+      ],
+      "localSpecialtyName": "星螺",
+      "talentBookNames": [
+        "「繁荣」的教导",
+        "「繁荣」的指引",
+        "「繁荣」的哲学"
+      ],
+      "weeklyBossMaterialName": "鎏金之鳞"
+    },
+    "element": "水",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Yelan.png",
+    "id": 10000060,
+    "materials": [
+      "涤净青金碎屑",
+      "星螺",
+      "新兵的徽记",
+      "涤净青金断片",
+      "符纹之齿",
+      "士官的徽记",
+      "涤净青金块",
+      "尉官的徽记",
+      "涤净青金",
+      "「繁荣」的哲学",
+      "鎏金之鳞",
+      "智识之冕",
+      "「繁荣」的教导",
+      "「繁荣」的指引"
+    ],
+    "name": "夜兰",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Yelan.png",
+    "rarity": 5,
+    "region": "璃月",
+    "weaponType": "弓"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "最胜紫晶碎屑",
+        "最胜紫晶断片",
+        "最胜紫晶块",
+        "最胜紫晶"
+      ],
+      "bossMaterialName": "龙嗣伪鳍",
+      "commonMaterialNames": [
+        "破旧的刀镡",
+        "影打刀镡",
+        "名刀镡"
+      ],
+      "localSpecialtyName": "海灵芝",
+      "talentBookNames": [
+        "「天光」的教导",
+        "「天光」的指引",
+        "「天光」的哲学"
+      ],
+      "weeklyBossMaterialName": "万劫之真意"
+    },
+    "element": "雷",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Yae.png",
+    "id": 10000058,
+    "materials": [
+      "最胜紫晶碎屑",
+      "海灵芝",
+      "破旧的刀镡",
+      "最胜紫晶断片",
+      "龙嗣伪鳍",
+      "影打刀镡",
+      "最胜紫晶块",
+      "名刀镡",
+      "最胜紫晶",
+      "「天光」的哲学",
+      "万劫之真意",
+      "智识之冕",
+      "「天光」的教导",
+      "「天光」的指引"
+    ],
+    "name": "八重神子",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Yae.png",
+    "rarity": 5,
+    "region": "稻妻",
+    "weaponType": "法器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "坚牢黄玉碎屑",
+        "坚牢黄玉断片",
+        "坚牢黄玉块",
+        "坚牢黄玉"
+      ],
+      "bossMaterialName": "兽境王器",
+      "commonMaterialNames": [
+        "史莱姆凝液",
+        "史莱姆清",
+        "史莱姆原浆"
+      ],
+      "localSpecialtyName": "鬼兜虫",
+      "talentBookNames": [
+        "「风雅」的教导",
+        "「风雅」的指引",
+        "「风雅」的哲学"
+      ],
+      "weeklyBossMaterialName": "灰烬之心"
+    },
+    "element": "岩",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Itto.png",
+    "id": 10000057,
+    "materials": [
+      "坚牢黄玉碎屑",
+      "鬼兜虫",
+      "史莱姆凝液",
+      "坚牢黄玉断片",
+      "兽境王器",
+      "史莱姆清",
+      "坚牢黄玉块",
+      "史莱姆原浆",
+      "坚牢黄玉",
+      "「风雅」的哲学",
+      "灰烬之心",
+      "智识之冕",
+      "「风雅」的教导",
+      "「风雅」的指引"
+    ],
+    "name": "荒泷一斗",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Itto.png",
+    "rarity": 5,
+    "region": "稻妻",
+    "weaponType": "双手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "涤净青金碎屑",
+        "涤净青金断片",
+        "涤净青金块",
+        "涤净青金"
+      ],
+      "bossMaterialName": "排异之露",
+      "commonMaterialNames": [
+        "浮游干核",
+        "浮游幽核",
+        "浮游晶化核"
+      ],
+      "localSpecialtyName": "珊瑚真珠",
+      "talentBookNames": [
+        "「浮世」的教导",
+        "「浮世」的指引",
+        "「浮世」的哲学"
+      ],
+      "weeklyBossMaterialName": "狱火之蝶"
+    },
+    "element": "水",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Kokomi.png",
+    "id": 10000054,
+    "materials": [
+      "涤净青金碎屑",
+      "珊瑚真珠",
+      "浮游干核",
+      "涤净青金断片",
+      "排异之露",
+      "浮游幽核",
+      "涤净青金块",
+      "浮游晶化核",
+      "涤净青金",
+      "「浮世」的哲学",
+      "狱火之蝶",
+      "智识之冕",
+      "「浮世」的教导",
+      "「浮世」的指引"
+    ],
+    "name": "珊瑚宫心海",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Kokomi.png",
+    "rarity": 5,
+    "region": "稻妻",
+    "weaponType": "法器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "最胜紫晶碎屑",
+        "最胜紫晶断片",
+        "最胜紫晶块",
+        "最胜紫晶"
+      ],
+      "bossMaterialName": "雷霆数珠",
+      "commonMaterialNames": [
+        "破旧的刀镡",
+        "影打刀镡",
+        "名刀镡"
+      ],
+      "localSpecialtyName": "天云草实",
+      "talentBookNames": [
+        "「天光」的教导",
+        "「天光」的指引",
+        "「天光」的哲学"
+      ],
+      "weeklyBossMaterialName": "熔毁之刻"
+    },
+    "element": "雷",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Shougun.png",
+    "id": 10000052,
+    "materials": [
+      "最胜紫晶碎屑",
+      "天云草实",
+      "破旧的刀镡",
+      "最胜紫晶断片",
+      "雷霆数珠",
+      "影打刀镡",
+      "最胜紫晶块",
+      "名刀镡",
+      "最胜紫晶",
+      "「天光」的哲学",
+      "熔毁之刻",
+      "智识之冕",
+      "「天光」的教导",
+      "「天光」的指引"
+    ],
+    "name": "雷电将军",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Shougun.png",
+    "rarity": 5,
+    "region": "稻妻",
+    "weaponType": "长柄武器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "哀叙冰玉碎屑",
+        "哀叙冰玉断片",
+        "哀叙冰玉块",
+        "哀叙冰玉"
+      ],
+      "bossMaterialName": "晶凝之华",
+      "commonMaterialNames": [
+        "破损的面具",
+        "污秽的面具",
+        "不祥的面具"
+      ],
+      "localSpecialtyName": "蒲公英籽",
+      "talentBookNames": [
+        "「抗争」的教导",
+        "「抗争」的指引",
+        "「抗争」的哲学"
+      ],
+      "weeklyBossMaterialName": "龙王之冕"
+    },
+    "element": "冰",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Eula.png",
+    "id": 10000051,
+    "materials": [
+      "哀叙冰玉碎屑",
+      "蒲公英籽",
+      "破损的面具",
+      "哀叙冰玉断片",
+      "晶凝之华",
+      "污秽的面具",
+      "哀叙冰玉块",
+      "不祥的面具",
+      "哀叙冰玉",
+      "「抗争」的哲学",
+      "龙王之冕",
+      "智识之冕",
+      "「抗争」的教导",
+      "「抗争」的指引"
+    ],
+    "name": "优菈",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Eula.png",
+    "rarity": 5,
+    "region": "蒙德",
+    "weaponType": "双手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "燃愿玛瑙碎屑",
+        "燃愿玛瑙断片",
+        "燃愿玛瑙块",
+        "燃愿玛瑙"
+      ],
+      "bossMaterialName": "阴燃之珠",
+      "commonMaterialNames": [
+        "导能绘卷",
+        "封魔绘卷",
+        "禁咒绘卷"
+      ],
+      "localSpecialtyName": "鸣草",
+      "talentBookNames": [
+        "「浮世」的教导",
+        "「浮世」的指引",
+        "「浮世」的哲学"
+      ],
+      "weeklyBossMaterialName": "龙王之冕"
+    },
+    "element": "火",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Yoimiya.png",
+    "id": 10000049,
+    "materials": [
+      "燃愿玛瑙碎屑",
+      "鸣草",
+      "导能绘卷",
+      "燃愿玛瑙断片",
+      "阴燃之珠",
+      "封魔绘卷",
+      "燃愿玛瑙块",
+      "禁咒绘卷",
+      "燃愿玛瑙",
+      "「浮世」的哲学",
+      "龙王之冕",
+      "智识之冕",
+      "「浮世」的教导",
+      "「浮世」的指引"
+    ],
+    "name": "宵宫",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Yoimiya.png",
+    "rarity": 5,
+    "region": "稻妻",
+    "weaponType": "弓"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "自在松石碎屑",
+        "自在松石断片",
+        "自在松石块",
+        "自在松石"
+      ],
+      "bossMaterialName": "魔偶机心",
+      "commonMaterialNames": [
+        "寻宝鸦印",
+        "藏银鸦印",
+        "攫金鸦印"
+      ],
+      "localSpecialtyName": "海灵芝",
+      "talentBookNames": [
+        "「勤劳」的教导",
+        "「勤劳」的指引",
+        "「勤劳」的哲学"
+      ],
+      "weeklyBossMaterialName": "鎏金之鳞"
+    },
+    "element": "风",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Kazuha.png",
+    "id": 10000047,
+    "materials": [
+      "自在松石碎屑",
+      "海灵芝",
+      "寻宝鸦印",
+      "自在松石断片",
+      "魔偶机心",
+      "藏银鸦印",
+      "自在松石块",
+      "攫金鸦印",
+      "自在松石",
+      "「勤劳」的哲学",
+      "鎏金之鳞",
+      "智识之冕",
+      "「勤劳」的教导",
+      "「勤劳」的指引"
+    ],
+    "name": "枫原万叶",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Kazuha.png",
+    "rarity": 5,
+    "region": "稻妻",
+    "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "燃愿玛瑙碎屑",
+        "燃愿玛瑙断片",
+        "燃愿玛瑙块",
+        "燃愿玛瑙"
+      ],
+      "bossMaterialName": "未熟之玉",
+      "commonMaterialNames": [
+        "骗骗花蜜",
+        "微光花蜜",
+        "原素花蜜"
+      ],
+      "localSpecialtyName": "霓裳花",
+      "talentBookNames": [
+        "「勤劳」的教导",
+        "「勤劳」的指引",
+        "「勤劳」的哲学"
+      ],
+      "weeklyBossMaterialName": "魔王之刃·残片"
+    },
+    "element": "火",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Hutao.png",
+    "id": 10000046,
+    "materials": [
+      "燃愿玛瑙碎屑",
+      "霓裳花",
+      "骗骗花蜜",
+      "燃愿玛瑙断片",
+      "未熟之玉",
+      "微光花蜜",
+      "燃愿玛瑙块",
+      "原素花蜜",
+      "燃愿玛瑙",
+      "「勤劳」的哲学",
+      "魔王之刃·残片",
+      "智识之冕",
+      "「勤劳」的教导",
+      "「勤劳」的指引"
+    ],
+    "name": "胡桃",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Hutao.png",
+    "rarity": 5,
+    "region": "璃月",
+    "weaponType": "长柄武器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "最胜紫晶碎屑",
+        "最胜紫晶断片",
+        "最胜紫晶块",
+        "最胜紫晶"
+      ],
+      "bossMaterialName": "雷光棱镜",
+      "commonMaterialNames": [
+        "骗骗花蜜",
+        "微光花蜜",
+        "原素花蜜"
+      ],
+      "localSpecialtyName": "石珀",
+      "talentBookNames": [
+        "「繁荣」的教导",
+        "「繁荣」的指引",
+        "「繁荣」的哲学"
+      ],
+      "weeklyBossMaterialName": "北风之环"
+    },
+    "element": "雷",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Keqing.png",
+    "id": 10000042,
+    "materials": [
+      "最胜紫晶碎屑",
+      "石珀",
+      "骗骗花蜜",
+      "最胜紫晶断片",
+      "雷光棱镜",
+      "微光花蜜",
+      "最胜紫晶块",
+      "原素花蜜",
+      "最胜紫晶",
+      "「繁荣」的哲学",
+      "北风之环",
+      "智识之冕",
+      "「繁荣」的教导",
+      "「繁荣」的指引"
+    ],
+    "name": "刻晴",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Keqing.png",
+    "rarity": 5,
+    "region": "璃月",
+    "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "涤净青金碎屑",
+        "涤净青金断片",
+        "涤净青金块",
+        "涤净青金"
+      ],
+      "bossMaterialName": "净水之心",
+      "commonMaterialNames": [
+        "骗骗花蜜",
+        "微光花蜜",
+        "原素花蜜"
+      ],
+      "localSpecialtyName": "慕风蘑菇",
+      "talentBookNames": [
+        "「抗争」的教导",
+        "「抗争」的指引",
+        "「抗争」的哲学"
+      ],
+      "weeklyBossMaterialName": "北风之环"
+    },
+    "element": "水",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Mona.png",
+    "id": 10000041,
+    "materials": [
+      "涤净青金碎屑",
+      "慕风蘑菇",
+      "骗骗花蜜",
+      "涤净青金断片",
+      "净水之心",
+      "微光花蜜",
+      "涤净青金块",
+      "原素花蜜",
+      "涤净青金",
+      "「抗争」的哲学",
+      "北风之环",
+      "智识之冕",
+      "「抗争」的教导",
+      "「抗争」的指引"
+    ],
+    "name": "莫娜",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Mona.png",
+    "rarity": 5,
+    "region": "蒙德",
+    "weaponType": "法器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "坚牢黄玉碎屑",
+        "坚牢黄玉断片",
+        "坚牢黄玉块",
+        "坚牢黄玉"
+      ],
+      "bossMaterialName": "玄岩之塔",
+      "commonMaterialNames": [
+        "导能绘卷",
+        "封魔绘卷",
+        "禁咒绘卷"
+      ],
+      "localSpecialtyName": "塞西莉亚花",
+      "talentBookNames": [
+        "「诗文」的教导",
+        "「诗文」的指引",
+        "「诗文」的哲学"
+      ],
+      "weeklyBossMaterialName": "吞天之鲸·只角"
+    },
+    "element": "岩",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Albedo.png",
+    "id": 10000038,
+    "materials": [
+      "坚牢黄玉碎屑",
+      "塞西莉亚花",
+      "导能绘卷",
+      "坚牢黄玉断片",
+      "玄岩之塔",
+      "封魔绘卷",
+      "坚牢黄玉块",
+      "禁咒绘卷",
+      "坚牢黄玉",
+      "「诗文」的哲学",
+      "吞天之鲸·只角",
+      "智识之冕",
+      "「诗文」的教导",
+      "「诗文」的指引"
+    ],
+    "name": "阿贝多",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Albedo.png",
+    "rarity": 5,
+    "region": "蒙德",
+    "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "哀叙冰玉碎屑",
+        "哀叙冰玉断片",
+        "哀叙冰玉块",
+        "哀叙冰玉"
+      ],
+      "bossMaterialName": "极寒之核",
+      "commonMaterialNames": [
+        "骗骗花蜜",
+        "微光花蜜",
+        "原素花蜜"
+      ],
+      "localSpecialtyName": "清心",
+      "talentBookNames": [
+        "「勤劳」的教导",
+        "「勤劳」的指引",
+        "「勤劳」的哲学"
+      ],
+      "weeklyBossMaterialName": "武炼之魂·孤影"
+    },
+    "element": "冰",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Ganyu.png",
+    "id": 10000037,
+    "materials": [
+      "哀叙冰玉碎屑",
+      "清心",
+      "骗骗花蜜",
+      "哀叙冰玉断片",
+      "极寒之核",
+      "微光花蜜",
+      "哀叙冰玉块",
+      "原素花蜜",
+      "哀叙冰玉",
+      "「勤劳」的哲学",
+      "武炼之魂·孤影",
+      "智识之冕",
+      "「勤劳」的教导",
+      "「勤劳」的指引"
+    ],
+    "name": "甘雨",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Ganyu.png",
+    "rarity": 5,
+    "region": "璃月",
+    "weaponType": "弓"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "哀叙冰玉碎屑",
+        "哀叙冰玉断片",
+        "哀叙冰玉块",
+        "哀叙冰玉"
+      ],
+      "bossMaterialName": "极寒之核",
+      "commonMaterialNames": [
+        "导能绘卷",
+        "封魔绘卷",
+        "禁咒绘卷"
+      ],
+      "localSpecialtyName": "琉璃袋",
+      "talentBookNames": [
+        "「繁荣」的教导",
+        "「繁荣」的指引",
+        "「繁荣」的哲学"
+      ],
+      "weeklyBossMaterialName": "北风之尾"
+    },
+    "element": "冰",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Qiqi.png",
+    "id": 10000035,
+    "materials": [
+      "哀叙冰玉碎屑",
+      "琉璃袋",
+      "导能绘卷",
+      "哀叙冰玉断片",
+      "极寒之核",
+      "封魔绘卷",
+      "哀叙冰玉块",
+      "禁咒绘卷",
+      "哀叙冰玉",
+      "「繁荣」的哲学",
+      "北风之尾",
+      "智识之冕",
+      "「繁荣」的教导",
+      "「繁荣」的指引"
+    ],
+    "name": "七七",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Qiqi.png",
+    "rarity": 5,
+    "region": "璃月",
+    "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "涤净青金碎屑",
+        "涤净青金断片",
+        "涤净青金块",
+        "涤净青金"
+      ],
+      "bossMaterialName": "净水之心",
+      "commonMaterialNames": [
+        "新兵的徽记",
+        "士官的徽记",
+        "尉官的徽记"
+      ],
+      "localSpecialtyName": "星螺",
+      "talentBookNames": [
+        "「自由」的教导",
+        "「自由」的指引",
+        "「自由」的哲学"
+      ],
+      "weeklyBossMaterialName": "魔王之刃·残片"
+    },
+    "element": "水",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Tartaglia.png",
+    "id": 10000033,
+    "materials": [
+      "涤净青金碎屑",
+      "星螺",
+      "新兵的徽记",
+      "涤净青金断片",
+      "净水之心",
+      "士官的徽记",
+      "涤净青金块",
+      "尉官的徽记",
+      "涤净青金",
+      "「自由」的哲学",
+      "魔王之刃·残片",
+      "智识之冕",
+      "「自由」的教导",
+      "「自由」的指引"
+    ],
+    "name": "达达利亚",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Tartaglia.png",
+    "rarity": 5,
+    "region": "至冬",
+    "weaponType": "弓"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "坚牢黄玉碎屑",
+        "坚牢黄玉断片",
+        "坚牢黄玉块",
+        "坚牢黄玉"
+      ],
+      "bossMaterialName": "玄岩之塔",
+      "commonMaterialNames": [
+        "史莱姆凝液",
+        "史莱姆清",
+        "史莱姆原浆"
+      ],
+      "localSpecialtyName": "石珀",
+      "talentBookNames": [
+        "「黄金」的教导",
+        "「黄金」的指引",
+        "「黄金」的哲学"
+      ],
+      "weeklyBossMaterialName": "吞天之鲸·只角"
+    },
+    "element": "岩",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Zhongli.png",
+    "id": 10000030,
+    "materials": [
+      "坚牢黄玉碎屑",
+      "石珀",
+      "史莱姆凝液",
+      "坚牢黄玉断片",
+      "玄岩之塔",
+      "史莱姆清",
+      "坚牢黄玉块",
+      "史莱姆原浆",
+      "坚牢黄玉",
+      "「黄金」的哲学",
+      "吞天之鲸·只角",
+      "智识之冕",
+      "「黄金」的教导",
+      "「黄金」的指引"
+    ],
+    "name": "钟离",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Zhongli.png",
+    "rarity": 5,
+    "region": "璃月",
+    "weaponType": "长柄武器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "燃愿玛瑙碎屑",
+        "燃愿玛瑙断片",
+        "燃愿玛瑙块",
+        "燃愿玛瑙"
+      ],
+      "bossMaterialName": "常燃火种",
+      "commonMaterialNames": [
+        "导能绘卷",
+        "封魔绘卷",
+        "禁咒绘卷"
+      ],
+      "localSpecialtyName": "慕风蘑菇",
+      "talentBookNames": [
+        "「自由」的教导",
+        "「自由」的指引",
+        "「自由」的哲学"
+      ],
+      "weeklyBossMaterialName": "北风之环"
+    },
+    "element": "火",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Klee.png",
+    "id": 10000029,
+    "materials": [
+      "燃愿玛瑙碎屑",
+      "慕风蘑菇",
+      "导能绘卷",
+      "燃愿玛瑙断片",
+      "常燃火种",
+      "封魔绘卷",
+      "燃愿玛瑙块",
+      "禁咒绘卷",
+      "燃愿玛瑙",
+      "「自由」的哲学",
+      "北风之环",
+      "智识之冕",
+      "「自由」的教导",
+      "「自由」的指引"
+    ],
+    "name": "可莉",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Klee.png",
+    "rarity": 5,
+    "region": "蒙德",
+    "weaponType": "法器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "自在松石碎屑",
+        "自在松石断片",
+        "自在松石块",
+        "自在松石"
+      ],
+      "bossMaterialName": "未熟之玉",
+      "commonMaterialNames": [
+        "史莱姆凝液",
+        "史莱姆清",
+        "史莱姆原浆"
+      ],
+      "localSpecialtyName": "清心",
+      "talentBookNames": [
+        "「繁荣」的教导",
+        "「繁荣」的指引",
+        "「繁荣」的哲学"
+      ],
+      "weeklyBossMaterialName": "武炼之魂·孤影"
+    },
+    "element": "风",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Xiao.png",
+    "id": 10000026,
+    "materials": [
+      "自在松石碎屑",
+      "清心",
+      "史莱姆凝液",
+      "自在松石断片",
+      "未熟之玉",
+      "史莱姆清",
+      "自在松石块",
+      "史莱姆原浆",
+      "自在松石",
+      "「繁荣」的哲学",
+      "武炼之魂·孤影",
+      "智识之冕",
+      "「繁荣」的教导",
+      "「繁荣」的指引"
+    ],
+    "name": "魈",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Xiao.png",
+    "rarity": 5,
+    "region": "璃月",
+    "weaponType": "长柄武器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "自在松石碎屑",
+        "自在松石断片",
+        "自在松石块",
+        "自在松石"
+      ],
+      "bossMaterialName": "飓风之种",
+      "commonMaterialNames": [
+        "史莱姆凝液",
+        "史莱姆清",
+        "史莱姆原浆"
+      ],
+      "localSpecialtyName": "塞西莉亚花",
+      "talentBookNames": [
+        "「诗文」的教导",
+        "「诗文」的指引",
+        "「诗文」的哲学"
+      ],
+      "weeklyBossMaterialName": "北风之尾"
+    },
+    "element": "风",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Venti.png",
+    "id": 10000022,
+    "materials": [
+      "自在松石碎屑",
+      "塞西莉亚花",
+      "史莱姆凝液",
+      "自在松石断片",
+      "飓风之种",
+      "史莱姆清",
+      "自在松石块",
+      "史莱姆原浆",
+      "自在松石",
+      "「诗文」的哲学",
+      "北风之尾",
+      "智识之冕",
+      "「诗文」的教导",
+      "「诗文」的指引"
+    ],
+    "name": "温迪",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Venti.png",
+    "rarity": 5,
+    "region": "蒙德",
+    "weaponType": "弓"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "燃愿玛瑙碎屑",
+        "燃愿玛瑙断片",
+        "燃愿玛瑙块",
+        "燃愿玛瑙"
+      ],
+      "bossMaterialName": "常燃火种",
+      "commonMaterialNames": [
+        "新兵的徽记",
+        "士官的徽记",
+        "尉官的徽记"
+      ],
+      "localSpecialtyName": "小灯草",
+      "talentBookNames": [
+        "「抗争」的教导",
+        "「抗争」的指引",
+        "「抗争」的哲学"
+      ],
+      "weeklyBossMaterialName": "东风之翎"
+    },
+    "element": "火",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Diluc.png",
+    "id": 10000016,
+    "materials": [
+      "燃愿玛瑙碎屑",
+      "小灯草",
+      "新兵的徽记",
+      "燃愿玛瑙断片",
+      "常燃火种",
+      "士官的徽记",
+      "燃愿玛瑙块",
+      "尉官的徽记",
+      "燃愿玛瑙",
+      "「抗争」的哲学",
+      "东风之翎",
+      "智识之冕",
+      "「抗争」的教导",
+      "「抗争」的指引"
+    ],
+    "name": "迪卢克",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Diluc.png",
+    "rarity": 5,
+    "region": "蒙德",
+    "weaponType": "双手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "璀璨原钻碎屑",
+        "璀璨原钻断片",
+        "璀璨原钻块",
+        "璀璨原钻"
+      ],
+      "bossMaterialName": "",
+      "commonMaterialNames": [
+        "破损的面具",
+        "污秽的面具",
+        "不祥的面具"
+      ],
+      "localSpecialtyName": "风车菊",
+      "talentBookNames": [],
+      "weeklyBossMaterialName": ""
+    },
+    "element": "无",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_PlayerGirl.png",
+    "id": 10000007,
+    "materials": [
+      "璀璨原钻碎屑",
+      "风车菊",
+      "破损的面具",
+      "璀璨原钻断片",
+      "污秽的面具",
+      "璀璨原钻块",
+      "不祥的面具",
+      "璀璨原钻"
+    ],
+    "name": "荧",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_PlayerGirl.png",
+    "rarity": 5,
+    "region": "未知",
+    "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "璀璨原钻碎屑",
+        "璀璨原钻断片",
+        "璀璨原钻块",
+        "璀璨原钻"
+      ],
+      "bossMaterialName": "",
+      "commonMaterialNames": [
+        "破损的面具",
+        "污秽的面具",
+        "不祥的面具"
+      ],
+      "localSpecialtyName": "风车菊",
+      "talentBookNames": [],
+      "weeklyBossMaterialName": ""
+    },
+    "element": "无",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_PlayerBoy.png",
+    "id": 10000005,
+    "materials": [
+      "璀璨原钻碎屑",
+      "风车菊",
+      "破损的面具",
+      "璀璨原钻断片",
+      "污秽的面具",
+      "璀璨原钻块",
+      "不祥的面具",
+      "璀璨原钻"
+    ],
+    "name": "空",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_PlayerBoy.png",
+    "rarity": 5,
+    "region": "未知",
+    "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "自在松石碎屑",
+        "自在松石断片",
+        "自在松石块",
+        "自在松石"
+      ],
+      "bossMaterialName": "飓风之种",
+      "commonMaterialNames": [
+        "破损的面具",
+        "污秽的面具",
+        "不祥的面具"
+      ],
+      "localSpecialtyName": "蒲公英籽",
+      "talentBookNames": [
+        "「抗争」的教导",
+        "「抗争」的指引",
+        "「抗争」的哲学"
+      ],
+      "weeklyBossMaterialName": "东风之翎"
+    },
+    "element": "风",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Qin.png",
+    "id": 10000003,
+    "materials": [
+      "自在松石碎屑",
+      "蒲公英籽",
+      "破损的面具",
+      "自在松石断片",
+      "飓风之种",
+      "污秽的面具",
+      "自在松石块",
+      "不祥的面具",
+      "自在松石",
+      "「抗争」的哲学",
+      "东风之翎",
+      "智识之冕",
+      "「抗争」的教导",
+      "「抗争」的指引"
+    ],
+    "name": "琴",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Qin.png",
+    "rarity": 5,
+    "region": "蒙德",
+    "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "哀叙冰玉碎屑",
+        "哀叙冰玉断片",
+        "哀叙冰玉块",
+        "哀叙冰玉"
+      ],
+      "bossMaterialName": "恒常机关之心",
+      "commonMaterialNames": [
+        "破旧的刀镡",
+        "影打刀镡",
+        "名刀镡"
+      ],
+      "localSpecialtyName": "绯樱绣球",
+      "talentBookNames": [
+        "「风雅」的教导",
+        "「风雅」的指引",
+        "「风雅」的哲学"
+      ],
+      "weeklyBossMaterialName": "血玉之枝"
+    },
+    "element": "冰",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Ayaka.png",
+    "id": 10000002,
+    "materials": [
+      "哀叙冰玉碎屑",
+      "绯樱绣球",
+      "破旧的刀镡",
+      "哀叙冰玉断片",
+      "恒常机关之心",
+      "影打刀镡",
+      "哀叙冰玉块",
+      "名刀镡",
+      "哀叙冰玉",
+      "「风雅」的哲学",
+      "血玉之枝",
+      "智识之冕",
+      "「风雅」的教导",
+      "「风雅」的指引"
+    ],
+    "name": "神里绫华",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Ayaka.png",
+    "rarity": 5,
+    "region": "稻妻",
+    "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "自在松石碎屑",
+        "自在松石断片",
+        "自在松石块",
+        "自在松石"
+      ],
+      "bossMaterialName": "漫光的辉角",
+      "commonMaterialNames": [
+        "寻宝鸦印",
+        "藏银鸦印",
+        "攫金鸦印"
+      ],
+      "localSpecialtyName": "冬凌草",
+      "talentBookNames": [
+        "「抗争」的教导",
+        "「抗争」的指引",
+        "「抗争」的哲学"
+      ],
+      "weeklyBossMaterialName": "贤医的假面"
+    },
+    "element": "风",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Prune.png",
+    "id": 10000132,
+    "materials": [
+      "自在松石碎屑",
+      "冬凌草",
+      "寻宝鸦印",
+      "自在松石断片",
+      "漫光的辉角",
+      "藏银鸦印",
+      "自在松石块",
+      "攫金鸦印",
+      "自在松石",
+      "「抗争」的哲学",
+      "贤医的假面",
+      "智识之冕",
+      "「抗争」的教导",
+      "「抗争」的指引"
+    ],
+    "name": "布伦妮",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Prune.png",
+    "rarity": 4,
+    "region": "蒙德",
+    "weaponType": "法器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "坚牢黄玉碎屑",
+        "坚牢黄玉断片",
+        "坚牢黄玉块",
+        "坚牢黄玉"
+      ],
+      "bossMaterialName": "循环式军用月矩核心",
+      "commonMaterialNames": [
+        "毁损机轴",
+        "加固机轴",
+        "精制机轴"
+      ],
+      "localSpecialtyName": "松珀香",
+      "talentBookNames": [
+        "「乐园」的教导",
+        "「乐园」的指引",
+        "「乐园」的哲学"
+      ],
+      "weeklyBossMaterialName": "蚀灭的灵犀"
+    },
+    "element": "岩",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Illuga.png",
+    "id": 10000127,
+    "materials": [
+      "坚牢黄玉碎屑",
+      "松珀香",
+      "毁损机轴",
+      "坚牢黄玉断片",
+      "循环式军用月矩核心",
+      "加固机轴",
+      "坚牢黄玉块",
+      "精制机轴",
+      "坚牢黄玉",
+      "「乐园」的哲学",
+      "蚀灭的灵犀",
+      "智识之冕",
+      "「乐园」的教导",
+      "「乐园」的指引"
+    ],
+    "name": "叶洛亚",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Illuga.png",
+    "rarity": 4,
+    "region": "挪德卡莱",
+    "weaponType": "长柄武器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "自在松石碎屑",
+        "自在松石断片",
+        "自在松石块",
+        "自在松石"
+      ],
+      "bossMaterialName": "承光的鳞羽",
+      "commonMaterialNames": [
+        "毁损机轴",
+        "加固机轴",
+        "精制机轴"
+      ],
+      "localSpecialtyName": "便携轴承",
+      "talentBookNames": [
+        "「浪迹」的教导",
+        "「浪迹」的指引",
+        "「浪迹」的哲学"
+      ],
+      "weeklyBossMaterialName": "升扬样本·骑士"
+    },
+    "element": "风",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Jahoda.png",
+    "id": 10000124,
+    "materials": [
+      "自在松石碎屑",
+      "便携轴承",
+      "毁损机轴",
+      "自在松石断片",
+      "承光的鳞羽",
+      "加固机轴",
+      "自在松石块",
+      "精制机轴",
+      "自在松石",
+      "「浪迹」的哲学",
+      "升扬样本·骑士",
+      "智识之冕",
+      "「浪迹」的教导",
+      "「浪迹」的指引"
+    ],
+    "name": "雅珂达",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Jahoda.png",
+    "rarity": 4,
+    "region": "挪德卡莱",
+    "weaponType": "弓"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "涤净青金碎屑",
+        "涤净青金断片",
+        "涤净青金块",
+        "涤净青金"
+      ],
+      "bossMaterialName": "精密型月矩力冲鸭模具",
+      "commonMaterialNames": [
+        "毁损机轴",
+        "加固机轴",
+        "精制机轴"
+      ],
+      "localSpecialtyName": "便携轴承",
+      "talentBookNames": [
+        "「乐园」的教导",
+        "「乐园」的指引",
+        "「乐园」的哲学"
+      ],
+      "weeklyBossMaterialName": "丝织之羽"
+    },
+    "element": "水",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Aino.png",
+    "id": 10000121,
+    "materials": [
+      "涤净青金碎屑",
+      "便携轴承",
+      "毁损机轴",
+      "涤净青金断片",
+      "精密型月矩力冲鸭模具",
+      "加固机轴",
+      "涤净青金块",
+      "精制机轴",
+      "涤净青金",
+      "「乐园」的哲学",
+      "丝织之羽",
+      "智识之冕",
+      "「乐园」的教导",
+      "「乐园」的指引"
+    ],
+    "name": "爱诺",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Aino.png",
+    "rarity": 4,
+    "region": "挪德卡莱",
+    "weaponType": "双手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "涤净青金碎屑",
+        "涤净青金断片",
+        "涤净青金块",
+        "涤净青金"
+      ],
+      "bossMaterialName": "秘源积气喉",
+      "commonMaterialNames": [
+        "牢固的箭簇",
+        "锐利的箭簇",
+        "历战的箭簇"
+      ],
+      "localSpecialtyName": "嘟嘟莲",
+      "talentBookNames": [
+        "「诗文」的教导",
+        "「诗文」的指引",
+        "「诗文」的哲学"
+      ],
+      "weeklyBossMaterialName": "蚀灭的鳞羽"
+    },
+    "element": "水",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Dahlia.png",
+    "id": 10000115,
+    "materials": [
+      "涤净青金碎屑",
+      "嘟嘟莲",
+      "牢固的箭簇",
+      "涤净青金断片",
+      "秘源积气喉",
+      "锐利的箭簇",
+      "涤净青金块",
+      "历战的箭簇",
+      "涤净青金",
+      "「诗文」的哲学",
+      "蚀灭的鳞羽",
+      "智识之冕",
+      "「诗文」的教导",
+      "「诗文」的指引"
+    ],
+    "name": "塔利雅",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Dahlia.png",
+    "rarity": 4,
+    "region": "蒙德",
+    "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "自在松石碎屑",
+        "自在松石断片",
+        "自在松石块",
+        "自在松石"
+      ],
+      "bossMaterialName": "龙像的无智核",
+      "commonMaterialNames": [
+        "稚嫩的尖齿",
+        "老练的坚齿",
+        "横行霸者的利齿"
+      ],
+      "localSpecialtyName": "肉龙掌",
+      "talentBookNames": [
+        "「纷争」的教导",
+        "「纷争」的指引",
+        "「纷争」的哲学"
+      ],
+      "weeklyBossMaterialName": "升扬样本·战车"
+    },
+    "element": "风",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Ifa.png",
+    "id": 10000113,
+    "materials": [
+      "自在松石碎屑",
+      "肉龙掌",
+      "稚嫩的尖齿",
+      "自在松石断片",
+      "龙像的无智核",
+      "老练的坚齿",
+      "自在松石块",
+      "横行霸者的利齿",
+      "自在松石",
+      "「纷争」的哲学",
+      "升扬样本·战车",
+      "智识之冕",
+      "「纷争」的教导",
+      "「纷争」的指引"
+    ],
+    "name": "伊法",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Ifa.png",
+    "rarity": 4,
+    "region": "纳塔",
+    "weaponType": "法器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "最胜紫晶碎屑",
+        "最胜紫晶断片",
+        "最胜紫晶块",
+        "最胜紫晶"
+      ],
+      "bossMaterialName": "深邃纠缠的凝视",
+      "commonMaterialNames": [
+        "卫从的木哨",
+        "战士的铁哨",
+        "龙冠武士的金哨"
+      ],
+      "localSpecialtyName": "琉鳞石",
+      "talentBookNames": [
+        "「角逐」的教导",
+        "「角逐」的指引",
+        "「角逐」的哲学"
+      ],
+      "weeklyBossMaterialName": "否定裁断"
+    },
+    "element": "雷",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Iansan.png",
+    "id": 10000110,
+    "materials": [
+      "最胜紫晶碎屑",
+      "琉鳞石",
+      "卫从的木哨",
+      "最胜紫晶断片",
+      "深邃纠缠的凝视",
+      "战士的铁哨",
+      "最胜紫晶块",
+      "龙冠武士的金哨",
+      "最胜紫晶",
+      "「角逐」的哲学",
+      "否定裁断",
+      "智识之冕",
+      "「角逐」的教导",
+      "「角逐」的指引"
+    ],
+    "name": "伊安珊",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Iansan.png",
+    "rarity": 4,
+    "region": "纳塔",
+    "weaponType": "长柄武器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "自在松石碎屑",
+        "自在松石断片",
+        "自在松石块",
+        "自在松石"
+      ],
+      "bossMaterialName": "秘刻金纹的源核",
+      "commonMaterialNames": [
+        "骗骗花蜜",
+        "微光花蜜",
+        "原素花蜜"
+      ],
+      "localSpecialtyName": "清水玉",
+      "talentBookNames": [
+        "「勤劳」的教导",
+        "「勤劳」的指引",
+        "「勤劳」的哲学"
+      ],
+      "weeklyBossMaterialName": "蚀灭的阳焰"
+    },
+    "element": "风",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Lanyan.png",
+    "id": 10000108,
+    "materials": [
+      "自在松石碎屑",
+      "清水玉",
+      "骗骗花蜜",
+      "自在松石断片",
+      "秘刻金纹的源核",
+      "微光花蜜",
+      "自在松石块",
+      "原素花蜜",
+      "自在松石",
+      "「勤劳」的哲学",
+      "蚀灭的阳焰",
+      "智识之冕",
+      "「勤劳」的教导",
+      "「勤劳」的指引"
+    ],
+    "name": "蓝砚",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Lanyan.png",
+    "rarity": 4,
+    "region": "璃月",
+    "weaponType": "法器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "最胜紫晶碎屑",
+        "最胜紫晶断片",
+        "最胜紫晶块",
+        "最胜紫晶"
+      ],
+      "bossMaterialName": "受祝所缚之印",
+      "commonMaterialNames": [
+        "稚嫩的尖齿",
+        "老练的坚齿",
+        "横行霸者的利齿"
+      ],
+      "localSpecialtyName": "微光角菌",
+      "talentBookNames": [
+        "「焚燔」的教导",
+        "「焚燔」的指引",
+        "「焚燔」的哲学"
+      ],
+      "weeklyBossMaterialName": "无光丝线"
+    },
+    "element": "雷",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Olorun.png",
+    "id": 10000105,
+    "materials": [
+      "最胜紫晶碎屑",
+      "微光角菌",
+      "稚嫩的尖齿",
+      "最胜紫晶断片",
+      "受祝所缚之印",
+      "老练的坚齿",
+      "最胜紫晶块",
+      "横行霸者的利齿",
+      "最胜紫晶",
+      "「焚燔」的哲学",
+      "无光丝线",
+      "智识之冕",
+      "「焚燔」的教导",
+      "「焚燔」的指引"
+    ],
+    "name": "欧洛伦",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Olorun.png",
+    "rarity": 4,
+    "region": "纳塔",
+    "weaponType": "弓"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "坚牢黄玉碎屑",
+        "坚牢黄玉断片",
+        "坚牢黄玉块",
+        "坚牢黄玉"
+      ],
+      "bossMaterialName": "过熟的火榴果",
+      "commonMaterialNames": [
+        "卫从的木哨",
+        "战士的铁哨",
+        "龙冠武士的金哨"
+      ],
+      "localSpecialtyName": "青蜜莓",
+      "talentBookNames": [
+        "「纷争」的教导",
+        "「纷争」的指引",
+        "「纷争」的哲学"
+      ],
+      "weeklyBossMaterialName": "残火灯烛"
+    },
+    "element": "岩",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Kachina.png",
+    "id": 10000100,
+    "materials": [
+      "坚牢黄玉碎屑",
+      "青蜜莓",
+      "卫从的木哨",
+      "坚牢黄玉断片",
+      "过熟的火榴果",
+      "战士的铁哨",
+      "坚牢黄玉块",
+      "龙冠武士的金哨",
+      "坚牢黄玉",
+      "「纷争」的哲学",
+      "残火灯烛",
+      "智识之冕",
+      "「纷争」的教导",
+      "「纷争」的指引"
+    ],
+    "name": "卡齐娜",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Kachina.png",
+    "rarity": 4,
+    "region": "纳塔",
+    "weaponType": "长柄武器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "最胜紫晶碎屑",
+        "最胜紫晶断片",
+        "最胜紫晶块",
+        "最胜紫晶"
+      ],
+      "bossMaterialName": "凝云鳞甲",
+      "commonMaterialNames": [
+        "褪色红绸",
+        "镶边红绸",
+        "织金红绸"
+      ],
+      "localSpecialtyName": "万相石",
+      "talentBookNames": [
+        "「笃行」的教导",
+        "「笃行」的指引",
+        "「笃行」的哲学"
+      ],
+      "weeklyBossMaterialName": "空行的虚铃"
+    },
+    "element": "雷",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Sethos.png",
+    "id": 10000097,
+    "materials": [
+      "最胜紫晶碎屑",
+      "万相石",
+      "褪色红绸",
+      "最胜紫晶断片",
+      "凝云鳞甲",
+      "镶边红绸",
+      "最胜紫晶块",
+      "织金红绸",
+      "最胜紫晶",
+      "「笃行」的哲学",
+      "空行的虚铃",
+      "智识之冕",
+      "「笃行」的教导",
+      "「笃行」的指引"
+    ],
+    "name": "赛索斯",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Sethos.png",
+    "rarity": 4,
+    "region": "须弥",
+    "weaponType": "弓"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "燃愿玛瑙碎屑",
+        "燃愿玛瑙断片",
+        "燃愿玛瑙块",
+        "燃愿玛瑙"
+      ],
+      "bossMaterialName": "帝皇的决断",
+      "commonMaterialNames": [
+        "史莱姆凝液",
+        "史莱姆清",
+        "史莱姆原浆"
+      ],
+      "localSpecialtyName": "星螺",
+      "talentBookNames": [
+        "「繁荣」的教导",
+        "「繁荣」的指引",
+        "「繁荣」的哲学"
+      ],
+      "weeklyBossMaterialName": "无光质块"
+    },
+    "element": "火",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Gaming.png",
+    "id": 10000092,
+    "materials": [
+      "燃愿玛瑙碎屑",
+      "星螺",
+      "史莱姆凝液",
+      "燃愿玛瑙断片",
+      "帝皇的决断",
+      "史莱姆清",
+      "燃愿玛瑙块",
+      "史莱姆原浆",
+      "燃愿玛瑙",
+      "「繁荣」的哲学",
+      "无光质块",
+      "智识之冕",
+      "「繁荣」的教导",
+      "「繁荣」的指引"
+    ],
+    "name": "嘉明",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Gaming.png",
+    "rarity": 4,
+    "region": "璃月",
+    "weaponType": "双手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "燃愿玛瑙碎屑",
+        "燃愿玛瑙断片",
+        "燃愿玛瑙块",
+        "燃愿玛瑙"
+      ],
+      "bossMaterialName": "原海麟角",
+      "commonMaterialNames": [
+        "啮合齿轮",
+        "机关正齿轮",
+        "奇械机芯齿轮"
+      ],
+      "localSpecialtyName": "柔灯铃",
+      "talentBookNames": [
+        "「秩序」的教导",
+        "「秩序」的指引",
+        "「秩序」的哲学"
+      ],
+      "weeklyBossMaterialName": "无光涡眼"
+    },
+    "element": "火",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Chevreuse.png",
+    "id": 10000090,
+    "materials": [
+      "燃愿玛瑙碎屑",
+      "柔灯铃",
+      "啮合齿轮",
+      "燃愿玛瑙断片",
+      "原海麟角",
+      "机关正齿轮",
+      "燃愿玛瑙块",
+      "奇械机芯齿轮",
+      "燃愿玛瑙",
+      "「秩序」的哲学",
+      "无光涡眼",
+      "智识之冕",
+      "「秩序」的教导",
+      "「秩序」的指引"
+    ],
+    "name": "夏沃蕾",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Chevreuse.png",
+    "rarity": 4,
+    "region": "枫丹",
+    "weaponType": "长柄武器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "哀叙冰玉碎屑",
+        "哀叙冰玉断片",
+        "哀叙冰玉块",
+        "哀叙冰玉"
+      ],
+      "bossMaterialName": "「图比昂装置」",
+      "commonMaterialNames": [
+        "啮合齿轮",
+        "机关正齿轮",
+        "奇械机芯齿轮"
+      ],
+      "localSpecialtyName": "苍晶螺",
+      "talentBookNames": [
+        "「正义」的教导",
+        "「正义」的指引",
+        "「正义」的哲学"
+      ],
+      "weeklyBossMaterialName": "无光丝线"
+    },
+    "element": "冰",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Charlotte.png",
+    "id": 10000088,
+    "materials": [
+      "哀叙冰玉碎屑",
+      "苍晶螺",
+      "啮合齿轮",
+      "哀叙冰玉断片",
+      "「图比昂装置」",
+      "机关正齿轮",
+      "哀叙冰玉块",
+      "奇械机芯齿轮",
+      "哀叙冰玉",
+      "「正义」的哲学",
+      "无光丝线",
+      "智识之冕",
+      "「正义」的教导",
+      "「正义」的指引"
+    ],
+    "name": "夏洛蒂",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Charlotte.png",
+    "rarity": 4,
+    "region": "枫丹",
+    "weaponType": "法器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "哀叙冰玉碎屑",
+        "哀叙冰玉断片",
+        "哀叙冰玉块",
+        "哀叙冰玉"
+      ],
+      "bossMaterialName": "奇械发条备件·科培琉司",
+      "commonMaterialNames": [
+        "异海凝珠",
+        "异海之块",
+        "异色结晶石"
+      ],
+      "localSpecialtyName": "海露花",
+      "talentBookNames": [
+        "「正义」的教导",
+        "「正义」的指引",
+        "「正义」的哲学"
+      ],
+      "weeklyBossMaterialName": "生长天地之蕨草"
+    },
+    "element": "冰",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Freminet.png",
+    "id": 10000085,
+    "materials": [
+      "哀叙冰玉碎屑",
+      "海露花",
+      "异海凝珠",
+      "哀叙冰玉断片",
+      "奇械发条备件·科培琉司",
+      "异海之块",
+      "哀叙冰玉块",
+      "异色结晶石",
+      "哀叙冰玉",
+      "「正义」的哲学",
+      "生长天地之蕨草",
+      "智识之冕",
+      "「正义」的教导",
+      "「正义」的指引"
+    ],
+    "name": "菲米尼",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Freminet.png",
+    "rarity": 4,
+    "region": "枫丹",
+    "weaponType": "双手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "自在松石碎屑",
+        "自在松石断片",
+        "自在松石块",
+        "自在松石"
+      ],
+      "bossMaterialName": "奇械发条备件·歌裴莉娅",
+      "commonMaterialNames": [
+        "啮合齿轮",
+        "机关正齿轮",
+        "奇械机芯齿轮"
+      ],
+      "localSpecialtyName": "柔灯铃",
+      "talentBookNames": [
+        "「秩序」的教导",
+        "「秩序」的指引",
+        "「秩序」的哲学"
+      ],
+      "weeklyBossMaterialName": "亘古树海之一瞬"
+    },
+    "element": "风",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Linette.png",
+    "id": 10000083,
+    "materials": [
+      "自在松石碎屑",
+      "柔灯铃",
+      "啮合齿轮",
+      "自在松石断片",
+      "奇械发条备件·歌裴莉娅",
+      "机关正齿轮",
+      "自在松石块",
+      "奇械机芯齿轮",
+      "自在松石",
+      "「秩序」的哲学",
+      "亘古树海之一瞬",
+      "智识之冕",
+      "「秩序」的教导",
+      "「秩序」的指引"
+    ],
+    "name": "琳妮特",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Linette.png",
+    "rarity": 4,
+    "region": "枫丹",
+    "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "生长碧翡碎屑",
+        "生长碧翡断片",
+        "生长碧翡块",
+        "生长碧翡"
+      ],
+      "bossMaterialName": "灭诤草蔓",
+      "commonMaterialNames": [
+        "蕈兽孢子",
+        "荧光孢粉",
+        "孢囊晶尘"
+      ],
+      "localSpecialtyName": "悼灵花",
+      "talentBookNames": [
+        "「巧思」的教导",
+        "「巧思」的指引",
+        "「巧思」的哲学"
+      ],
+      "weeklyBossMaterialName": "原初绿洲之初绽"
+    },
+    "element": "草",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Kaveh.png",
+    "id": 10000081,
+    "materials": [
+      "生长碧翡碎屑",
+      "悼灵花",
+      "蕈兽孢子",
+      "生长碧翡断片",
+      "灭诤草蔓",
+      "荧光孢粉",
+      "生长碧翡块",
+      "孢囊晶尘",
+      "生长碧翡",
+      "「巧思」的哲学",
+      "原初绿洲之初绽",
+      "智识之冕",
+      "「巧思」的教导",
+      "「巧思」的指引"
+    ],
+    "name": "卡维",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Kaveh.png",
+    "rarity": 4,
+    "region": "须弥",
+    "weaponType": "双手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "哀叙冰玉碎屑",
+        "哀叙冰玉断片",
+        "哀叙冰玉块",
+        "哀叙冰玉"
+      ],
+      "bossMaterialName": "苍砾蕊羽",
+      "commonMaterialNames": [
+        "新兵的徽记",
+        "士官的徽记",
+        "尉官的徽记"
+      ],
+      "localSpecialtyName": "钩钩果",
+      "talentBookNames": [
+        "「诗文」的教导",
+        "「诗文」的指引",
+        "「诗文」的哲学"
+      ],
+      "weeklyBossMaterialName": "无心的渊镜"
+    },
+    "element": "冰",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Mika.png",
+    "id": 10000080,
+    "materials": [
+      "哀叙冰玉碎屑",
+      "钩钩果",
+      "新兵的徽记",
+      "哀叙冰玉断片",
+      "苍砾蕊羽",
+      "士官的徽记",
+      "哀叙冰玉块",
+      "尉官的徽记",
+      "哀叙冰玉",
+      "「诗文」的哲学",
+      "无心的渊镜",
+      "智识之冕",
+      "「诗文」的教导",
+      "「诗文」的指引"
+    ],
+    "name": "米卡",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Mika.png",
+    "rarity": 4,
+    "region": "蒙德",
+    "weaponType": "长柄武器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "生长碧翡碎屑",
+        "生长碧翡断片",
+        "生长碧翡块",
+        "生长碧翡"
+      ],
+      "bossMaterialName": "灭诤草蔓",
+      "commonMaterialNames": [
+        "史莱姆凝液",
+        "史莱姆清",
+        "史莱姆原浆"
+      ],
+      "localSpecialtyName": "绝云椒椒",
+      "talentBookNames": [
+        "「勤劳」的教导",
+        "「勤劳」的指引",
+        "「勤劳」的哲学"
+      ],
+      "weeklyBossMaterialName": "空行的虚铃"
+    },
+    "element": "草",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Yaoyao.png",
+    "id": 10000077,
+    "materials": [
+      "生长碧翡碎屑",
+      "绝云椒椒",
+      "史莱姆凝液",
+      "生长碧翡断片",
+      "灭诤草蔓",
+      "史莱姆清",
+      "生长碧翡块",
+      "史莱姆原浆",
+      "生长碧翡",
+      "「勤劳」的哲学",
+      "空行的虚铃",
+      "智识之冕",
+      "「勤劳」的教导",
+      "「勤劳」的指引"
+    ],
+    "name": "瑶瑶",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Yaoyao.png",
+    "rarity": 4,
+    "region": "璃月",
+    "weaponType": "长柄武器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "自在松石碎屑",
+        "自在松石断片",
+        "自在松石块",
+        "自在松石"
+      ],
+      "bossMaterialName": "导光四面体",
+      "commonMaterialNames": [
+        "褪色红绸",
+        "镶边红绸",
+        "织金红绸"
+      ],
+      "localSpecialtyName": "赤念果",
+      "talentBookNames": [
+        "「诤言」的教导",
+        "「诤言」的指引",
+        "「诤言」的哲学"
+      ],
+      "weeklyBossMaterialName": "傀儡的悬丝"
+    },
+    "element": "风",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Faruzan.png",
+    "id": 10000076,
+    "materials": [
+      "自在松石碎屑",
+      "赤念果",
+      "褪色红绸",
+      "自在松石断片",
+      "导光四面体",
+      "镶边红绸",
+      "自在松石块",
+      "织金红绸",
+      "自在松石",
+      "「诤言」的哲学",
+      "傀儡的悬丝",
+      "智识之冕",
+      "「诤言」的教导",
+      "「诤言」的指引"
+    ],
+    "name": "珐露珊",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Faruzan.png",
+    "rarity": 4,
+    "region": "须弥",
+    "weaponType": "弓"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "哀叙冰玉碎屑",
+        "哀叙冰玉断片",
+        "哀叙冰玉块",
+        "哀叙冰玉"
+      ],
+      "bossMaterialName": "永续机芯",
+      "commonMaterialNames": [
+        "导能绘卷",
+        "封魔绘卷",
+        "禁咒绘卷"
+      ],
+      "localSpecialtyName": "月莲",
+      "talentBookNames": [
+        "「巧思」的教导",
+        "「巧思」的指引",
+        "「巧思」的哲学"
+      ],
+      "weeklyBossMaterialName": "无心的渊镜"
+    },
+    "element": "冰",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Layla.png",
+    "id": 10000074,
+    "materials": [
+      "哀叙冰玉碎屑",
+      "月莲",
+      "导能绘卷",
+      "哀叙冰玉断片",
+      "永续机芯",
+      "封魔绘卷",
+      "哀叙冰玉块",
+      "禁咒绘卷",
+      "哀叙冰玉",
+      "「巧思」的哲学",
+      "无心的渊镜",
+      "智识之冕",
+      "「巧思」的教导",
+      "「巧思」的指引"
+    ],
+    "name": "莱依拉",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Layla.png",
+    "rarity": 4,
+    "region": "须弥",
+    "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "涤净青金碎屑",
+        "涤净青金断片",
+        "涤净青金块",
+        "涤净青金"
+      ],
+      "bossMaterialName": "导光四面体",
+      "commonMaterialNames": [
+        "褪色红绸",
+        "镶边红绸",
+        "织金红绸"
+      ],
+      "localSpecialtyName": "赤念果",
+      "talentBookNames": [
+        "「诤言」的教导",
+        "「诤言」的指引",
+        "「诤言」的哲学"
+      ],
+      "weeklyBossMaterialName": "祸神之禊泪"
+    },
+    "element": "水",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Candace.png",
+    "id": 10000072,
+    "materials": [
+      "涤净青金碎屑",
+      "赤念果",
+      "褪色红绸",
+      "涤净青金断片",
+      "导光四面体",
+      "镶边红绸",
+      "涤净青金块",
+      "织金红绸",
+      "涤净青金",
+      "「诤言」的哲学",
+      "祸神之禊泪",
+      "智识之冕",
+      "「诤言」的教导",
+      "「诤言」的指引"
+    ],
+    "name": "坎蒂丝",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Candace.png",
+    "rarity": 4,
+    "region": "须弥",
+    "weaponType": "长柄武器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "最胜紫晶碎屑",
+        "最胜紫晶断片",
+        "最胜紫晶块",
+        "最胜紫晶"
+      ],
+      "bossMaterialName": "藏雷野实",
+      "commonMaterialNames": [
+        "褪色红绸",
+        "镶边红绸",
+        "织金红绸"
+      ],
+      "localSpecialtyName": "劫波莲",
+      "talentBookNames": [
+        "「巧思」的教导",
+        "「巧思」的指引",
+        "「巧思」的哲学"
+      ],
+      "weeklyBossMaterialName": "血玉之枝"
+    },
+    "element": "雷",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Dori.png",
+    "id": 10000068,
+    "materials": [
+      "最胜紫晶碎屑",
+      "劫波莲",
+      "褪色红绸",
+      "最胜紫晶断片",
+      "藏雷野实",
+      "镶边红绸",
+      "最胜紫晶块",
+      "织金红绸",
+      "最胜紫晶",
+      "「巧思」的哲学",
+      "血玉之枝",
+      "智识之冕",
+      "「巧思」的教导",
+      "「巧思」的指引"
+    ],
+    "name": "多莉",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Dori.png",
+    "rarity": 4,
+    "region": "须弥",
+    "weaponType": "双手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "生长碧翡碎屑",
+        "生长碧翡断片",
+        "生长碧翡块",
+        "生长碧翡"
+      ],
+      "bossMaterialName": "蕈王钩喙",
+      "commonMaterialNames": [
+        "牢固的箭簇",
+        "锐利的箭簇",
+        "历战的箭簇"
+      ],
+      "localSpecialtyName": "树王圣体菇",
+      "talentBookNames": [
+        "「笃行」的教导",
+        "「笃行」的指引",
+        "「笃行」的哲学"
+      ],
+      "weeklyBossMaterialName": "祸神之禊泪"
+    },
+    "element": "草",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Collei.png",
+    "id": 10000067,
+    "materials": [
+      "生长碧翡碎屑",
+      "树王圣体菇",
+      "牢固的箭簇",
+      "生长碧翡断片",
+      "蕈王钩喙",
+      "锐利的箭簇",
+      "生长碧翡块",
+      "历战的箭簇",
+      "生长碧翡",
+      "「笃行」的哲学",
+      "祸神之禊泪",
+      "智识之冕",
+      "「笃行」的教导",
+      "「笃行」的指引"
+    ],
+    "name": "柯莱",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Collei.png",
+    "rarity": 4,
+    "region": "须弥",
+    "weaponType": "弓"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "最胜紫晶碎屑",
+        "最胜紫晶断片",
+        "最胜紫晶块",
+        "最胜紫晶"
+      ],
+      "bossMaterialName": "符纹之齿",
+      "commonMaterialNames": [
+        "浮游干核",
+        "浮游幽核",
+        "浮游晶化核"
+      ],
+      "localSpecialtyName": "鸣草",
+      "talentBookNames": [
+        "「风雅」的教导",
+        "「风雅」的指引",
+        "「风雅」的哲学"
+      ],
+      "weeklyBossMaterialName": "祸神之禊泪"
+    },
+    "element": "雷",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Shinobu.png",
+    "id": 10000065,
+    "materials": [
+      "最胜紫晶碎屑",
+      "鸣草",
+      "浮游干核",
+      "最胜紫晶断片",
+      "符纹之齿",
+      "浮游幽核",
+      "最胜紫晶块",
+      "浮游晶化核",
+      "最胜紫晶",
+      "「风雅」的哲学",
+      "祸神之禊泪",
+      "智识之冕",
+      "「风雅」的教导",
+      "「风雅」的指引"
+    ],
+    "name": "久岐忍",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Shinobu.png",
+    "rarity": 4,
+    "region": "稻妻",
+    "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "坚牢黄玉碎屑",
+        "坚牢黄玉断片",
+        "坚牢黄玉块",
+        "坚牢黄玉"
+      ],
+      "bossMaterialName": "兽境王器",
+      "commonMaterialNames": [
+        "破损的面具",
+        "污秽的面具",
+        "不祥的面具"
+      ],
+      "localSpecialtyName": "琉璃百合",
+      "talentBookNames": [
+        "「勤劳」的教导",
+        "「勤劳」的指引",
+        "「勤劳」的哲学"
+      ],
+      "weeklyBossMaterialName": "灰烬之心"
+    },
+    "element": "岩",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Yunjin.png",
+    "id": 10000064,
+    "materials": [
+      "坚牢黄玉碎屑",
+      "琉璃百合",
+      "破损的面具",
+      "坚牢黄玉断片",
+      "兽境王器",
+      "污秽的面具",
+      "坚牢黄玉块",
+      "不祥的面具",
+      "坚牢黄玉",
+      "「勤劳」的哲学",
+      "灰烬之心",
+      "智识之冕",
+      "「勤劳」的教导",
+      "「勤劳」的指引"
+    ],
+    "name": "云堇",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Yunjin.png",
+    "rarity": 4,
+    "region": "璃月",
+    "weaponType": "长柄武器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "生长碧翡碎屑",
+        "生长碧翡断片",
+        "生长碧翡块",
+        "生长碧翡"
+      ],
+      "bossMaterialName": "常暗圆环",
+      "commonMaterialNames": [
+        "浮游干核",
+        "浮游幽核",
+        "浮游晶化核"
+      ],
+      "localSpecialtyName": "天云草实",
+      "talentBookNames": [
+        "「浮世」的教导",
+        "「浮世」的指引",
+        "「浮世」的哲学"
+      ],
+      "weeklyBossMaterialName": "亘古树海之一瞬"
+    },
+    "element": "草",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Momoka.png",
+    "id": 10000061,
+    "materials": [
+      "生长碧翡碎屑",
+      "天云草实",
+      "浮游干核",
+      "生长碧翡断片",
+      "常暗圆环",
+      "浮游幽核",
+      "生长碧翡块",
+      "浮游晶化核",
+      "生长碧翡",
+      "「浮世」的哲学",
+      "亘古树海之一瞬",
+      "智识之冕",
+      "「浮世」的教导",
+      "「浮世」的指引"
+    ],
+    "name": "绮良良",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Momoka.png",
+    "rarity": 4,
+    "region": "稻妻",
+    "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "自在松石碎屑",
+        "自在松石断片",
+        "自在松石块",
+        "自在松石"
+      ],
+      "bossMaterialName": "符纹之齿",
+      "commonMaterialNames": [
+        "寻宝鸦印",
+        "藏银鸦印",
+        "攫金鸦印"
+      ],
+      "localSpecialtyName": "鬼兜虫",
+      "talentBookNames": [
+        "「浮世」的教导",
+        "「浮世」的指引",
+        "「浮世」的哲学"
+      ],
+      "weeklyBossMaterialName": "万劫之真意"
+    },
+    "element": "风",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Heizo.png",
+    "id": 10000059,
+    "materials": [
+      "自在松石碎屑",
+      "鬼兜虫",
+      "寻宝鸦印",
+      "自在松石断片",
+      "符纹之齿",
+      "藏银鸦印",
+      "自在松石块",
+      "攫金鸦印",
+      "自在松石",
+      "「浮世」的哲学",
+      "万劫之真意",
+      "智识之冕",
+      "「浮世」的教导",
+      "「浮世」的指引"
+    ],
+    "name": "鹿野院平藏",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Heizo.png",
+    "rarity": 4,
+    "region": "稻妻",
+    "weaponType": "法器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "最胜紫晶碎屑",
+        "最胜紫晶断片",
+        "最胜紫晶块",
+        "最胜紫晶"
+      ],
+      "bossMaterialName": "雷霆数珠",
+      "commonMaterialNames": [
+        "破损的面具",
+        "污秽的面具",
+        "不祥的面具"
+      ],
+      "localSpecialtyName": "血斛",
+      "talentBookNames": [
+        "「风雅」的教导",
+        "「风雅」的指引",
+        "「风雅」的哲学"
+      ],
+      "weeklyBossMaterialName": "灰烬之心"
+    },
+    "element": "雷",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Sara.png",
+    "id": 10000056,
+    "materials": [
+      "最胜紫晶碎屑",
+      "血斛",
+      "破损的面具",
+      "最胜紫晶断片",
+      "雷霆数珠",
+      "污秽的面具",
+      "最胜紫晶块",
+      "不祥的面具",
+      "最胜紫晶",
+      "「风雅」的哲学",
+      "灰烬之心",
+      "智识之冕",
+      "「风雅」的教导",
+      "「风雅」的指引"
+    ],
+    "name": "九条裟罗",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Sara.png",
+    "rarity": 4,
+    "region": "稻妻",
+    "weaponType": "弓"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "坚牢黄玉碎屑",
+        "坚牢黄玉断片",
+        "坚牢黄玉块",
+        "坚牢黄玉"
+      ],
+      "bossMaterialName": "恒常机关之心",
+      "commonMaterialNames": [
+        "浮游干核",
+        "浮游幽核",
+        "浮游晶化核"
+      ],
+      "localSpecialtyName": "珊瑚真珠",
+      "talentBookNames": [
+        "「天光」的教导",
+        "「天光」的指引",
+        "「天光」的哲学"
+      ],
+      "weeklyBossMaterialName": "熔毁之刻"
+    },
+    "element": "岩",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Gorou.png",
+    "id": 10000055,
+    "materials": [
+      "坚牢黄玉碎屑",
+      "珊瑚真珠",
+      "浮游干核",
+      "坚牢黄玉断片",
+      "恒常机关之心",
+      "浮游幽核",
+      "坚牢黄玉块",
+      "浮游晶化核",
+      "坚牢黄玉",
+      "「天光」的哲学",
+      "熔毁之刻",
+      "智识之冕",
+      "「天光」的教导",
+      "「天光」的指引"
+    ],
+    "name": "五郎",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Gorou.png",
+    "rarity": 4,
+    "region": "稻妻",
+    "weaponType": "弓"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "自在松石碎屑",
+        "自在松石断片",
+        "自在松石块",
+        "自在松石"
+      ],
+      "bossMaterialName": "魔偶机心",
+      "commonMaterialNames": [
+        "骗骗花蜜",
+        "微光花蜜",
+        "原素花蜜"
+      ],
+      "localSpecialtyName": "晶化骨髓",
+      "talentBookNames": [
+        "「天光」的教导",
+        "「天光」的指引",
+        "「天光」的哲学"
+      ],
+      "weeklyBossMaterialName": "鎏金之鳞"
+    },
+    "element": "风",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Sayu.png",
+    "id": 10000053,
+    "materials": [
+      "自在松石碎屑",
+      "晶化骨髓",
+      "骗骗花蜜",
+      "自在松石断片",
+      "魔偶机心",
+      "微光花蜜",
+      "自在松石块",
+      "原素花蜜",
+      "自在松石",
+      "「天光」的哲学",
+      "鎏金之鳞",
+      "智识之冕",
+      "「天光」的教导",
+      "「天光」的指引"
+    ],
+    "name": "早柚",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Sayu.png",
+    "rarity": 4,
+    "region": "稻妻",
+    "weaponType": "双手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "燃愿玛瑙碎屑",
+        "燃愿玛瑙断片",
+        "燃愿玛瑙块",
+        "燃愿玛瑙"
+      ],
+      "bossMaterialName": "阴燃之珠",
+      "commonMaterialNames": [
+        "寻宝鸦印",
+        "藏银鸦印",
+        "攫金鸦印"
+      ],
+      "localSpecialtyName": "幽灯蕈",
+      "talentBookNames": [
+        "「浮世」的教导",
+        "「浮世」的指引",
+        "「浮世」的哲学"
+      ],
+      "weeklyBossMaterialName": "狱火之蝶"
+    },
+    "element": "火",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Tohma.png",
+    "id": 10000050,
+    "materials": [
+      "燃愿玛瑙碎屑",
+      "幽灯蕈",
+      "寻宝鸦印",
+      "燃愿玛瑙断片",
+      "阴燃之珠",
+      "藏银鸦印",
+      "燃愿玛瑙块",
+      "攫金鸦印",
+      "燃愿玛瑙",
+      "「浮世」的哲学",
+      "狱火之蝶",
+      "智识之冕",
+      "「浮世」的教导",
+      "「浮世」的指引"
+    ],
+    "name": "托马",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Tohma.png",
+    "rarity": 4,
+    "region": "稻妻",
+    "weaponType": "长柄武器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "燃愿玛瑙碎屑",
+        "燃愿玛瑙断片",
+        "燃愿玛瑙块",
+        "燃愿玛瑙"
+      ],
+      "bossMaterialName": "未熟之玉",
+      "commonMaterialNames": [
+        "寻宝鸦印",
+        "藏银鸦印",
+        "攫金鸦印"
+      ],
+      "localSpecialtyName": "夜泊石",
+      "talentBookNames": [
+        "「黄金」的教导",
+        "「黄金」的指引",
+        "「黄金」的哲学"
+      ],
+      "weeklyBossMaterialName": "血玉之枝"
+    },
+    "element": "火",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Feiyan.png",
+    "id": 10000048,
+    "materials": [
+      "燃愿玛瑙碎屑",
+      "夜泊石",
+      "寻宝鸦印",
+      "燃愿玛瑙断片",
+      "未熟之玉",
+      "藏银鸦印",
+      "燃愿玛瑙块",
+      "攫金鸦印",
+      "燃愿玛瑙",
+      "「黄金」的哲学",
+      "血玉之枝",
+      "智识之冕",
+      "「黄金」的教导",
+      "「黄金」的指引"
+    ],
+    "name": "烟绯",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Feiyan.png",
+    "rarity": 4,
+    "region": "璃月",
+    "weaponType": "法器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "哀叙冰玉碎屑",
+        "哀叙冰玉断片",
+        "哀叙冰玉块",
+        "哀叙冰玉"
+      ],
+      "bossMaterialName": "极寒之核",
+      "commonMaterialNames": [
+        "新兵的徽记",
+        "士官的徽记",
+        "尉官的徽记"
+      ],
+      "localSpecialtyName": "落落莓",
+      "talentBookNames": [
+        "「诗文」的教导",
+        "「诗文」的指引",
+        "「诗文」的哲学"
+      ],
+      "weeklyBossMaterialName": "武炼之魂·孤影"
+    },
+    "element": "冰",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Rosaria.png",
+    "id": 10000045,
+    "materials": [
+      "哀叙冰玉碎屑",
+      "落落莓",
+      "新兵的徽记",
+      "哀叙冰玉断片",
+      "极寒之核",
+      "士官的徽记",
+      "哀叙冰玉块",
+      "尉官的徽记",
+      "哀叙冰玉",
+      "「诗文」的哲学",
+      "武炼之魂·孤影",
+      "智识之冕",
+      "「诗文」的教导",
+      "「诗文」的指引"
+    ],
+    "name": "罗莎莉亚",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Rosaria.png",
+    "rarity": 4,
+    "region": "蒙德",
+    "weaponType": "长柄武器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "燃愿玛瑙碎屑",
+        "燃愿玛瑙断片",
+        "燃愿玛瑙块",
+        "燃愿玛瑙"
+      ],
+      "bossMaterialName": "常燃火种",
+      "commonMaterialNames": [
+        "寻宝鸦印",
+        "藏银鸦印",
+        "攫金鸦印"
+      ],
+      "localSpecialtyName": "琉璃袋",
+      "talentBookNames": [
+        "「黄金」的教导",
+        "「黄金」的指引",
+        "「黄金」的哲学"
+      ],
+      "weeklyBossMaterialName": "吞天之鲸·只角"
+    },
+    "element": "火",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Xinyan.png",
+    "id": 10000044,
+    "materials": [
+      "燃愿玛瑙碎屑",
+      "琉璃袋",
+      "寻宝鸦印",
+      "燃愿玛瑙断片",
+      "常燃火种",
+      "藏银鸦印",
+      "燃愿玛瑙块",
+      "攫金鸦印",
+      "燃愿玛瑙",
+      "「黄金」的哲学",
+      "吞天之鲸·只角",
+      "智识之冕",
+      "「黄金」的教导",
+      "「黄金」的指引"
+    ],
+    "name": "辛焱",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Xinyan.png",
+    "rarity": 4,
+    "region": "璃月",
+    "weaponType": "双手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "自在松石碎屑",
+        "自在松石断片",
+        "自在松石块",
+        "自在松石"
+      ],
+      "bossMaterialName": "飓风之种",
+      "commonMaterialNames": [
+        "骗骗花蜜",
+        "微光花蜜",
+        "原素花蜜"
+      ],
+      "localSpecialtyName": "风车菊",
+      "talentBookNames": [
+        "「自由」的教导",
+        "「自由」的指引",
+        "「自由」的哲学"
+      ],
+      "weeklyBossMaterialName": "北风的魂匣"
+    },
+    "element": "风",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Sucrose.png",
+    "id": 10000043,
+    "materials": [
+      "自在松石碎屑",
+      "风车菊",
+      "骗骗花蜜",
+      "自在松石断片",
+      "飓风之种",
+      "微光花蜜",
+      "自在松石块",
+      "原素花蜜",
+      "自在松石",
+      "「自由」的哲学",
+      "北风的魂匣",
+      "智识之冕",
+      "「自由」的教导",
+      "「自由」的指引"
+    ],
+    "name": "砂糖",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Sucrose.png",
+    "rarity": 4,
+    "region": "蒙德",
+    "weaponType": "法器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "哀叙冰玉碎屑",
+        "哀叙冰玉断片",
+        "哀叙冰玉块",
+        "哀叙冰玉"
+      ],
+      "bossMaterialName": "极寒之核",
+      "commonMaterialNames": [
+        "牢固的箭簇",
+        "锐利的箭簇",
+        "历战的箭簇"
+      ],
+      "localSpecialtyName": "嘟嘟莲",
+      "talentBookNames": [
+        "「自由」的教导",
+        "「自由」的指引",
+        "「自由」的哲学"
+      ],
+      "weeklyBossMaterialName": "魔王之刃·残片"
+    },
+    "element": "冰",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Diona.png",
+    "id": 10000039,
+    "materials": [
+      "哀叙冰玉碎屑",
+      "嘟嘟莲",
+      "牢固的箭簇",
+      "哀叙冰玉断片",
+      "极寒之核",
+      "锐利的箭簇",
+      "哀叙冰玉块",
+      "历战的箭簇",
+      "哀叙冰玉",
+      "「自由」的哲学",
+      "魔王之刃·残片",
+      "智识之冕",
+      "「自由」的教导",
+      "「自由」的指引"
+    ],
+    "name": "迪奥娜",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Diona.png",
+    "rarity": 4,
+    "region": "蒙德",
+    "weaponType": "弓"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "哀叙冰玉碎屑",
+        "哀叙冰玉断片",
+        "哀叙冰玉块",
+        "哀叙冰玉"
+      ],
+      "bossMaterialName": "极寒之核",
+      "commonMaterialNames": [
+        "破损的面具",
+        "污秽的面具",
+        "不祥的面具"
+      ],
+      "localSpecialtyName": "石珀",
+      "talentBookNames": [
+        "「勤劳」的教导",
+        "「勤劳」的指引",
+        "「勤劳」的哲学"
+      ],
+      "weeklyBossMaterialName": "东风的吐息"
+    },
+    "element": "冰",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Chongyun.png",
+    "id": 10000036,
+    "materials": [
+      "哀叙冰玉碎屑",
+      "石珀",
+      "破损的面具",
+      "哀叙冰玉断片",
+      "极寒之核",
+      "污秽的面具",
+      "哀叙冰玉块",
+      "不祥的面具",
+      "哀叙冰玉",
+      "「勤劳」的哲学",
+      "东风的吐息",
+      "智识之冕",
+      "「勤劳」的教导",
+      "「勤劳」的指引"
+    ],
+    "name": "重云",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Chongyun.png",
+    "rarity": 4,
+    "region": "璃月",
+    "weaponType": "双手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "坚牢黄玉碎屑",
+        "坚牢黄玉断片",
+        "坚牢黄玉块",
+        "坚牢黄玉"
+      ],
+      "bossMaterialName": "玄岩之塔",
+      "commonMaterialNames": [
+        "破损的面具",
+        "污秽的面具",
+        "不祥的面具"
+      ],
+      "localSpecialtyName": "落落莓",
+      "talentBookNames": [
+        "「抗争」的教导",
+        "「抗争」的指引",
+        "「抗争」的哲学"
+      ],
+      "weeklyBossMaterialName": "东风之爪"
+    },
+    "element": "岩",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Noel.png",
+    "id": 10000034,
+    "materials": [
+      "坚牢黄玉碎屑",
+      "落落莓",
+      "破损的面具",
+      "坚牢黄玉断片",
+      "玄岩之塔",
+      "污秽的面具",
+      "坚牢黄玉块",
+      "不祥的面具",
+      "坚牢黄玉",
+      "「抗争」的哲学",
+      "东风之爪",
+      "智识之冕",
+      "「抗争」的教导",
+      "「抗争」的指引"
+    ],
+    "name": "诺艾尔",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Noel.png",
+    "rarity": 4,
+    "region": "蒙德",
+    "weaponType": "双手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "燃愿玛瑙碎屑",
+        "燃愿玛瑙断片",
+        "燃愿玛瑙块",
+        "燃愿玛瑙"
+      ],
+      "bossMaterialName": "常燃火种",
+      "commonMaterialNames": [
+        "寻宝鸦印",
+        "藏银鸦印",
+        "攫金鸦印"
+      ],
+      "localSpecialtyName": "风车菊",
+      "talentBookNames": [
+        "「抗争」的教导",
+        "「抗争」的指引",
+        "「抗争」的哲学"
+      ],
+      "weeklyBossMaterialName": "东风之翎"
+    },
+    "element": "火",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Bennett.png",
+    "id": 10000032,
+    "materials": [
+      "燃愿玛瑙碎屑",
+      "风车菊",
+      "寻宝鸦印",
+      "燃愿玛瑙断片",
+      "常燃火种",
+      "藏银鸦印",
+      "燃愿玛瑙块",
+      "攫金鸦印",
+      "燃愿玛瑙",
+      "「抗争」的哲学",
+      "东风之翎",
+      "智识之冕",
+      "「抗争」的教导",
+      "「抗争」的指引"
+    ],
+    "name": "班尼特",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Bennett.png",
+    "rarity": 4,
+    "region": "蒙德",
+    "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "最胜紫晶碎屑",
+        "最胜紫晶断片",
+        "最胜紫晶块",
+        "最胜紫晶"
+      ],
+      "bossMaterialName": "雷光棱镜",
+      "commonMaterialNames": [
+        "牢固的箭簇",
+        "锐利的箭簇",
+        "历战的箭簇"
+      ],
+      "localSpecialtyName": "小灯草",
+      "talentBookNames": [
+        "「诗文」的教导",
+        "「诗文」的指引",
+        "「诗文」的哲学"
+      ],
+      "weeklyBossMaterialName": "北风的魂匣"
+    },
+    "element": "雷",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Fischl.png",
+    "id": 10000031,
+    "materials": [
+      "最胜紫晶碎屑",
+      "小灯草",
+      "牢固的箭簇",
+      "最胜紫晶断片",
+      "雷光棱镜",
+      "锐利的箭簇",
+      "最胜紫晶块",
+      "历战的箭簇",
+      "最胜紫晶",
+      "「诗文」的哲学",
+      "北风的魂匣",
+      "智识之冕",
+      "「诗文」的教导",
+      "「诗文」的指引"
+    ],
+    "name": "菲谢尔",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Fischl.png",
+    "rarity": 4,
+    "region": "蒙德",
+    "weaponType": "弓"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "坚牢黄玉碎屑",
+        "坚牢黄玉断片",
+        "坚牢黄玉块",
+        "坚牢黄玉"
+      ],
+      "bossMaterialName": "玄岩之塔",
+      "commonMaterialNames": [
+        "新兵的徽记",
+        "士官的徽记",
+        "尉官的徽记"
+      ],
+      "localSpecialtyName": "琉璃百合",
+      "talentBookNames": [
+        "「繁荣」的教导",
+        "「繁荣」的指引",
+        "「繁荣」的哲学"
+      ],
+      "weeklyBossMaterialName": "北风的魂匣"
+    },
+    "element": "岩",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Ningguang.png",
+    "id": 10000027,
+    "materials": [
+      "坚牢黄玉碎屑",
+      "琉璃百合",
+      "新兵的徽记",
+      "坚牢黄玉断片",
+      "玄岩之塔",
+      "士官的徽记",
+      "坚牢黄玉块",
+      "尉官的徽记",
+      "坚牢黄玉",
+      "「繁荣」的哲学",
+      "北风的魂匣",
+      "智识之冕",
+      "「繁荣」的教导",
+      "「繁荣」的指引"
+    ],
+    "name": "凝光",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Ningguang.png",
+    "rarity": 4,
+    "region": "璃月",
+    "weaponType": "法器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "涤净青金碎屑",
+        "涤净青金断片",
+        "涤净青金块",
+        "涤净青金"
+      ],
+      "bossMaterialName": "净水之心",
+      "commonMaterialNames": [
+        "破损的面具",
+        "污秽的面具",
+        "不祥的面具"
+      ],
+      "localSpecialtyName": "霓裳花",
+      "talentBookNames": [
+        "「黄金」的教导",
+        "「黄金」的指引",
+        "「黄金」的哲学"
+      ],
+      "weeklyBossMaterialName": "北风之尾"
+    },
+    "element": "水",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Xingqiu.png",
+    "id": 10000025,
+    "materials": [
+      "涤净青金碎屑",
+      "霓裳花",
+      "破损的面具",
+      "涤净青金断片",
+      "净水之心",
+      "污秽的面具",
+      "涤净青金块",
+      "不祥的面具",
+      "涤净青金",
+      "「黄金」的哲学",
+      "北风之尾",
+      "智识之冕",
+      "「黄金」的教导",
+      "「黄金」的指引"
+    ],
+    "name": "行秋",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Xingqiu.png",
+    "rarity": 4,
+    "region": "璃月",
+    "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "最胜紫晶碎屑",
+        "最胜紫晶断片",
+        "最胜紫晶块",
+        "最胜紫晶"
+      ],
+      "bossMaterialName": "雷光棱镜",
+      "commonMaterialNames": [
+        "寻宝鸦印",
+        "藏银鸦印",
+        "攫金鸦印"
+      ],
+      "localSpecialtyName": "夜泊石",
+      "talentBookNames": [
+        "「黄金」的教导",
+        "「黄金」的指引",
+        "「黄金」的哲学"
+      ],
+      "weeklyBossMaterialName": "东风的吐息"
+    },
+    "element": "雷",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Beidou.png",
+    "id": 10000024,
+    "materials": [
+      "最胜紫晶碎屑",
+      "夜泊石",
+      "寻宝鸦印",
+      "最胜紫晶断片",
+      "雷光棱镜",
+      "藏银鸦印",
+      "最胜紫晶块",
+      "攫金鸦印",
+      "最胜紫晶",
+      "「黄金」的哲学",
+      "东风的吐息",
+      "智识之冕",
+      "「黄金」的教导",
+      "「黄金」的指引"
+    ],
+    "name": "北斗",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Beidou.png",
+    "rarity": 4,
+    "region": "璃月",
+    "weaponType": "双手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "燃愿玛瑙碎屑",
+        "燃愿玛瑙断片",
+        "燃愿玛瑙块",
+        "燃愿玛瑙"
+      ],
+      "bossMaterialName": "常燃火种",
+      "commonMaterialNames": [
+        "史莱姆凝液",
+        "史莱姆清",
+        "史莱姆原浆"
+      ],
+      "localSpecialtyName": "绝云椒椒",
+      "talentBookNames": [
+        "「勤劳」的教导",
+        "「勤劳」的指引",
+        "「勤劳」的哲学"
+      ],
+      "weeklyBossMaterialName": "东风之爪"
+    },
+    "element": "火",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Xiangling.png",
+    "id": 10000023,
+    "materials": [
+      "燃愿玛瑙碎屑",
+      "绝云椒椒",
+      "史莱姆凝液",
+      "燃愿玛瑙断片",
+      "常燃火种",
+      "史莱姆清",
+      "燃愿玛瑙块",
+      "史莱姆原浆",
+      "燃愿玛瑙",
+      "「勤劳」的哲学",
+      "东风之爪",
+      "智识之冕",
+      "「勤劳」的教导",
+      "「勤劳」的指引"
+    ],
+    "name": "香菱",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Xiangling.png",
+    "rarity": 4,
+    "region": "璃月",
+    "weaponType": "长柄武器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "燃愿玛瑙碎屑",
+        "燃愿玛瑙断片",
+        "燃愿玛瑙块",
+        "燃愿玛瑙"
+      ],
+      "bossMaterialName": "常燃火种",
+      "commonMaterialNames": [
+        "牢固的箭簇",
+        "锐利的箭簇",
+        "历战的箭簇"
+      ],
+      "localSpecialtyName": "小灯草",
+      "talentBookNames": [
+        "「自由」的教导",
+        "「自由」的指引",
+        "「自由」的哲学"
+      ],
+      "weeklyBossMaterialName": "东风的吐息"
+    },
+    "element": "火",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Ambor.png",
+    "id": 10000021,
+    "materials": [
+      "燃愿玛瑙碎屑",
+      "小灯草",
+      "牢固的箭簇",
+      "燃愿玛瑙断片",
+      "常燃火种",
+      "锐利的箭簇",
+      "燃愿玛瑙块",
+      "历战的箭簇",
+      "燃愿玛瑙",
+      "「自由」的哲学",
+      "东风的吐息",
+      "智识之冕",
+      "「自由」的教导",
+      "「自由」的指引"
+    ],
+    "name": "安柏",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Ambor.png",
+    "rarity": 4,
+    "region": "蒙德",
+    "weaponType": "弓"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "最胜紫晶碎屑",
+        "最胜紫晶断片",
+        "最胜紫晶块",
+        "最胜紫晶"
+      ],
+      "bossMaterialName": "雷光棱镜",
+      "commonMaterialNames": [
+        "破损的面具",
+        "污秽的面具",
+        "不祥的面具"
+      ],
+      "localSpecialtyName": "钩钩果",
+      "talentBookNames": [
+        "「抗争」的教导",
+        "「抗争」的指引",
+        "「抗争」的哲学"
+      ],
+      "weeklyBossMaterialName": "东风之爪"
+    },
+    "element": "雷",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Razor.png",
+    "id": 10000020,
+    "materials": [
+      "最胜紫晶碎屑",
+      "钩钩果",
+      "破损的面具",
+      "最胜紫晶断片",
+      "雷光棱镜",
+      "污秽的面具",
+      "最胜紫晶块",
+      "不祥的面具",
+      "最胜紫晶",
+      "「抗争」的哲学",
+      "东风之爪",
+      "智识之冕",
+      "「抗争」的教导",
+      "「抗争」的指引"
+    ],
+    "name": "雷泽",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Razor.png",
+    "rarity": 4,
+    "region": "蒙德",
+    "weaponType": "双手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "哀叙冰玉碎屑",
+        "哀叙冰玉断片",
+        "哀叙冰玉块",
+        "哀叙冰玉"
+      ],
+      "bossMaterialName": "极寒之核",
+      "commonMaterialNames": [
+        "寻宝鸦印",
+        "藏银鸦印",
+        "攫金鸦印"
+      ],
+      "localSpecialtyName": "嘟嘟莲",
+      "talentBookNames": [
+        "「诗文」的教导",
+        "「诗文」的指引",
+        "「诗文」的哲学"
+      ],
+      "weeklyBossMaterialName": "北风的魂匣"
+    },
+    "element": "冰",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Kaeya.png",
+    "id": 10000015,
+    "materials": [
+      "哀叙冰玉碎屑",
+      "嘟嘟莲",
+      "寻宝鸦印",
+      "哀叙冰玉断片",
+      "极寒之核",
+      "藏银鸦印",
+      "哀叙冰玉块",
+      "攫金鸦印",
+      "哀叙冰玉",
+      "「诗文」的哲学",
+      "北风的魂匣",
+      "智识之冕",
+      "「诗文」的教导",
+      "「诗文」的指引"
+    ],
+    "name": "凯亚",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Kaeya.png",
+    "rarity": 4,
+    "region": "蒙德",
+    "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "涤净青金碎屑",
+        "涤净青金断片",
+        "涤净青金块",
+        "涤净青金"
+      ],
+      "bossMaterialName": "净水之心",
+      "commonMaterialNames": [
+        "导能绘卷",
+        "封魔绘卷",
+        "禁咒绘卷"
+      ],
+      "localSpecialtyName": "慕风蘑菇",
+      "talentBookNames": [
+        "「自由」的教导",
+        "「自由」的指引",
+        "「自由」的哲学"
+      ],
+      "weeklyBossMaterialName": "北风之环"
+    },
+    "element": "水",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Barbara.png",
+    "id": 10000014,
+    "materials": [
+      "涤净青金碎屑",
+      "慕风蘑菇",
+      "导能绘卷",
+      "涤净青金断片",
+      "净水之心",
+      "封魔绘卷",
+      "涤净青金块",
+      "禁咒绘卷",
+      "涤净青金",
+      "「自由」的哲学",
+      "北风之环",
+      "智识之冕",
+      "「自由」的教导",
+      "「自由」的指引"
+    ],
+    "name": "芭芭拉",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Barbara.png",
+    "rarity": 4,
+    "region": "蒙德",
+    "weaponType": "法器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "最胜紫晶碎屑",
+        "最胜紫晶断片",
+        "最胜紫晶块",
+        "最胜紫晶"
+      ],
+      "bossMaterialName": "雷光棱镜",
+      "commonMaterialNames": [
+        "史莱姆凝液",
+        "史莱姆清",
+        "史莱姆原浆"
+      ],
+      "localSpecialtyName": "落落莓",
+      "talentBookNames": [
+        "「诗文」的教导",
+        "「诗文」的指引",
+        "「诗文」的哲学"
+      ],
+      "weeklyBossMaterialName": "东风之爪"
+    },
+    "element": "雷",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Lisa.png",
+    "id": 10000006,
+    "materials": [
+      "最胜紫晶碎屑",
+      "落落莓",
+      "史莱姆凝液",
+      "最胜紫晶断片",
+      "雷光棱镜",
+      "史莱姆清",
+      "最胜紫晶块",
+      "史莱姆原浆",
+      "最胜紫晶",
+      "「诗文」的哲学",
+      "东风之爪",
+      "智识之冕",
+      "「诗文」的教导",
+      "「诗文」的指引"
+    ],
+    "name": "丽莎",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Lisa.png",
+    "rarity": 4,
+    "region": "蒙德",
+    "weaponType": "法器"
+  }
+]

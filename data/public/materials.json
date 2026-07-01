@@ -1,0 +1,5945 @@
+[
+  {
+    "category": "系统开放",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_102.png",
+    "id": 102,
+    "name": "冒险阅历",
+    "source": "冒险阅历，用于提升冒险等阶"
+  },
+  {
+    "category": "好感成长",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_105.png",
+    "id": 105,
+    "name": "好感经验",
+    "source": "好感经验，用于提升好感等级"
+  },
+  {
+    "category": "稀有货币",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_201.png",
+    "id": 201,
+    "name": "原石",
+    "source": "超出世界的原初晶石。黑暗的宇宙中，由无主的梦想与希望凝结而成的辉光。"
+  },
+  {
+    "category": "通用货币",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_202.png",
+    "id": 202,
+    "name": "摩拉",
+    "source": "冒险与探索奖励\n洞天百宝兑换\n激活藏金之花奖励"
+  },
+  {
+    "category": "高级兑换券",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_221.png",
+    "id": 221,
+    "name": "无主的星辉",
+    "source": "祈愿"
+  },
+  {
+    "category": "普通兑换券",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_222.png",
+    "id": 222,
+    "name": "无主的星尘",
+    "source": "祈愿"
+  },
+  {
+    "category": "限定祈愿道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_223.png",
+    "id": 223,
+    "name": "纠缠之缘",
+    "source": "连结梦想的命运之种。\n缘石辉光能让本无交集的命运交错，让彼此的梦想相连，正如这种光辉将群星连成心之所向的图形。"
+  },
+  {
+    "category": "祈愿道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_224.png",
+    "id": 224,
+    "name": "相遇之缘",
+    "source": "点亮星空的希望之种。\n无论相隔多远，命定相遇的人都会受缘石辉光的指引，在星空下相会。"
+  },
+  {
+    "category": "CONSUME",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_239.png",
+    "id": 239,
+    "name": "纪游经验",
+    "source": "魔女封存于奇域中的万千收藏，皆是你们新奇的见闻，构成全新画卷的灵感。"
+  },
+  {
+    "category": "功能开启凭证",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_240.png",
+    "id": 240,
+    "name": "诸界纪游",
+    "source": "使用后可以获得当期的诸界纪游使用资格。"
+  },
+  {
+    "category": "七国徽印",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_301.png",
+    "id": 301,
+    "name": "火之印",
+    "source": "纳塔地区探索奖励"
+  },
+  {
+    "category": "七国徽印",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_302.png",
+    "id": 302,
+    "name": "水之印",
+    "source": "枫丹地区探索奖励"
+  },
+  {
+    "category": "七国徽印",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_303.png",
+    "id": 303,
+    "name": "草之印",
+    "source": "须弥地区探索奖励"
+  },
+  {
+    "category": "七国徽印",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_304.png",
+    "id": 304,
+    "name": "雷之印",
+    "source": "稻妻地区探索奖励"
+  },
+  {
+    "category": "七国徽印",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_305.png",
+    "id": 305,
+    "name": "风之印",
+    "source": "蒙德地区探索奖励"
+  },
+  {
+    "category": "七国徽印",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_306.png",
+    "id": 306,
+    "name": "冰之印",
+    "source": "探索奖励"
+  },
+  {
+    "category": "七国徽印",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_307.png",
+    "id": 307,
+    "name": "岩之印",
+    "source": "璃月地区探索奖励"
+  },
+  {
+    "category": "徽印",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_308.png",
+    "id": 308,
+    "name": "月之印",
+    "source": "挪德卡莱地区探索奖励"
+  },
+  {
+    "category": "功能开启凭证",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_1201.png",
+    "id": 1201,
+    "name": "珍珠纪行·初稿",
+    "source": "用纪行文体写成的游记，记载了在大陆上旅行的种种见闻。不知道为什么会有这个初稿，难道你之前来过？\n\n使用后可以获得当期的珍珠纪行使用资格。"
+  },
+  {
+    "category": "功能开启凭证",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_1202.png",
+    "id": 1202,
+    "name": "空月祝福·新月",
+    "source": "于新月初升之时，向天空之月祈求财富与好运的仪式。你完全可以认为这是提瓦特的第一轮新月，至少是你见到的第一轮。\n\n使用后可以获得30天的空月祝福时间。"
+  },
+  {
+    "category": "食物",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100001.png",
+    "id": 100001,
+    "name": "苹果",
+    "source": "野外采集"
+  },
+  {
+    "category": "食物",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100002.png",
+    "id": 100002,
+    "name": "日落果",
+    "source": "野外采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100011.png",
+    "id": 100011,
+    "name": "蘑菇",
+    "source": "野外采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100012.png",
+    "id": 100012,
+    "name": "甜甜花",
+    "source": "野外采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100013.png",
+    "id": 100013,
+    "name": "胡萝卜",
+    "source": "野外采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100014.png",
+    "id": 100014,
+    "name": "白萝卜",
+    "source": "野外采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100015.png",
+    "id": 100015,
+    "name": "金鱼草",
+    "source": "河岸湖泊采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100016.png",
+    "id": 100016,
+    "name": "薄荷",
+    "source": "野外采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100017.png",
+    "id": 100017,
+    "name": "小麦",
+    "source": "野外采集\n杂货店购买"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100018.png",
+    "id": 100018,
+    "name": "卷心菜",
+    "source": "野外采集\n杂货店购买"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100019.png",
+    "id": 100019,
+    "name": "天原银莲",
+    "source": "野外采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100020.png",
+    "id": 100020,
+    "name": "松果",
+    "source": "野外采集"
+  },
+  {
+    "category": "蒙德区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100021.png",
+    "id": 100021,
+    "name": "钩钩果",
+    "source": "推荐：奔狼领采集\n前往采集"
+  },
+  {
+    "category": "蒙德区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100022.png",
+    "id": 100022,
+    "name": "落落莓",
+    "source": "推荐：望风山地采集\n尘歌壶种植\n前往采集"
+  },
+  {
+    "category": "蒙德区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100023.png",
+    "id": 100023,
+    "name": "塞西莉亚花",
+    "source": "推荐：摘星崖采集\n尘歌壶种植\n前往采集"
+  },
+  {
+    "category": "蒙德区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100024.png",
+    "id": 100024,
+    "name": "风车菊",
+    "source": "风起地七天神像附近采集\n推荐：风龙废墟采集\n尘歌壶种植\n前往采集"
+  },
+  {
+    "category": "蒙德区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100025.png",
+    "id": 100025,
+    "name": "慕风蘑菇",
+    "source": "房檐下采集\n前往采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100026.png",
+    "id": 100026,
+    "name": "莲蓬",
+    "source": "河岸湖泊采集"
+  },
+  {
+    "category": "璃月区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100027.png",
+    "id": 100027,
+    "name": "绝云椒椒",
+    "source": "推荐：轻策庄采集\n尘歌壶种植\n前往采集"
+  },
+  {
+    "category": "璃月区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100028.png",
+    "id": 100028,
+    "name": "夜泊石",
+    "source": "璃月山洞内采集\n推荐：明蕴镇采集\n前往采集"
+  },
+  {
+    "category": "璃月区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100029.png",
+    "id": 100029,
+    "name": "霓裳花",
+    "source": "璃月港玉京台附近采集\n望舒客栈附近采集\n尘歌壶种植\n前往采集"
+  },
+  {
+    "category": "璃月区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100030.png",
+    "id": 100030,
+    "name": "琉璃百合",
+    "source": "推荐：璃月港玉京台采集\n推荐：轻策庄采集\n尘歌壶种植\n前往采集"
+  },
+  {
+    "category": "璃月区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100031.png",
+    "id": 100031,
+    "name": "清心",
+    "source": "推荐：绝云间采集\n推荐：孤云阁采集\n尘歌壶种植\n前往采集"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100032.png",
+    "id": 100032,
+    "name": "马尾",
+    "source": "荻草丛中，湿地采集\n推荐：荻花洲采集"
+  },
+  {
+    "category": "璃月区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100033.png",
+    "id": 100033,
+    "name": "星螺",
+    "source": "璃月海滩采集\n前往采集"
+  },
+  {
+    "category": "璃月区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100034.png",
+    "id": 100034,
+    "name": "琉璃袋",
+    "source": "璃月山壁采集\n尘歌壶种植\n前往采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100051.png",
+    "id": 100051,
+    "name": "树莓",
+    "source": "野外采集"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100052.png",
+    "id": 100052,
+    "name": "冰雾花花朵",
+    "source": "野外采集\n推荐：晨曦酒庄采集"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100053.png",
+    "id": 100053,
+    "name": "烈焰花花蕊",
+    "source": "野外采集\n推荐：千风神殿采集"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100054.png",
+    "id": 100054,
+    "name": "电气水晶",
+    "source": "山壁下采集\n推荐：誓言岬采集"
+  },
+  {
+    "category": "蒙德区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100055.png",
+    "id": 100055,
+    "name": "小灯草",
+    "source": "推荐：奔狼领采集\n推荐：低语森林采集\n尘歌壶种植\n前往采集"
+  },
+  {
+    "category": "蒙德区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100056.png",
+    "id": 100056,
+    "name": "嘟嘟莲",
+    "source": "湖泊水边采集\n推荐：清泉镇采集\n尘歌壶种植\n前往采集"
+  },
+  {
+    "category": "蒙德区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100057.png",
+    "id": 100057,
+    "name": "蒲公英籽",
+    "source": "推荐：蒙德城门采集\n前往采集"
+  },
+  {
+    "category": "璃月区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100058.png",
+    "id": 100058,
+    "name": "石珀",
+    "source": "璃月山壁下采集\n推荐：琥牢山采集\n前往采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100061.png",
+    "id": 100061,
+    "name": "兽肉",
+    "source": "动物掉落"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100062.png",
+    "id": 100062,
+    "name": "鸟蛋",
+    "source": "野外采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100063.png",
+    "id": 100063,
+    "name": "松茸",
+    "source": "野外采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100064.png",
+    "id": 100064,
+    "name": "禽肉",
+    "source": "动物掉落"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100072.png",
+    "id": 100072,
+    "name": "蝴蝶翅膀",
+    "source": "野外采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100073.png",
+    "id": 100073,
+    "name": "螃蟹",
+    "source": "河岸湖泊海滩采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_110007.png",
+    "id": 100074,
+    "name": "蟹黄",
+    "source": "烹饪加工获得"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100075.png",
+    "id": 100075,
+    "name": "盐",
+    "source": "杂货店购买"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100076.png",
+    "id": 100076,
+    "name": "洋葱",
+    "source": "杂货店购买"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100077.png",
+    "id": 100077,
+    "name": "胡椒",
+    "source": "杂货店购买"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100078.png",
+    "id": 100078,
+    "name": "牛奶",
+    "source": "杂货店购买"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100079.png",
+    "id": 100079,
+    "name": "番茄",
+    "source": "杂货店购买"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100080.png",
+    "id": 100080,
+    "name": "土豆",
+    "source": "杂货店购买"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100081.png",
+    "id": 100081,
+    "name": "青蛙",
+    "source": "淡水水域采集"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100082.png",
+    "id": 100082,
+    "name": "发光髓",
+    "source": "野外采集"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100083.png",
+    "id": 100083,
+    "name": "蜥蜴尾巴",
+    "source": "捕捉蜥蜴采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100084.png",
+    "id": 100084,
+    "name": "鱼肉",
+    "source": "捕捉鱼类采集"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100085.png",
+    "id": 100085,
+    "name": "晶核",
+    "source": "捕捉晶蝶采集\n捕捉月萤虫采集\n晶蝶诱捕装置采集获得"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100088.png",
+    "id": 100088,
+    "name": "豆腐",
+    "source": "璃月杂货店购买\n稻妻杂货店购买\n须弥杂货店购买"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100089.png",
+    "id": 100089,
+    "name": "杏仁",
+    "source": "璃月杂货店购买\n枫丹杂货店购买"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100090.png",
+    "id": 100090,
+    "name": "鳅鳅宝玉",
+    "source": "野外采集\n推荐：荻花洲采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100091.png",
+    "id": 100091,
+    "name": "竹笋",
+    "source": "野外采集\n推荐：轻策庄竹林采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100092.png",
+    "id": 100092,
+    "name": "稻米",
+    "source": "璃月杂货店购买\n稻妻杂货店购买\n须弥杂货店购买"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100093.png",
+    "id": 100093,
+    "name": "虾仁",
+    "source": "璃月杂货店购买\n稻妻杂货店购买\n须弥杂货店购买"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100094.png",
+    "id": 100094,
+    "name": "「冷鲜肉」",
+    "source": "动物掉落"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100095.png",
+    "id": 100095,
+    "name": "鳗肉",
+    "source": "野外采集\n推荐：海祇岛采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100096.png",
+    "id": 100096,
+    "name": "秃秃豆",
+    "source": "须弥餐馆购买\n枫丹杂货店购买\n纳塔杂货店购买"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100097.png",
+    "id": 100097,
+    "name": "神秘的肉",
+    "source": "动物掉落"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100098.png",
+    "id": 100098,
+    "name": "咖啡豆",
+    "source": "须弥咖啡厅购买\n枫丹咖啡厅购买"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100099.png",
+    "id": 100099,
+    "name": "发酵果实汁",
+    "source": "枫丹杂货店购买"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101268.png",
+    "id": 100100,
+    "name": "黑麦",
+    "source": "野外采集\n挪德卡莱杂货店购买"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100225.png",
+    "id": 100225,
+    "name": "狩猎陷阱",
+    "source": "用来捕捉一定体型的野兽。在野外留心搜集的话，还是能做出这样一个陷阱的。布置在地上，小心藏好。"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100618.png",
+    "id": 100618,
+    "name": "奇异的「牙齿」",
+    "source": "从雪山上拾得的「牙齿」。也许有人会知道关于它的一些信息…"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100619.png",
+    "id": 100619,
+    "name": "汲取了力量的龙牙",
+    "source": "汲取了力量的龙牙。无论是光泽还是质感，相较原本都有所不同…"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100937.png",
+    "id": 100934,
+    "name": "键纹",
+    "source": "海祇岛与渊下宫流传的键纹。用以解锁的图案，因此称之为「键纹」。"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100936.png",
+    "id": 100935,
+    "name": "键纹",
+    "source": "海祇岛与渊下宫流传的键纹。是由曾经的白夜国民之纹拆解而成的。"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100935.png",
+    "id": 100936,
+    "name": "键纹",
+    "source": "海祇岛与渊下宫流传的键纹。五种键纹样式各不相同。"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100938.png",
+    "id": 100937,
+    "name": "键纹",
+    "source": "海祇岛与渊下宫流传的键纹。人们离开海渊之后，将键纹拼合，形成了珊瑚宫家之纹。"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100934.png",
+    "id": 100938,
+    "name": "键纹",
+    "source": "海祇岛与渊下宫流传的键纹。隐藏着一段秘密。"
+  },
+  {
+    "category": "锻造用矿石",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101001.png",
+    "id": 101001,
+    "name": "铁块",
+    "source": "野外采集"
+  },
+  {
+    "category": "锻造用矿石",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101002.png",
+    "id": 101002,
+    "name": "白铁块",
+    "source": "野外采集\n推荐：望风山地采集\n推荐：奔狼领采集"
+  },
+  {
+    "category": "锻造用矿石",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101003.png",
+    "id": 101003,
+    "name": "水晶块",
+    "source": "野外采集\n推荐：风龙废墟采集"
+  },
+  {
+    "category": "锻造用矿石",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101004.png",
+    "id": 101004,
+    "name": "魔晶块",
+    "source": "野外采集"
+  },
+  {
+    "category": "锻造用矿石",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101006.png",
+    "id": 101006,
+    "name": "星银矿石",
+    "source": "野外采集\n推荐：龙脊雪山采集"
+  },
+  {
+    "category": "锻造用矿石",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101008.png",
+    "id": 101008,
+    "name": "紫晶块",
+    "source": "野外采集\n推荐：鸣神岛采集"
+  },
+  {
+    "category": "锻造用矿石",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101009.png",
+    "id": 101009,
+    "name": "萃凝晶",
+    "source": "野外采集\n推荐：厄里那斯地面区域采集"
+  },
+  {
+    "category": "锻造用矿石",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101258.png",
+    "id": 101010,
+    "name": "虹滴晶",
+    "source": "野外采集"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101101.png",
+    "id": 101101,
+    "name": "北陆单手剑原胚",
+    "source": "蒙德、璃月、稻妻地区「征讨领域」或「奔狼的领主」挑战奖励"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101102.png",
+    "id": 101102,
+    "name": "北陆弓原胚",
+    "source": "蒙德、璃月、稻妻地区「征讨领域」或「奔狼的领主」挑战奖励"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101103.png",
+    "id": 101103,
+    "name": "北陆双手剑原胚",
+    "source": "蒙德、璃月、稻妻地区「征讨领域」或「奔狼的领主」挑战奖励"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101104.png",
+    "id": 101104,
+    "name": "北陆法器原胚",
+    "source": "蒙德、璃月、稻妻地区「征讨领域」或「奔狼的领主」挑战奖励"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101105.png",
+    "id": 101105,
+    "name": "北陆长柄武器原胚",
+    "source": "蒙德、璃月、稻妻地区「征讨领域」或「奔狼的领主」挑战奖励"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101111.png",
+    "id": 101111,
+    "name": "央陆单手剑原胚",
+    "source": "须弥、枫丹地区「征讨领域」挑战奖励"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101112.png",
+    "id": 101112,
+    "name": "央陆弓原胚",
+    "source": "须弥、枫丹地区「征讨领域」挑战奖励"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101113.png",
+    "id": 101113,
+    "name": "央陆双手剑原胚",
+    "source": "须弥、枫丹地区「征讨领域」挑战奖励"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101114.png",
+    "id": 101114,
+    "name": "央陆法器原胚",
+    "source": "须弥、枫丹地区「征讨领域」挑战奖励"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101115.png",
+    "id": 101115,
+    "name": "央陆长柄武器原胚",
+    "source": "须弥、枫丹地区「征讨领域」挑战奖励"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101116.png",
+    "id": 101116,
+    "name": "垠土单手剑原胚",
+    "source": "纳塔、挪德卡莱地区「征讨领域」挑战奖励"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101117.png",
+    "id": 101117,
+    "name": "垠土弓原胚",
+    "source": "纳塔、挪德卡莱地区「征讨领域」挑战奖励"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101118.png",
+    "id": 101118,
+    "name": "垠土双手剑原胚",
+    "source": "纳塔、挪德卡莱地区「征讨领域」挑战奖励"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101119.png",
+    "id": 101119,
+    "name": "垠土法器原胚",
+    "source": "纳塔、挪德卡莱地区「征讨领域」挑战奖励"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101120.png",
+    "id": 101120,
+    "name": "垠土长柄武器原胚",
+    "source": "纳塔、挪德卡莱地区「征讨领域」挑战奖励"
+  },
+  {
+    "category": "稻妻区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101201.png",
+    "id": 101201,
+    "name": "鬼兜虫",
+    "source": "推荐：鸣神岛采集\n推荐：踏鞴砂采集\n前往采集"
+  },
+  {
+    "category": "稻妻区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101202.png",
+    "id": 101202,
+    "name": "绯樱绣球",
+    "source": "推荐：鸣神岛采集\n前往采集"
+  },
+  {
+    "category": "稻妻区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101203.png",
+    "id": 101203,
+    "name": "晶化骨髓",
+    "source": "推荐：八酝岛采集\n前往采集"
+  },
+  {
+    "category": "稻妻区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101204.png",
+    "id": 101204,
+    "name": "血斛",
+    "source": "推荐：名椎滩采集\n前往采集"
+  },
+  {
+    "category": "稻妻区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101205.png",
+    "id": 101205,
+    "name": "鸣草",
+    "source": "推荐：踏鞴砂采集\n尘歌壶种植\n前往采集"
+  },
+  {
+    "category": "稻妻区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101206.png",
+    "id": 101206,
+    "name": "海灵芝",
+    "source": "稻妻海域采集\n尘歌壶种植\n前往采集"
+  },
+  {
+    "category": "稻妻区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101207.png",
+    "id": 101207,
+    "name": "珊瑚真珠",
+    "source": "推荐：海祇岛采集\n前往采集"
+  },
+  {
+    "category": "稻妻区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101208.png",
+    "id": 101208,
+    "name": "天云草实",
+    "source": "推荐：清籁岛采集\n前往采集"
+  },
+  {
+    "category": "稻妻区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101209.png",
+    "id": 101209,
+    "name": "幽灯蕈",
+    "source": "推荐：鹤观采集\n前往采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101210.png",
+    "id": 101210,
+    "name": "海草",
+    "source": "稻妻海域采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101211.png",
+    "id": 101211,
+    "name": "堇瓜",
+    "source": "稻妻野外采集"
+  },
+  {
+    "category": "食物",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101212.png",
+    "id": 101212,
+    "name": "星蕈",
+    "source": "野外采集"
+  },
+  {
+    "category": "须弥区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101213.png",
+    "id": 101213,
+    "name": "树王圣体菇",
+    "source": "推荐：善见地采集\n推荐：护世森采集\n前往采集"
+  },
+  {
+    "category": "须弥区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101214.png",
+    "id": 101214,
+    "name": "帕蒂沙兰",
+    "source": "须弥城附近采集\n前往采集"
+  },
+  {
+    "category": "须弥区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101215.png",
+    "id": 101215,
+    "name": "月莲",
+    "source": "须弥水域采集\n前往采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101216.png",
+    "id": 101216,
+    "name": "香辛果",
+    "source": "野外采集"
+  },
+  {
+    "category": "须弥区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101217.png",
+    "id": 101217,
+    "name": "劫波莲",
+    "source": "须弥山崖采集\n前往采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101218.png",
+    "id": 101218,
+    "name": "墩墩桃",
+    "source": "野外采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101219.png",
+    "id": 101219,
+    "name": "须弥蔷薇",
+    "source": "野外采集"
+  },
+  {
+    "category": "须弥区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101220.png",
+    "id": 101220,
+    "name": "赤念果",
+    "source": "须弥沙漠采集\n前往采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101221.png",
+    "id": 101221,
+    "name": "枣椰",
+    "source": "须弥沙漠绿洲采集"
+  },
+  {
+    "category": "须弥区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101222.png",
+    "id": 101222,
+    "name": "沙脂蛹",
+    "source": "须弥沙漠采集\n推荐：沙虫隧道采集\n前往采集"
+  },
+  {
+    "category": "须弥区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101223.png",
+    "id": 101223,
+    "name": "悼灵花",
+    "source": "须弥沙漠采集\n推荐：锋刃林泽采集\n前往采集"
+  },
+  {
+    "category": "须弥区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101224.png",
+    "id": 101224,
+    "name": "万相石",
+    "source": "须弥沙漠采集\n推荐：铁穆山采集\n前往采集"
+  },
+  {
+    "category": "须弥区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101225.png",
+    "id": 101225,
+    "name": "圣金虫",
+    "source": "须弥沙漠遗迹采集\n前往采集"
+  },
+  {
+    "category": "食物",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101226.png",
+    "id": 101226,
+    "name": "活化的星蕈",
+    "source": "野外采集"
+  },
+  {
+    "category": "食物",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101227.png",
+    "id": 101227,
+    "name": "枯焦的星蕈",
+    "source": "野外采集"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101228.png",
+    "id": 101228,
+    "name": "毗波耶",
+    "source": "野外采集\n推荐：桓那兰那采集"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101229.png",
+    "id": 101229,
+    "name": "久雨莲",
+    "source": "河岸湖泊采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101231.png",
+    "id": 101231,
+    "name": "茉洁草",
+    "source": "野外采集"
+  },
+  {
+    "category": "枫丹区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101232.png",
+    "id": 101232,
+    "name": "苍晶螺",
+    "source": "推荐：塞洛海原采集\n前往采集"
+  },
+  {
+    "category": "枫丹区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101233.png",
+    "id": 101233,
+    "name": "海露花",
+    "source": "推荐：塞洛海原采集\n前往采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101234.png",
+    "id": 101234,
+    "name": "汐藻",
+    "source": "枫丹水下采集"
+  },
+  {
+    "category": "枫丹区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101235.png",
+    "id": 101235,
+    "name": "柔灯铃",
+    "source": "枫丹廷北部采集\n尘歌壶种植\n前往采集"
+  },
+  {
+    "category": "枫丹区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101236.png",
+    "id": 101236,
+    "name": "虹彩蔷薇",
+    "source": "推荐：苍晶区采集\n尘歌壶种植\n前往采集"
+  },
+  {
+    "category": "枫丹区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101237.png",
+    "id": 101237,
+    "name": "幽光星星",
+    "source": "推荐：黎翡区采集\n前往采集"
+  },
+  {
+    "category": "枫丹区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101238.png",
+    "id": 101238,
+    "name": "湖光铃兰",
+    "source": "推荐：伊黎耶林区采集\n前往采集"
+  },
+  {
+    "category": "枫丹区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101239.png",
+    "id": 101239,
+    "name": "子探测单元",
+    "source": "推荐：枫丹动能工程科学研究院区采集\n前往采集"
+  },
+  {
+    "category": "枫丹区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101240.png",
+    "id": 101240,
+    "name": "初露之源",
+    "source": "推荐：莫尔泰区水下采集\n前往采集"
+  },
+  {
+    "category": "璃月区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101241.png",
+    "id": 101241,
+    "name": "清水玉",
+    "source": "野外采集\n推荐：沉玉谷·南陵采集\n前往采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101242.png",
+    "id": 101242,
+    "name": "沉玉仙茗",
+    "source": "野外采集\n推荐：翘英庄采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101243.png",
+    "id": 101243,
+    "name": "颗粒果",
+    "source": "野外采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101245.png",
+    "id": 101245,
+    "name": "澄晶实",
+    "source": "液态燃素区域采集"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101246.png",
+    "id": 101246,
+    "name": "苦种",
+    "source": "野外采集"
+  },
+  {
+    "category": "纳塔区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101247.png",
+    "id": 101247,
+    "name": "浪沫羽鳃",
+    "source": "推荐：涌流地采集\n推荐：「流泉之众」周边采集\n尘歌壶种植\n前往采集"
+  },
+  {
+    "category": "纳塔区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101248.png",
+    "id": 101248,
+    "name": "灼灼彩菊",
+    "source": "推荐：柴薪之丘采集\n推荐：圣火竞技场周边采集\n尘歌壶种植\n前往采集"
+  },
+  {
+    "category": "纳塔区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101249.png",
+    "id": 101249,
+    "name": "青蜜莓",
+    "source": "推荐：踞石山采集\n推荐：「悬木人」下方采集\n尘歌壶种植\n前往采集"
+  },
+  {
+    "category": "纳塔区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101250.png",
+    "id": 101250,
+    "name": "肉龙掌",
+    "source": "推荐：硫晶支脉采集\n尘歌壶种植\n前往采集"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101251.png",
+    "id": 101251,
+    "name": "烬芯花",
+    "source": "野外采集"
+  },
+  {
+    "category": "纳塔区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101252.png",
+    "id": 101252,
+    "name": "微光角菌",
+    "source": "推荐：镜璧山采集\n推荐：「烟谜主」周边采集\n尘歌壶种植\n前往采集"
+  },
+  {
+    "category": "纳塔区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101253.png",
+    "id": 101253,
+    "name": "枯叶紫英",
+    "source": "推荐：奥奇卡纳塔采集\n前往采集"
+  },
+  {
+    "category": "纳塔区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101254.png",
+    "id": 101254,
+    "name": "云岩裂叶",
+    "source": "推荐：安饶之野采集\n尘歌壶种植\n前往采集"
+  },
+  {
+    "category": "纳塔区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101255.png",
+    "id": 101255,
+    "name": "琉鳞石",
+    "source": "推荐：安饶之野采集\n前往采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101256.png",
+    "id": 101256,
+    "name": "红果果菇",
+    "source": "推荐：安饶之野果园采集"
+  },
+  {
+    "category": "挪德卡莱区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101257.png",
+    "id": 101257,
+    "name": "便携轴承",
+    "source": "蓝珀湖附近采集\n推荐：叮铃哐啷蛋卷工坊采集\n前往采集"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101259.png",
+    "id": 101259,
+    "name": "寒涌石",
+    "source": "野外采集"
+  },
+  {
+    "category": "挪德卡莱区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101261.png",
+    "id": 101261,
+    "name": "霜盏花",
+    "source": "推荐：终夜长茔采集\n推荐：霜月之坊附近采集\n尘歌壶种植\n前往采集"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101262.png",
+    "id": 101262,
+    "name": "宿影花",
+    "source": "野外采集"
+  },
+  {
+    "category": "挪德卡莱区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101263.png",
+    "id": 101263,
+    "name": "月落银",
+    "source": "希汐岛采集\n前往采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101264.png",
+    "id": 101264,
+    "name": "白灵果",
+    "source": "野外采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101265.png",
+    "id": 101265,
+    "name": "夏槲果",
+    "source": "野外采集"
+  },
+  {
+    "category": "挪德卡莱区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101266.png",
+    "id": 101268,
+    "name": "冬凌草",
+    "source": "厄布拉神柱采集\n推荐：安瓦蒂尼尔湖附近采集\n尘歌壶种植\n前往采集"
+  },
+  {
+    "category": "挪德卡莱区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101269.png",
+    "id": 101269,
+    "name": "松珀香",
+    "source": "噩影泽地采集\n推荐：西风戍垒附近采集\n尘歌壶种植\n前往采集"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101271.png",
+    "id": 101271,
+    "name": "风息花",
+    "source": "野外采集\n推荐：风车镇采集"
+  },
+  {
+    "category": "蒙德区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101272.png",
+    "id": 101272,
+    "name": "空羽蛾",
+    "source": "推荐：风息山、空之神殿采集\n推荐：风车镇、柱殿中央区采集\n前往采集"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101301.png",
+    "id": 101301,
+    "name": "桦木",
+    "source": "野外采集\n推荐：苍风高地砍伐\n洞天百宝·木材购买获取\n木材转化"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101302.png",
+    "id": 101302,
+    "name": "萃华木",
+    "source": "野外采集\n推荐：坠星山谷砍伐\n推荐：碧水原砍伐\n洞天百宝·木材购买获取\n木材转化"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101303.png",
+    "id": 101303,
+    "name": "松木",
+    "source": "野外采集\n推荐：龙脊雪山砍伐\n洞天百宝·木材购买获取\n木材转化"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101304.png",
+    "id": 101304,
+    "name": "却砂木",
+    "source": "野外采集\n推荐：珉林砍伐\n推荐：璃沙郊砍伐\n洞天百宝·木材购买获取\n木材转化"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101305.png",
+    "id": 101305,
+    "name": "竹节",
+    "source": "野外采集\n推荐：碧水原砍伐\n洞天百宝·木材购买获取\n木材转化"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101307.png",
+    "id": 101307,
+    "name": "垂香木",
+    "source": "野外采集\n推荐：坠星山谷砍伐\n洞天百宝·木材购买获取\n木材转化"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101308.png",
+    "id": 101308,
+    "name": "杉木",
+    "source": "野外采集\n推荐：坠星山谷砍伐\n推荐：风啸山坡砍伐\n洞天百宝·木材购买获取\n木材转化"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101309.png",
+    "id": 101309,
+    "name": "梦见木",
+    "source": "野外采集\n推荐：鸣神岛砍伐\n洞天百宝·木材购买获取\n木材转化"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101310.png",
+    "id": 101310,
+    "name": "枫木",
+    "source": "野外采集\n推荐：鸣神岛砍伐\n洞天百宝·木材购买获取\n木材转化"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101311.png",
+    "id": 101311,
+    "name": "孔雀木",
+    "source": "野外采集\n推荐：鸣神岛砍伐\n洞天百宝·木材购买获取\n木材转化"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101312.png",
+    "id": 101312,
+    "name": "御伽木",
+    "source": "野外采集\n推荐：八酝岛砍伐\n洞天百宝·木材购买获取\n木材转化"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101313.png",
+    "id": 101313,
+    "name": "辉木",
+    "source": "野外采集\n推荐：须弥森林砍伐\n洞天百宝·木材购买获取\n木材转化"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101314.png",
+    "id": 101314,
+    "name": "业果木",
+    "source": "野外采集\n推荐：须弥森林砍伐\n洞天百宝·木材购买获取\n木材转化"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101315.png",
+    "id": 101315,
+    "name": "证悟木",
+    "source": "野外采集\n推荐：须弥森林砍伐\n洞天百宝·木材购买获取\n木材转化"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101316.png",
+    "id": 101316,
+    "name": "刺葵木",
+    "source": "野外采集\n推荐：须弥沙漠砍伐\n洞天百宝·木材购买获取\n木材转化"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101317.png",
+    "id": 101317,
+    "name": "柽木",
+    "source": "野外采集\n推荐：须弥沙漠砍伐\n洞天百宝·木材购买获取\n木材转化"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101318.png",
+    "id": 101318,
+    "name": "悬铃木",
+    "source": "野外采集\n推荐：枫丹野外砍伐\n洞天百宝·木材购买获取\n木材转化"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101319.png",
+    "id": 101319,
+    "name": "椴木",
+    "source": "野外采集\n推荐：枫丹野外砍伐\n洞天百宝·木材购买获取\n木材转化"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101320.png",
+    "id": 101320,
+    "name": "白梣木",
+    "source": "野外采集\n推荐：枫丹野外砍伐\n洞天百宝·木材购买获取\n木材转化"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101321.png",
+    "id": 101321,
+    "name": "香柏木",
+    "source": "野外采集\n推荐：枫丹野外砍伐\n洞天百宝·木材购买获取\n木材转化"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101322.png",
+    "id": 101322,
+    "name": "炬木",
+    "source": "野外采集\n推荐：枫丹野外砍伐\n洞天百宝·木材购买获取\n木材转化"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101323.png",
+    "id": 101323,
+    "name": "白栗栎木",
+    "source": "野外采集\n推荐：纳塔野外砍伐\n洞天百宝·木材购买获取\n木材转化"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101324.png",
+    "id": 101324,
+    "name": "灰灰楼林木",
+    "source": "野外采集\n推荐：纳塔野外砍伐\n洞天百宝·木材购买获取\n木材转化"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101325.png",
+    "id": 101325,
+    "name": "燃爆木",
+    "source": "野外采集\n推荐：纳塔野外砍伐\n洞天百宝·木材购买获取\n木材转化"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101326.png",
+    "id": 101326,
+    "name": "桃椰子木",
+    "source": "野外采集\n推荐：纳塔野外砍伐\n洞天百宝·木材购买获取\n木材转化"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101327.png",
+    "id": 101327,
+    "name": "银冷杉木",
+    "source": "野外采集\n推荐：挪德卡莱砍伐\n洞天百宝·木材购买获取\n木材转化"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101328.png",
+    "id": 101328,
+    "name": "榛木",
+    "source": "野外采集\n推荐：挪德卡莱砍伐\n洞天百宝·木材购买获取\n木材转化"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101329.png",
+    "id": 101329,
+    "name": "夏栎木",
+    "source": "野外采集\n推荐：挪德卡莱砍伐\n洞天百宝·木材购买获取\n木材转化"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101330.png",
+    "id": 101330,
+    "name": "桤木",
+    "source": "野外采集\n推荐：挪德卡莱砍伐\n洞天百宝·木材购买获取\n木材转化"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101401.png",
+    "id": 101401,
+    "name": "布匹",
+    "source": "优质的布匹。制作摆设时应该能派上用场。"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101402.png",
+    "id": 101402,
+    "name": "红色染料",
+    "source": "红色的染料。制作摆设时应该能派上用场。"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101403.png",
+    "id": 101403,
+    "name": "黄色染料",
+    "source": "黄色的染料。制作摆设时应该能派上用场。"
+  },
+  {
+    "category": "素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101404.png",
+    "id": 101404,
+    "name": "蓝色染料",
+    "source": "蓝色的染料。制作摆设时应该能派上用场。"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101644.png",
+    "id": 101644,
+    "name": "流明石原矿",
+    "source": "流明石的璞矿，稍加雕琢的话似乎可以用来增强手中的流明石「触媒」，不如去找瑾武咨询看看…"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101692.png",
+    "id": 101692,
+    "name": "光界之印",
+    "source": "受到渊下宫常世大神的认可，获授的印记。\n用来供奉给御使雕像，提升睦疏之匣的等级。"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101693.png",
+    "id": 101693,
+    "name": "光界之核",
+    "source": "在黑雾笼罩的渊下宫调查探索时，找到了奇特石头。\n为了对抗深渊，光界给人类提供了额外的帮助。"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101714.png",
+    "id": 101714,
+    "name": "香气四溢的调料",
+    "source": "根据娜扎法琳给的配方，制作出来的调料。带有扑鼻的香气，加入到料理中似乎能激发出更多风味。"
+  },
+  {
+    "category": "角色经验素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104001.png",
+    "id": 104001,
+    "name": "流浪者的经验",
+    "source": "冒险与探索奖励\n洞天百宝兑换"
+  },
+  {
+    "category": "角色经验素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104002.png",
+    "id": 104002,
+    "name": "冒险家的经验",
+    "source": "冒险与探索奖励\n激活启示之花奖励"
+  },
+  {
+    "category": "角色经验素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104003.png",
+    "id": 104003,
+    "name": "大英雄的经验",
+    "source": "解决事件报酬\n洞天百宝兑换\n激活启示之花奖励"
+  },
+  {
+    "category": "武器强化素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104011.png",
+    "id": 104011,
+    "name": "精锻用杂矿",
+    "source": "锻造获得\n解决事件报酬"
+  },
+  {
+    "category": "武器强化素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104012.png",
+    "id": 104012,
+    "name": "精锻用良矿",
+    "source": "锻造获得\n解决事件报酬"
+  },
+  {
+    "category": "武器强化素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104013.png",
+    "id": 104013,
+    "name": "精锻用魔矿",
+    "source": "锻造获得\n解决事件报酬"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104101.png",
+    "id": 104101,
+    "name": "璀璨原钻碎屑",
+    "source": "冒险等阶奖励"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104102.png",
+    "id": 104102,
+    "name": "璀璨原钻断片",
+    "source": "冒险等阶奖励"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104103.png",
+    "id": 104103,
+    "name": "璀璨原钻块",
+    "source": "冒险等阶奖励"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104104.png",
+    "id": 104104,
+    "name": "璀璨原钻",
+    "source": "冒险等阶奖励"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104111.png",
+    "id": 104111,
+    "name": "燃愿玛瑙碎屑",
+    "source": "纪念品商店兑换\n冒险之证讨伐页签查看\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104112.png",
+    "id": 104112,
+    "name": "燃愿玛瑙断片",
+    "source": "冒险之证讨伐页签查看\n合成台-转化页签：转化获取\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104113.png",
+    "id": 104113,
+    "name": "燃愿玛瑙块",
+    "source": "冒险之证讨伐页签查看\n合成台-转化页签：转化获取\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104114.png",
+    "id": 104114,
+    "name": "燃愿玛瑙",
+    "source": "冒险之证讨伐页签查看\n合成台-转化页签：转化获取\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104121.png",
+    "id": 104121,
+    "name": "涤净青金碎屑",
+    "source": "纪念品商店兑换\n冒险之证讨伐页签查看\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104122.png",
+    "id": 104122,
+    "name": "涤净青金断片",
+    "source": "冒险之证讨伐页签查看\n合成台-转化页签：转化获取\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104123.png",
+    "id": 104123,
+    "name": "涤净青金块",
+    "source": "冒险之证讨伐页签查看\n合成台-转化页签：转化获取\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104124.png",
+    "id": 104124,
+    "name": "涤净青金",
+    "source": "冒险之证讨伐页签查看\n合成台-转化页签：转化获取\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104131.png",
+    "id": 104131,
+    "name": "生长碧翡碎屑",
+    "source": "冒险之证讨伐页签查看\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104132.png",
+    "id": 104132,
+    "name": "生长碧翡断片",
+    "source": "冒险之证讨伐页签查看\n合成台-转化页签：转化获取\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104133.png",
+    "id": 104133,
+    "name": "生长碧翡块",
+    "source": "冒险之证讨伐页签查看\n合成台-转化页签：转化获取\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104134.png",
+    "id": 104134,
+    "name": "生长碧翡",
+    "source": "冒险之证讨伐页签查看\n合成台-转化页签：转化获取\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104141.png",
+    "id": 104141,
+    "name": "最胜紫晶碎屑",
+    "source": "纪念品商店兑换\n冒险之证讨伐页签查看\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104142.png",
+    "id": 104142,
+    "name": "最胜紫晶断片",
+    "source": "冒险之证讨伐页签查看\n合成台-转化页签：转化获取\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104143.png",
+    "id": 104143,
+    "name": "最胜紫晶块",
+    "source": "冒险之证讨伐页签查看\n合成台-转化页签：转化获取\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104144.png",
+    "id": 104144,
+    "name": "最胜紫晶",
+    "source": "冒险之证讨伐页签查看\n合成台-转化页签：转化获取\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104151.png",
+    "id": 104151,
+    "name": "自在松石碎屑",
+    "source": "纪念品商店兑换\n冒险之证讨伐页签查看\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104152.png",
+    "id": 104152,
+    "name": "自在松石断片",
+    "source": "冒险之证讨伐页签查看\n合成台-转化页签：转化获取\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104153.png",
+    "id": 104153,
+    "name": "自在松石块",
+    "source": "冒险之证讨伐页签查看\n合成台-转化页签：转化获取\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104154.png",
+    "id": 104154,
+    "name": "自在松石",
+    "source": "冒险之证讨伐页签查看\n合成台-转化页签：转化获取\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104161.png",
+    "id": 104161,
+    "name": "哀叙冰玉碎屑",
+    "source": "纪念品商店兑换\n冒险之证讨伐页签查看\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104162.png",
+    "id": 104162,
+    "name": "哀叙冰玉断片",
+    "source": "冒险之证讨伐页签查看\n合成台-转化页签：转化获取\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104163.png",
+    "id": 104163,
+    "name": "哀叙冰玉块",
+    "source": "冒险之证讨伐页签查看\n合成台-转化页签：转化获取\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104164.png",
+    "id": 104164,
+    "name": "哀叙冰玉",
+    "source": "冒险之证讨伐页签查看\n合成台-转化页签：转化获取\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104171.png",
+    "id": 104171,
+    "name": "坚牢黄玉碎屑",
+    "source": "纪念品商店兑换\n冒险之证讨伐页签查看\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104172.png",
+    "id": 104172,
+    "name": "坚牢黄玉断片",
+    "source": "冒险之证讨伐页签查看\n合成台-转化页签：转化获取\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104173.png",
+    "id": 104173,
+    "name": "坚牢黄玉块",
+    "source": "冒险之证讨伐页签查看\n合成台-转化页签：转化获取\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104174.png",
+    "id": 104174,
+    "name": "坚牢黄玉",
+    "source": "冒险之证讨伐页签查看\n合成台-转化页签：转化获取\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104201.png",
+    "id": 104201,
+    "name": "嬗变之尘",
+    "source": "星尘兑换"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104301.png",
+    "id": 104301,
+    "name": "「自由」的教导",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104302.png",
+    "id": 104302,
+    "name": "「自由」的指引",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104303.png",
+    "id": 104303,
+    "name": "「自由」的哲学",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104304.png",
+    "id": 104304,
+    "name": "「抗争」的教导",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104305.png",
+    "id": 104305,
+    "name": "「抗争」的指引",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104306.png",
+    "id": 104306,
+    "name": "「抗争」的哲学",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104307.png",
+    "id": 104307,
+    "name": "「诗文」的教导",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104308.png",
+    "id": 104308,
+    "name": "「诗文」的指引",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104309.png",
+    "id": 104309,
+    "name": "「诗文」的哲学",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104310.png",
+    "id": 104310,
+    "name": "「繁荣」的教导",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104311.png",
+    "id": 104311,
+    "name": "「繁荣」的指引",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104312.png",
+    "id": 104312,
+    "name": "「繁荣」的哲学",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104313.png",
+    "id": 104313,
+    "name": "「勤劳」的教导",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104314.png",
+    "id": 104314,
+    "name": "「勤劳」的指引",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104315.png",
+    "id": 104315,
+    "name": "「勤劳」的哲学",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104316.png",
+    "id": 104316,
+    "name": "「黄金」的教导",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104317.png",
+    "id": 104317,
+    "name": "「黄金」的指引",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104318.png",
+    "id": 104318,
+    "name": "「黄金」的哲学",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104319.png",
+    "id": 104319,
+    "name": "智识之冕",
+    "source": "限时活动奖励"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104320.png",
+    "id": 104320,
+    "name": "「浮世」的教导",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104321.png",
+    "id": 104321,
+    "name": "「浮世」的指引",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104322.png",
+    "id": 104322,
+    "name": "「浮世」的哲学",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104323.png",
+    "id": 104323,
+    "name": "「风雅」的教导",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104324.png",
+    "id": 104324,
+    "name": "「风雅」的指引",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104325.png",
+    "id": 104325,
+    "name": "「风雅」的哲学",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104326.png",
+    "id": 104326,
+    "name": "「天光」的教导",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104327.png",
+    "id": 104327,
+    "name": "「天光」的指引",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104328.png",
+    "id": 104328,
+    "name": "「天光」的哲学",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104329.png",
+    "id": 104329,
+    "name": "「诤言」的教导",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104330.png",
+    "id": 104330,
+    "name": "「诤言」的指引",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104331.png",
+    "id": 104331,
+    "name": "「诤言」的哲学",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104332.png",
+    "id": 104332,
+    "name": "「巧思」的教导",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104333.png",
+    "id": 104333,
+    "name": "「巧思」的指引",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104334.png",
+    "id": 104334,
+    "name": "「巧思」的哲学",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104335.png",
+    "id": 104335,
+    "name": "「笃行」的教导",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104336.png",
+    "id": 104336,
+    "name": "「笃行」的指引",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104337.png",
+    "id": 104337,
+    "name": "「笃行」的哲学",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104338.png",
+    "id": 104338,
+    "name": "「公平」的教导",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104339.png",
+    "id": 104339,
+    "name": "「公平」的指引",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104340.png",
+    "id": 104340,
+    "name": "「公平」的哲学",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104341.png",
+    "id": 104341,
+    "name": "「正义」的教导",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104342.png",
+    "id": 104342,
+    "name": "「正义」的指引",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104343.png",
+    "id": 104343,
+    "name": "「正义」的哲学",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104344.png",
+    "id": 104344,
+    "name": "「秩序」的教导",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104345.png",
+    "id": 104345,
+    "name": "「秩序」的指引",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104346.png",
+    "id": 104346,
+    "name": "「秩序」的哲学",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104347.png",
+    "id": 104347,
+    "name": "「角逐」的教导",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104348.png",
+    "id": 104348,
+    "name": "「角逐」的指引",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104349.png",
+    "id": 104349,
+    "name": "「角逐」的哲学",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104350.png",
+    "id": 104350,
+    "name": "「焚燔」的教导",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104351.png",
+    "id": 104351,
+    "name": "「焚燔」的指引",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104352.png",
+    "id": 104352,
+    "name": "「焚燔」的哲学",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104353.png",
+    "id": 104353,
+    "name": "「纷争」的教导",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104354.png",
+    "id": 104354,
+    "name": "「纷争」的指引",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104355.png",
+    "id": 104355,
+    "name": "「纷争」的哲学",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104356.png",
+    "id": 104356,
+    "name": "「月光」的教导",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104357.png",
+    "id": 104357,
+    "name": "「月光」的指引",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104358.png",
+    "id": 104358,
+    "name": "「月光」的哲学",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104359.png",
+    "id": 104359,
+    "name": "「乐园」的教导",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104360.png",
+    "id": 104360,
+    "name": "「乐园」的指引",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104361.png",
+    "id": 104361,
+    "name": "「乐园」的哲学",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104362.png",
+    "id": 104362,
+    "name": "「浪迹」的教导",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104363.png",
+    "id": 104363,
+    "name": "「浪迹」的指引",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色天赋素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_104364.png",
+    "id": 104364,
+    "name": "「浪迹」的哲学",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_105005.png",
+    "id": 105005,
+    "name": "祝圣之霜",
+    "source": "「圣言自明机」萃取获取\n「幻想真境剧诗」星章奖励\n「砺行修远」获取\n纳塔「煅石之轮」供奉获取\n纳塔「部族秘藏之所」获取\n挪德卡莱「聚所共建」获取\n「珍珠纪行」获取"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_TrainingIteration.png",
+    "id": 105006,
+    "name": "启圣之尘",
+    "source": "「幽境危战」危战嘉奖\n「幽境危战」挑战奖励\n「砺行修远」获取\n挪德卡莱「月灵盈藏之地」获取\n「珍珠纪行」和「珍珠之歌」获取"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_107001.png",
+    "id": 107001,
+    "name": "散失的风神瞳",
+    "source": "浓烈的风元素能量积聚成的物质。献给风的神像，能弥补它在漫长岁月中散失的力量。"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_107002.png",
+    "id": 107002,
+    "name": "元素晶尘",
+    "source": "神瞳结晶破碎后的碎片，揭示附近隐藏宝箱"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_107003.png",
+    "id": 107003,
+    "name": "散失的岩神瞳",
+    "source": "浓烈的岩元素能量积聚成的物质。献给岩的神像，能弥补它在漫长岁月中散失的力量。"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_107010.png",
+    "id": 107010,
+    "name": "绯红玉髓",
+    "source": "某种浓郁的生命力与龙脊雪山的特殊能量结合产生的结晶。对于渴求生长的忍冬之树，是绝好的「养分」。"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_107010.png",
+    "id": 107011,
+    "name": "绯红玉髓（纯表现）",
+    "source": "某种浓郁的生命力与龙脊雪山的特殊能量结合产生的结晶。对于渴求生长的忍冬之树，是绝好的「养分」。"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_107013.png",
+    "id": 107013,
+    "name": "仙速瓶",
+    "source": "封存着一股仙力的小瓶。使用后能立即完成一件摆设的制作。"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_107014.png",
+    "id": 107014,
+    "name": "散失的雷神瞳",
+    "source": "浓烈的雷元素能量积聚成的物质。献给雷的神像，能弥补它在漫长岁月中散失的力量。"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_107015.png",
+    "id": 107015,
+    "name": "逐月符",
+    "source": "由冒险家协会布设在各地的玉符，以「浮生石片」雕琢而成，光泽温润，晶莹剔透。据说这种玉符凝聚着皓月的精华，寄托着人们对往日佳节的追思，意义非凡。"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_107016.png",
+    "id": 107016,
+    "name": "流明晶石",
+    "source": "湛蓝如天幕的晶石，表面光芒明灭，似乎在呼应着地层深处不可见的高远天空…\n侧耳细听，仿佛能听到其中传来细微的叹息。\n说来奇怪，这块晶石有一种温暖的触感。"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_107017.png",
+    "id": 107017,
+    "name": "散失的草神瞳",
+    "source": "浓烈的草元素能量积聚成的物质。献给草的神像，能弥补它在漫长岁月中散失的力量。"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_GcgIcon_Invitation.png",
+    "id": 107020,
+    "name": "对局邀请函",
+    "source": "可以阅览猫尾酒馆对局邀请板，选择牌手名录中的一位，即可使用这封对局邀请函，委托猫尾酒馆发出对局邀请。受邀请的牌手将会到猫尾酒馆等待进行对局。"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_GcgIcon_CardCurrency.png",
+    "id": 107021,
+    "name": "幸运牌币",
+    "source": "牌手协会内部认证和使用的货币，可以用于购买「七圣召唤」相关的各式各样的道具。据说当初取名为幸运牌币，是希望拥有它的人能够变得幸运，不过，或许是足够幸运的人才能拥有它们也说不定…"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_107022.png",
+    "id": 107022,
+    "name": "净光翎",
+    "source": "灵光百种所遗留下来的，凝结着过去记忆的断片。"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_107023.png",
+    "id": 107023,
+    "name": "散失的水神瞳",
+    "source": "浓烈的水元素能量积聚成的物质。献给水的神像，能弥补它在漫长岁月中散失的力量。"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_107024.png",
+    "id": 107024,
+    "name": "礼券秘盒",
+    "source": "存放着「欢兴礼券」的礼盒，有着花朵般的奇特外形，是「琉形蜃境」中独树一帜的景观，也是游客们赢取奖品所需的重要收集物。使用「流悦晶石」与「酣悦晶石」，似乎能更便捷地确定它们的位置…"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_107026.png",
+    "id": 107026,
+    "name": "苍灵鲤",
+    "source": "由逸散的仙力凝集而成，畅游于山野河谷之间的灵鲤。"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_107028.png",
+    "id": 107028,
+    "name": "散失的火神瞳",
+    "source": "浓烈的火元素能量积聚成的物质。献给火的神像，能弥补它在漫长岁月中散失的力量。"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_107029.png",
+    "id": 107029,
+    "name": "欢声飞羽",
+    "source": "如同快乐笑声凝结而成的神奇晶体，呈现出两片书页拼接的姿态，或是自由飞旋的羽毛。触碰之后，便能从中获得「悠乐片段」…\n使用「轻愉信笺」与「欢跃信笺」，似乎能更便捷地确定它们的位置…"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_107030.png",
+    "id": 107030,
+    "name": "散失的月神瞳",
+    "source": "浓烈的月矩力积聚成的物质。献给新月的神像，能弥补它在漫长岁月中散失的力量。"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_107033.png",
+    "id": 107033,
+    "name": "技艺团块",
+    "source": "test 空之神殿神瞳"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_107034.png",
+    "id": 107034,
+    "name": "摹忆因子",
+    "source": "构筑「文明」的最小单位。\n任何来自「文明」的造物，从人类的集体记忆中消逝后，皆会裂解为摹忆因子。将其供奉于空之神殿内的摹忆中枢，或许会得到来自隙间记忆的赐福…"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_110001.png",
+    "id": 110001,
+    "name": "面粉",
+    "source": "烹饪加工获得"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_110002.png",
+    "id": 110002,
+    "name": "奶油",
+    "source": "烹饪加工获得"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_110003.png",
+    "id": 110003,
+    "name": "熏禽肉",
+    "source": "烹饪加工获得"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_110004.png",
+    "id": 110004,
+    "name": "黄油",
+    "source": "烹饪加工获得"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_110005.png",
+    "id": 110005,
+    "name": "火腿",
+    "source": "烹饪加工获得"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_110006.png",
+    "id": 110006,
+    "name": "糖",
+    "source": "烹饪加工获得"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_110008.png",
+    "id": 110008,
+    "name": "果酱",
+    "source": "烹饪加工获得"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_110009.png",
+    "id": 110009,
+    "name": "奶酪",
+    "source": "烹饪加工获得"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_110010.png",
+    "id": 110010,
+    "name": "培根",
+    "source": "烹饪加工获得"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_110011.png",
+    "id": 110011,
+    "name": "香肠",
+    "source": "烹饪加工获得"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_110012.png",
+    "id": 110012,
+    "name": "熏鱼",
+    "source": "烹饪加工获得"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_110013.png",
+    "id": 110013,
+    "name": "鱼干",
+    "source": "烹饪加工获得"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_110014.png",
+    "id": 110014,
+    "name": "香辛料",
+    "source": "烹饪加工获得"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_110015.png",
+    "id": 110015,
+    "name": "酸奶油",
+    "source": "烹饪加工获得"
+  },
+  {
+    "category": "食材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_110016.png",
+    "id": 110016,
+    "name": "黑麦粉",
+    "source": "烹饪加工获得"
+  },
+  {
+    "category": "合成产物",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_111020.png",
+    "id": 111020,
+    "name": "漂亮的小结晶",
+    "source": "合成获得"
+  },
+  {
+    "category": "合成产物",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_111021.png",
+    "id": 111021,
+    "name": "漂亮的中结晶",
+    "source": "合成获得"
+  },
+  {
+    "category": "合成产物",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_111022.png",
+    "id": 111022,
+    "name": "漂亮的大结晶",
+    "source": "合成获得"
+  },
+  {
+    "category": "鱼饵",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_111023.png",
+    "id": 111023,
+    "name": "果酿饵",
+    "source": "合成获得"
+  },
+  {
+    "category": "鱼饵",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_111024.png",
+    "id": 111024,
+    "name": "赤糜饵",
+    "source": "合成获得"
+  },
+  {
+    "category": "鱼饵",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_111025.png",
+    "id": 111025,
+    "name": "蠕虫假饵",
+    "source": "合成获得"
+  },
+  {
+    "category": "鱼饵",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_111026.png",
+    "id": 111026,
+    "name": "飞蝇假饵",
+    "source": "合成获得"
+  },
+  {
+    "category": "鱼饵",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_111027.png",
+    "id": 111027,
+    "name": "荧草饵",
+    "source": "完成鲸井椛任务获得"
+  },
+  {
+    "category": "鱼饵",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_111028.png",
+    "id": 111028,
+    "name": "甘露饵",
+    "source": "合成获得"
+  },
+  {
+    "category": "鱼饵",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_111030.png",
+    "id": 111030,
+    "name": "酸桔饵",
+    "source": "合成获得"
+  },
+  {
+    "category": "鱼饵",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_111031.png",
+    "id": 111031,
+    "name": "维护机关频闪诱饵",
+    "source": "合成获得"
+  },
+  {
+    "category": "鱼饵",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_111033.png",
+    "id": 111033,
+    "name": "澄晶果粒饵",
+    "source": "合成获得"
+  },
+  {
+    "category": "鱼饵",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_111034.png",
+    "id": 111034,
+    "name": "温火饵",
+    "source": "合成获得"
+  },
+  {
+    "category": "鱼饵",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_111035.png",
+    "id": 111035,
+    "name": "槲梭饵",
+    "source": "合成获得"
+  },
+  {
+    "category": "鱼饵",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_111036.png",
+    "id": 111036,
+    "name": "清白饵",
+    "source": "合成获得"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112002.png",
+    "id": 112002,
+    "name": "史莱姆凝液",
+    "source": "史莱姆掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112003.png",
+    "id": 112003,
+    "name": "史莱姆清",
+    "source": "40级以上史莱姆掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112004.png",
+    "id": 112004,
+    "name": "史莱姆原浆",
+    "source": "60级以上史莱姆掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112005.png",
+    "id": 112005,
+    "name": "破损的面具",
+    "source": "丘丘人掉落\n丘丘射手少量掉落\n丘丘萨满少量掉落\n丘丘暴徒少量掉落\n丘丘王少量掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112006.png",
+    "id": 112006,
+    "name": "污秽的面具",
+    "source": "40级以上丘丘人掉落\n40级以上丘丘射手少量掉落\n40级以上丘丘萨满少量掉落\n40级以上丘丘暴徒少量掉落\n40级以上丘丘王少量掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112007.png",
+    "id": 112007,
+    "name": "不祥的面具",
+    "source": "60级以上丘丘人掉落\n60级以上丘丘射手少量掉落\n60级以上丘丘萨满少量掉落\n60级以上丘丘暴徒少量掉落\n60级以上丘丘王少量掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112008.png",
+    "id": 112008,
+    "name": "导能绘卷",
+    "source": "丘丘萨满掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112009.png",
+    "id": 112009,
+    "name": "封魔绘卷",
+    "source": "40级以上丘丘萨满掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112010.png",
+    "id": 112010,
+    "name": "禁咒绘卷",
+    "source": "60级以上丘丘萨满掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112011.png",
+    "id": 112011,
+    "name": "牢固的箭簇",
+    "source": "丘丘射手掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112012.png",
+    "id": 112012,
+    "name": "锐利的箭簇",
+    "source": "40级以上丘丘射手掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112013.png",
+    "id": 112013,
+    "name": "历战的箭簇",
+    "source": "60级以上丘丘射手掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112014.png",
+    "id": 112014,
+    "name": "沉重号角",
+    "source": "丘丘暴徒掉落\n丘丘王掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112015.png",
+    "id": 112015,
+    "name": "黑铜号角",
+    "source": "40级以上丘丘暴徒掉落\n40级以上丘丘王掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112016.png",
+    "id": 112016,
+    "name": "黑晶号角",
+    "source": "60级以上丘丘暴徒掉落\n60级以上丘丘王掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112017.png",
+    "id": 112017,
+    "name": "晦暗刻像",
+    "source": "黑蛇众掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112018.png",
+    "id": 112018,
+    "name": "夤夜刻像",
+    "source": "40级以上黑蛇众掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112019.png",
+    "id": 112019,
+    "name": "幽邃刻像",
+    "source": "60级以上黑蛇众掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112020.png",
+    "id": 112020,
+    "name": "地脉的旧枝",
+    "source": "深渊法师掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112021.png",
+    "id": 112021,
+    "name": "地脉的枯叶",
+    "source": "40级以上深渊法师掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112022.png",
+    "id": 112022,
+    "name": "地脉的新芽",
+    "source": "60级以上深渊法师掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112023.png",
+    "id": 112023,
+    "name": "混沌装置",
+    "source": "遗迹守卫掉落\n遗迹猎者掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112024.png",
+    "id": 112024,
+    "name": "混沌回路",
+    "source": "40级以上遗迹守卫掉落\n40级以上遗迹猎者掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112025.png",
+    "id": 112025,
+    "name": "混沌炉心",
+    "source": "60级以上遗迹守卫掉落\n60级以上遗迹猎者掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112026.png",
+    "id": 112026,
+    "name": "雾虚花粉",
+    "source": "愚人众·萤术士掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112027.png",
+    "id": 112027,
+    "name": "雾虚草囊",
+    "source": "40级以上愚人众·萤术士掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112028.png",
+    "id": 112028,
+    "name": "雾虚灯芯",
+    "source": "60级以上愚人众·萤术士掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112029.png",
+    "id": 112029,
+    "name": "猎兵祭刀",
+    "source": "愚人众·债务处理人掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112030.png",
+    "id": 112030,
+    "name": "特工祭刀",
+    "source": "40级以上愚人众·债务处理人掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112031.png",
+    "id": 112031,
+    "name": "督察长祭刀",
+    "source": "60级以上愚人众·债务处理人掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112032.png",
+    "id": 112032,
+    "name": "新兵的徽记",
+    "source": "愚人众·先遣队掉落\n愚人众·债务处理人少量掉落\n愚人众·萤术士少量掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112033.png",
+    "id": 112033,
+    "name": "士官的徽记",
+    "source": "40级以上愚人众·先遣队掉落\n40级以上愚人众·债务处理人少量掉落\n40级以上愚人众·萤术士少量掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112034.png",
+    "id": 112034,
+    "name": "尉官的徽记",
+    "source": "60级以上愚人众·先遣队掉落\n60级以上愚人众·债务处理人少量掉落\n60级以上愚人众·萤术士少量掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112035.png",
+    "id": 112035,
+    "name": "寻宝鸦印",
+    "source": "盗宝团掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112036.png",
+    "id": 112036,
+    "name": "藏银鸦印",
+    "source": "40级以上盗宝团掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112037.png",
+    "id": 112037,
+    "name": "攫金鸦印",
+    "source": "60级以上盗宝团掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112038.png",
+    "id": 112038,
+    "name": "骗骗花蜜",
+    "source": "骗骗花掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112039.png",
+    "id": 112039,
+    "name": "微光花蜜",
+    "source": "40级以上骗骗花掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112040.png",
+    "id": 112040,
+    "name": "原素花蜜",
+    "source": "60级以上骗骗花掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112041.png",
+    "id": 112041,
+    "name": "脆弱的骨片",
+    "source": "幼岩龙蜥掉落\n岩龙蜥掉落\n深海龙蜥掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112042.png",
+    "id": 112042,
+    "name": "结实的骨片",
+    "source": "40级以上幼岩龙蜥掉落\n40级以上岩龙蜥掉落\n40级以上深海龙蜥掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112043.png",
+    "id": 112043,
+    "name": "石化的骨片",
+    "source": "60级以上幼岩龙蜥掉落\n60级以上岩龙蜥掉落\n60级以上深海龙蜥掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112044.png",
+    "id": 112044,
+    "name": "破旧的刀镡",
+    "source": "野伏众掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112045.png",
+    "id": 112045,
+    "name": "影打刀镡",
+    "source": "40级以上野伏众掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112046.png",
+    "id": 112046,
+    "name": "名刀镡",
+    "source": "60级以上野伏众掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112047.png",
+    "id": 112047,
+    "name": "混沌机关",
+    "source": "遗迹机兵掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112048.png",
+    "id": 112048,
+    "name": "混沌枢纽",
+    "source": "40级以上遗迹机兵掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112049.png",
+    "id": 112049,
+    "name": "混沌真眼",
+    "source": "60级以上遗迹机兵掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112050.png",
+    "id": 112050,
+    "name": "黯淡棱镜",
+    "source": "愚人众·冬国仕女掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112051.png",
+    "id": 112051,
+    "name": "水晶棱镜",
+    "source": "40级以上愚人众·冬国仕女掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112052.png",
+    "id": 112052,
+    "name": "偏光棱镜",
+    "source": "60级以上愚人众·冬国仕女掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112053.png",
+    "id": 112053,
+    "name": "浮游干核",
+    "source": "飘浮灵掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112054.png",
+    "id": 112054,
+    "name": "浮游幽核",
+    "source": "40级以上飘浮灵掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112055.png",
+    "id": 112055,
+    "name": "浮游晶化核",
+    "source": "60级以上飘浮灵掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112056.png",
+    "id": 112056,
+    "name": "隐兽指爪",
+    "source": "兽境之狼掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112057.png",
+    "id": 112057,
+    "name": "隐兽利爪",
+    "source": "40级以上兽境之狼掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112058.png",
+    "id": 112058,
+    "name": "隐兽鬼爪",
+    "source": "60级以上兽境之狼掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112059.png",
+    "id": 112059,
+    "name": "蕈兽孢子",
+    "source": "蕈兽掉落\n活化状态下蕈兽少量掉落\n枯焦状态下蕈兽少量掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112060.png",
+    "id": 112060,
+    "name": "荧光孢粉",
+    "source": "40级以上蕈兽掉落\n40级以上活化状态下蕈兽少量掉落\n40级以上枯焦状态下蕈兽少量掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112061.png",
+    "id": 112061,
+    "name": "孢囊晶尘",
+    "source": "60级以上蕈兽掉落\n60级以上活化状态下蕈兽少量掉落\n60级以上枯焦状态下蕈兽少量掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112062.png",
+    "id": 112062,
+    "name": "失活菌核",
+    "source": "活化状态下蕈兽掉落\n枯焦状态下蕈兽掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112063.png",
+    "id": 112063,
+    "name": "休眠菌核",
+    "source": "40级以上活化状态下蕈兽掉落\n40级以上枯焦状态下蕈兽掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112064.png",
+    "id": 112064,
+    "name": "茁壮菌核",
+    "source": "60级以上活化状态下蕈兽掉落\n60级以上枯焦状态下蕈兽掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112065.png",
+    "id": 112065,
+    "name": "褪色红绸",
+    "source": "镀金旅团掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112066.png",
+    "id": 112066,
+    "name": "镶边红绸",
+    "source": "40级以上镀金旅团掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112067.png",
+    "id": 112067,
+    "name": "织金红绸",
+    "source": "60级以上镀金旅团掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112068.png",
+    "id": 112068,
+    "name": "混沌容器",
+    "source": "遗迹龙兽掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112069.png",
+    "id": 112069,
+    "name": "混沌模块",
+    "source": "40级以上遗迹龙兽掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112070.png",
+    "id": 112070,
+    "name": "混沌锚栓",
+    "source": "60级以上遗迹龙兽掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112071.png",
+    "id": 112071,
+    "name": "破缺棱晶",
+    "source": "元能构装体掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112072.png",
+    "id": 112072,
+    "name": "混浊棱晶",
+    "source": "40级以上元能构装体掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112073.png",
+    "id": 112073,
+    "name": "辉光棱晶",
+    "source": "60级以上元能构装体掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112074.png",
+    "id": 112074,
+    "name": "残毁的横脊",
+    "source": "圣骸兽掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112075.png",
+    "id": 112075,
+    "name": "密固的横脊",
+    "source": "40级以上圣骸兽掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112076.png",
+    "id": 112076,
+    "name": "锲纹的横脊",
+    "source": "60级以上圣骸兽掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112077.png",
+    "id": 112077,
+    "name": "来自何处的待放之花",
+    "source": "丘丘游侠掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112078.png",
+    "id": 112078,
+    "name": "何人所珍藏之花",
+    "source": "40级以上丘丘游侠掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112079.png",
+    "id": 112079,
+    "name": "漫游者的盛放之花",
+    "source": "60级以上丘丘游侠掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112080.png",
+    "id": 112080,
+    "name": "异海凝珠",
+    "source": "原海异种掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112081.png",
+    "id": 112081,
+    "name": "异海之块",
+    "source": "40级以上原海异种掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112082.png",
+    "id": 112082,
+    "name": "异色结晶石",
+    "source": "60级以上原海异种掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112083.png",
+    "id": 112083,
+    "name": "啮合齿轮",
+    "source": "发条机关掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112084.png",
+    "id": 112084,
+    "name": "机关正齿轮",
+    "source": "40级以上发条机关掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112085.png",
+    "id": 112085,
+    "name": "奇械机芯齿轮",
+    "source": "60级以上发条机关掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112086.png",
+    "id": 112086,
+    "name": "浊水的一滴",
+    "source": "浊水幻灵掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112087.png",
+    "id": 112087,
+    "name": "浊水的一掬",
+    "source": "40级以上浊水幻灵掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112088.png",
+    "id": 112088,
+    "name": "初生的浊水幻灵",
+    "source": "60级以上浊水幻灵掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112089.png",
+    "id": 112089,
+    "name": "隙间之核",
+    "source": "隙境原体掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112090.png",
+    "id": 112090,
+    "name": "外世突触",
+    "source": "40级以上隙境原体掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112091.png",
+    "id": 112091,
+    "name": "异界生命核",
+    "source": "60级以上隙境原体掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112092.png",
+    "id": 112092,
+    "name": "老旧的役人怀表",
+    "source": "愚人众·役人掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112093.png",
+    "id": 112093,
+    "name": "役人的制式怀表",
+    "source": "40级以上愚人众·役人掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112094.png",
+    "id": 112094,
+    "name": "役人的时时刻刻",
+    "source": "60级以上愚人众·役人掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112095.png",
+    "id": 112095,
+    "name": "羽状鳍翅",
+    "source": "玄文兽掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112096.png",
+    "id": 112096,
+    "name": "月色鳍翅",
+    "source": "40级以上玄文兽掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112097.png",
+    "id": 112097,
+    "name": "渊光鳍翅",
+    "source": "60级以上玄文兽掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112098.png",
+    "id": 112098,
+    "name": "残毁的剑柄",
+    "source": "魔像禁卫掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112099.png",
+    "id": 112099,
+    "name": "裂断的剑柄",
+    "source": "40级以上魔像禁卫掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112100.png",
+    "id": 112100,
+    "name": "未熄的剑柄",
+    "source": "60级以上魔像禁卫掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112101.png",
+    "id": 112101,
+    "name": "稚嫩的尖齿",
+    "source": "纳塔龙众掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112102.png",
+    "id": 112102,
+    "name": "老练的坚齿",
+    "source": "40级以上纳塔龙众掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112103.png",
+    "id": 112103,
+    "name": "横行霸者的利齿",
+    "source": "60级以上纳塔龙众掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112104.png",
+    "id": 112104,
+    "name": "卫从的木哨",
+    "source": "部族龙形武士掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112105.png",
+    "id": 112105,
+    "name": "战士的铁哨",
+    "source": "40级以上部族龙形武士掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112106.png",
+    "id": 112106,
+    "name": "龙冠武士的金哨",
+    "source": "60级以上部族龙形武士掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112107.png",
+    "id": 112107,
+    "name": "意志破碎的残片",
+    "source": "大灵显化身掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112108.png",
+    "id": 112108,
+    "name": "意志明晰的寄偶",
+    "source": "40级以上大灵显化身掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112109.png",
+    "id": 112109,
+    "name": "意志巡游的符像",
+    "source": "60级以上大灵显化身掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112110.png",
+    "id": 112110,
+    "name": "聚燃的石块",
+    "source": "熔岩游像掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112111.png",
+    "id": 112111,
+    "name": "聚燃的命种",
+    "source": "40级以上熔岩游像掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112112.png",
+    "id": 112112,
+    "name": "聚燃的游像眼",
+    "source": "60级以上熔岩游像掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112113.png",
+    "id": 112113,
+    "name": "秘源轴",
+    "source": "秘源机兵·寻捕械掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112114.png",
+    "id": 112114,
+    "name": "秘源机鞘",
+    "source": "40级以上秘源机兵·寻捕械掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112115.png",
+    "id": 112115,
+    "name": "秘源真芯",
+    "source": "60级以上秘源机兵·寻捕械掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112116.png",
+    "id": 112116,
+    "name": "折光的胚芽",
+    "source": "深邃拟覆叶掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112117.png",
+    "id": 112117,
+    "name": "惑光的阔叶",
+    "source": "40级以上深邃拟覆叶掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112118.png",
+    "id": 112118,
+    "name": "迷光的蜷叶之心",
+    "source": "60级以上深邃拟覆叶掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112119.png",
+    "id": 112119,
+    "name": "冷裂壳块",
+    "source": "炉壳山鼬掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112120.png",
+    "id": 112120,
+    "name": "蕴热的背壳",
+    "source": "40级以上炉壳山鼬掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112121.png",
+    "id": 112121,
+    "name": "明燃的棱状壳",
+    "source": "60级以上炉壳山鼬掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112122.png",
+    "id": 112122,
+    "name": "毁损机轴",
+    "source": "巡陆艇掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112123.png",
+    "id": 112123,
+    "name": "加固机轴",
+    "source": "40级以上巡陆艇掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112124.png",
+    "id": 112124,
+    "name": "精制机轴",
+    "source": "60级以上巡陆艇掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112125.png",
+    "id": 112125,
+    "name": "磨损的执凭",
+    "source": "愚人众特辖队掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112126.png",
+    "id": 112126,
+    "name": "精致的执凭",
+    "source": "40级以上愚人众特辖队掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112127.png",
+    "id": 112127,
+    "name": "霜镌的执凭",
+    "source": "60级以上愚人众特辖队掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112128.png",
+    "id": 112128,
+    "name": "霜夜的残照",
+    "source": "霜夜灵嗣掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112129.png",
+    "id": 112129,
+    "name": "霜夜的柔辉",
+    "source": "40级以上霜夜灵嗣掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112130.png",
+    "id": 112130,
+    "name": "霜夜的煌荣",
+    "source": "60级以上霜夜灵嗣掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112131.png",
+    "id": 112131,
+    "name": "失光块骨",
+    "source": "蕴光异兽掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112132.png",
+    "id": 112132,
+    "name": "稀光遗骼",
+    "source": "40级以上蕴光异兽掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112133.png",
+    "id": 112133,
+    "name": "繁光躯外骸",
+    "source": "60级以上蕴光异兽掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112134.png",
+    "id": 112134,
+    "name": "幽雾化形",
+    "source": "荒野狂猎掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112135.png",
+    "id": 112135,
+    "name": "幽雾片甲",
+    "source": "40级以上荒野狂猎掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112136.png",
+    "id": 112136,
+    "name": "幽雾兜盔",
+    "source": "60级以上荒野狂猎掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112137.png",
+    "id": 112137,
+    "name": "深黯的裂眼",
+    "source": "深黯钓客掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112138.png",
+    "id": 112138,
+    "name": "深黯的怪核",
+    "source": "40级以上深黯钓客掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112139.png",
+    "id": 112139,
+    "name": "深黯的钩喙",
+    "source": "60级以上深黯钓客掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112140.png",
+    "id": 112140,
+    "name": "失色的焰剑",
+    "source": "辖域守护者掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112141.png",
+    "id": 112141,
+    "name": "残失的焰剑",
+    "source": "40级以上辖域守护者掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112142.png",
+    "id": 112142,
+    "name": "宝饰的焰剑",
+    "source": "60级以上辖域守护者掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113001.png",
+    "id": 113001,
+    "name": "飓风之种",
+    "source": "30级以上无相之风掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113002.png",
+    "id": 113002,
+    "name": "雷光棱镜",
+    "source": "30级以上无相之雷掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113003.png",
+    "id": 113003,
+    "name": "东风之翎",
+    "source": "70级以上风魔龙挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113004.png",
+    "id": 113004,
+    "name": "东风之爪",
+    "source": "70级以上风魔龙挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113005.png",
+    "id": 113005,
+    "name": "东风的吐息",
+    "source": "70级以上风魔龙挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113006.png",
+    "id": 113006,
+    "name": "北风之尾",
+    "source": "70级以上北风狼挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113007.png",
+    "id": 113007,
+    "name": "北风之环",
+    "source": "70级以上北风狼挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113008.png",
+    "id": 113008,
+    "name": "北风的魂匣",
+    "source": "70级以上北风狼挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113009.png",
+    "id": 113009,
+    "name": "玄岩之塔",
+    "source": "30级以上无相之岩掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113010.png",
+    "id": 113010,
+    "name": "极寒之核",
+    "source": "30级以上急冻树掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113011.png",
+    "id": 113011,
+    "name": "常燃火种",
+    "source": "30级以上爆炎树掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113012.png",
+    "id": 113012,
+    "name": "净水之心",
+    "source": "30级以上纯水精灵掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113013.png",
+    "id": 113013,
+    "name": "吞天之鲸·只角",
+    "source": "70级以上公子挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113014.png",
+    "id": 113014,
+    "name": "魔王之刃·残片",
+    "source": "70级以上公子挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113015.png",
+    "id": 113015,
+    "name": "武炼之魂·孤影",
+    "source": "70级以上公子挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113016.png",
+    "id": 113016,
+    "name": "未熟之玉",
+    "source": "30级以上古岩龙蜥掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113017.png",
+    "id": 113017,
+    "name": "龙王之冕",
+    "source": "70级以上若陀龙王挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113018.png",
+    "id": 113018,
+    "name": "血玉之枝",
+    "source": "70级以上若陀龙王挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113019.png",
+    "id": 113019,
+    "name": "鎏金之鳞",
+    "source": "70级以上若陀龙王挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113020.png",
+    "id": 113020,
+    "name": "晶凝之华",
+    "source": "30级以上无相之冰掉落"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113021.png",
+    "id": 113021,
+    "name": "异梦溶媒",
+    "source": "【征讨领域和北风的王狼】挑战奖励"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113022.png",
+    "id": 113022,
+    "name": "魔偶机心",
+    "source": "30级以上魔偶剑鬼掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113023.png",
+    "id": 113023,
+    "name": "恒常机关之心",
+    "source": "30级以上恒常机关阵列掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113024.png",
+    "id": 113024,
+    "name": "阴燃之珠",
+    "source": "30级以上无相之火掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113025.png",
+    "id": 113025,
+    "name": "熔毁之刻",
+    "source": "70级以上女士挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113026.png",
+    "id": 113026,
+    "name": "狱火之蝶",
+    "source": "70级以上女士挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113027.png",
+    "id": 113027,
+    "name": "灰烬之心",
+    "source": "70级以上女士挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113028.png",
+    "id": 113028,
+    "name": "排异之露",
+    "source": "30级以上无相之水掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113029.png",
+    "id": 113029,
+    "name": "雷霆数珠",
+    "source": "30级以上雷音权现掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113030.png",
+    "id": 113030,
+    "name": "兽境王器",
+    "source": "30级以上黄金王兽掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113031.png",
+    "id": 113031,
+    "name": "龙嗣伪鳍",
+    "source": "30级以上深海龙蜥之群掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113032.png",
+    "id": 113032,
+    "name": "凶将之手眼",
+    "source": "70级以上永恒的守护者挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113033.png",
+    "id": 113033,
+    "name": "祸神之禊泪",
+    "source": "70级以上永恒的守护者挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113034.png",
+    "id": 113034,
+    "name": "万劫之真意",
+    "source": "70级以上永恒的守护者挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113035.png",
+    "id": 113035,
+    "name": "符纹之齿",
+    "source": "30级以上遗迹巨蛇掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113036.png",
+    "id": 113036,
+    "name": "蕈王钩喙",
+    "source": "30级以上翠翎恐蕈掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113037.png",
+    "id": 113037,
+    "name": "藏雷野实",
+    "source": "30级以上掣电树掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113038.png",
+    "id": 113038,
+    "name": "永续机芯",
+    "source": "30级以上兆载永劫龙兽掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113039.png",
+    "id": 113039,
+    "name": "导光四面体",
+    "source": "30级以上半永恒统辖矩阵掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113040.png",
+    "id": 113040,
+    "name": "灭诤草蔓",
+    "source": "30级以上无相之草掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113041.png",
+    "id": 113041,
+    "name": "傀儡的悬丝",
+    "source": "70级以上「正机之神」挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113042.png",
+    "id": 113042,
+    "name": "无心的渊镜",
+    "source": "70级以上「正机之神」挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113043.png",
+    "id": 113043,
+    "name": "空行的虚铃",
+    "source": "70级以上「正机之神」挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113044.png",
+    "id": 113044,
+    "name": "苍砾蕊羽",
+    "source": "30级以上风蚀沙虫掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113045.png",
+    "id": 113045,
+    "name": "常暗圆环",
+    "source": "30级以上深罪浸礼者掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113046.png",
+    "id": 113046,
+    "name": "生长天地之蕨草",
+    "source": "70级以上阿佩普的绿洲守望者挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113047.png",
+    "id": 113047,
+    "name": "原初绿洲之初绽",
+    "source": "70级以上阿佩普的绿洲守望者挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113048.png",
+    "id": 113048,
+    "name": "亘古树海之一瞬",
+    "source": "70级以上阿佩普的绿洲守望者挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113049.png",
+    "id": 113049,
+    "name": "奇械发条备件·歌裴莉娅",
+    "source": "30级以上「冰风组曲」掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113050.png",
+    "id": 113050,
+    "name": "奇械发条备件·科培琉司",
+    "source": "30级以上「冰风组曲」掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113051.png",
+    "id": 113051,
+    "name": "帝皇的决断",
+    "source": "30级以上铁甲熔火帝皇掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113052.png",
+    "id": 113052,
+    "name": "「图比昂装置」",
+    "source": "30级以上实验性场力发生装置掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113053.png",
+    "id": 113053,
+    "name": "原海麟角",
+    "source": "30级以上千年珍珠骏麟掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113054.png",
+    "id": 113054,
+    "name": "无光丝线",
+    "source": "70级以上吞星之鲸挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113055.png",
+    "id": 113055,
+    "name": "无光涡眼",
+    "source": "70级以上吞星之鲸挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113056.png",
+    "id": 113056,
+    "name": "无光质块",
+    "source": "70级以上吞星之鲸挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113057.png",
+    "id": 113057,
+    "name": "未能达成超越之水",
+    "source": "30级以上水形幻人掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113058.png",
+    "id": 113058,
+    "name": "凝云鳞甲",
+    "source": "30级以上隐山猊兽掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113059.png",
+    "id": 113059,
+    "name": "金色旋律的断章",
+    "source": "30级以上魔像督军掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113060.png",
+    "id": 113060,
+    "name": "残火灯烛",
+    "source": "70级以上「仆人」挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113061.png",
+    "id": 113061,
+    "name": "丝织之羽",
+    "source": "70级以上「仆人」挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113062.png",
+    "id": 113062,
+    "name": "否定裁断",
+    "source": "70级以上「仆人」挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113063.png",
+    "id": 113063,
+    "name": "星与火的基石",
+    "source": "完成纳塔地区任务获得"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113064.png",
+    "id": 113064,
+    "name": "受祝所缚之印",
+    "source": "30级以上金焰绒翼龙暴君掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113065.png",
+    "id": 113065,
+    "name": "过熟的火榴果",
+    "source": "30级以上贪食匿叶龙山王掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113066.png",
+    "id": 113066,
+    "name": "秘刻金纹的源核",
+    "source": "30级以上秘源机兵·构型械掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113067.png",
+    "id": 113067,
+    "name": "深邃纠缠的凝视",
+    "source": "30级以上深邃摹结株掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113068.png",
+    "id": 113068,
+    "name": "蚀灭的灵犀",
+    "source": "70级以上蚀灭的源焰之主挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113069.png",
+    "id": 113069,
+    "name": "蚀灭的阳焰",
+    "source": "70级以上蚀灭的源焰之主挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113070.png",
+    "id": 113070,
+    "name": "蚀灭的鳞羽",
+    "source": "70级以上蚀灭的源焰之主挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113071.png",
+    "id": 113071,
+    "name": "谜土的护符",
+    "source": "30级以上灵觉隐修的迷者掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113072.png",
+    "id": 113072,
+    "name": "龙像的无智核",
+    "source": "30级以上熔岩辉龙像掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113073.png",
+    "id": 113073,
+    "name": "升扬样本·骑士",
+    "source": "70级以上门扉前的弈局挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113074.png",
+    "id": 113074,
+    "name": "升扬样本·战车",
+    "source": "70级以上门扉前的弈局挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113075.png",
+    "id": 113075,
+    "name": "升扬样本·王族",
+    "source": "70级以上门扉前的弈局挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113076.png",
+    "id": 113076,
+    "name": "秘源积气喉",
+    "source": "30级以上秘源机兵·统御械掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113077.png",
+    "id": 113077,
+    "name": "精密型月矩力冲鸭模具",
+    "source": "30级以上重拳出击鸭掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113078.png",
+    "id": 113078,
+    "name": "承光的鳞羽",
+    "source": "30级以上蕴光月幻蝶掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113079.png",
+    "id": 113079,
+    "name": "漫光的辉角",
+    "source": "30级以上霜夜巡天灵主掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113080.png",
+    "id": 113080,
+    "name": "循环式军用月矩核心",
+    "source": "30级以上超重型陆巡舰·机动战垒掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113081.png",
+    "id": 113081,
+    "name": "贤医的假面",
+    "source": "70级以上「博士」挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113082.png",
+    "id": 113082,
+    "name": "狂人的约束",
+    "source": "70级以上「博士」挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113083.png",
+    "id": 113083,
+    "name": "异端的瓶剂",
+    "source": "70级以上「博士」挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113084.png",
+    "id": 113084,
+    "name": "魇翼枯骸",
+    "source": "30级以上深黯魇语之主掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113085.png",
+    "id": 113085,
+    "name": "棱光的断尾",
+    "source": "30级以上蕴光月守宫掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113086.png",
+    "id": 113086,
+    "name": "堕天的落羽",
+    "source": "30级以上守望者·堕天掉落"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113087.png",
+    "id": 113087,
+    "name": "赝作的树脂",
+    "source": "70级以上多托雷挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113088.png",
+    "id": 113088,
+    "name": "扭曲的枯枝",
+    "source": "70级以上多托雷挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "角色培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_113089.png",
+    "id": 113089,
+    "name": "亵渎的新芽",
+    "source": "70级以上多托雷挑战奖励\n合成台-转化页签：转化获取"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114001.png",
+    "id": 114001,
+    "name": "高塔孤王的破瓦",
+    "source": "蒙德纪念品商店兑换\n礼包商城兑换"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114002.png",
+    "id": 114002,
+    "name": "高塔孤王的残垣",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114003.png",
+    "id": 114003,
+    "name": "高塔孤王的断片",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114004.png",
+    "id": 114004,
+    "name": "高塔孤王的碎梦",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114005.png",
+    "id": 114005,
+    "name": "凛风奔狼的始龀",
+    "source": "蒙德纪念品商店兑换\n礼包商城兑换"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114006.png",
+    "id": 114006,
+    "name": "凛风奔狼的裂齿",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114007.png",
+    "id": 114007,
+    "name": "凛风奔狼的断牙",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114008.png",
+    "id": 114008,
+    "name": "凛风奔狼的怀乡",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114009.png",
+    "id": 114009,
+    "name": "狮牙斗士的枷锁",
+    "source": "蒙德纪念品商店兑换\n礼包商城兑换"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114010.png",
+    "id": 114010,
+    "name": "狮牙斗士的铁链",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114011.png",
+    "id": 114011,
+    "name": "狮牙斗士的镣铐",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114012.png",
+    "id": 114012,
+    "name": "狮牙斗士的理想",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114013.png",
+    "id": 114013,
+    "name": "孤云寒林的光砂",
+    "source": "璃月纪念品商店兑换\n礼包商城兑换"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114014.png",
+    "id": 114014,
+    "name": "孤云寒林的辉岩",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114015.png",
+    "id": 114015,
+    "name": "孤云寒林的圣骸",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114016.png",
+    "id": 114016,
+    "name": "孤云寒林的神体",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114017.png",
+    "id": 114017,
+    "name": "雾海云间的铅丹",
+    "source": "璃月纪念品商店兑换\n礼包商城兑换"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114018.png",
+    "id": 114018,
+    "name": "雾海云间的汞丹",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114019.png",
+    "id": 114019,
+    "name": "雾海云间的金丹",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114020.png",
+    "id": 114020,
+    "name": "雾海云间的转还",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114021.png",
+    "id": 114021,
+    "name": "漆黑陨铁的一粒",
+    "source": "璃月纪念品商店兑换\n礼包商城兑换"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114022.png",
+    "id": 114022,
+    "name": "漆黑陨铁的一片",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114023.png",
+    "id": 114023,
+    "name": "漆黑陨铁的一角",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114024.png",
+    "id": 114024,
+    "name": "漆黑陨铁的一块",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114025.png",
+    "id": 114025,
+    "name": "远海夷地的瑚枝",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114026.png",
+    "id": 114026,
+    "name": "远海夷地的玉枝",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114027.png",
+    "id": 114027,
+    "name": "远海夷地的琼枝",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114028.png",
+    "id": 114028,
+    "name": "远海夷地的金枝",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114029.png",
+    "id": 114029,
+    "name": "鸣神御灵的明惠",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114030.png",
+    "id": 114030,
+    "name": "鸣神御灵的欢喜",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114031.png",
+    "id": 114031,
+    "name": "鸣神御灵的亲爱",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114032.png",
+    "id": 114032,
+    "name": "鸣神御灵的勇武",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114033.png",
+    "id": 114033,
+    "name": "今昔剧画之恶尉",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114034.png",
+    "id": 114034,
+    "name": "今昔剧画之虎啮",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114035.png",
+    "id": 114035,
+    "name": "今昔剧画之一角",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114036.png",
+    "id": 114036,
+    "name": "今昔剧画之鬼人",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114037.png",
+    "id": 114037,
+    "name": "谧林涓露的铜符",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114038.png",
+    "id": 114038,
+    "name": "谧林涓露的铁符",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114039.png",
+    "id": 114039,
+    "name": "谧林涓露的银符",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114040.png",
+    "id": 114040,
+    "name": "谧林涓露的金符",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114041.png",
+    "id": 114041,
+    "name": "绿洲花园的追忆",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114042.png",
+    "id": 114042,
+    "name": "绿洲花园的恩惠",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114043.png",
+    "id": 114043,
+    "name": "绿洲花园的哀思",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114044.png",
+    "id": 114044,
+    "name": "绿洲花园的真谛",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114045.png",
+    "id": 114045,
+    "name": "烈日威权的残响",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114046.png",
+    "id": 114046,
+    "name": "烈日威权的余光",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114047.png",
+    "id": 114047,
+    "name": "烈日威权的梦想",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114048.png",
+    "id": 114048,
+    "name": "烈日威权的旧日",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114049.png",
+    "id": 114049,
+    "name": "悠古弦音的残章",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114050.png",
+    "id": 114050,
+    "name": "悠古弦音的断章",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114051.png",
+    "id": 114051,
+    "name": "悠古弦音的乐章",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114052.png",
+    "id": 114052,
+    "name": "悠古弦音的回响",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114053.png",
+    "id": 114053,
+    "name": "纯圣露滴的滤渣",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114054.png",
+    "id": 114054,
+    "name": "纯圣露滴的凝华",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114055.png",
+    "id": 114055,
+    "name": "纯圣露滴的醴泉",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114056.png",
+    "id": 114056,
+    "name": "纯圣露滴的真粹",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114057.png",
+    "id": 114057,
+    "name": "无垢之海的苦盏",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114058.png",
+    "id": 114058,
+    "name": "无垢之海的酒盏",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114059.png",
+    "id": 114059,
+    "name": "无垢之海的银杯",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114060.png",
+    "id": 114060,
+    "name": "无垢之海的金杯",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114061.png",
+    "id": 114061,
+    "name": "贡祭炽心的惶恐",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114062.png",
+    "id": 114062,
+    "name": "贡祭炽心的踌躇",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114063.png",
+    "id": 114063,
+    "name": "贡祭炽心的决绝",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114064.png",
+    "id": 114064,
+    "name": "贡祭炽心的荣膺",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114065.png",
+    "id": 114065,
+    "name": "谵妄圣主的朽败",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114066.png",
+    "id": 114066,
+    "name": "谵妄圣主的余哀",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114067.png",
+    "id": 114067,
+    "name": "谵妄圣主的容光",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114068.png",
+    "id": 114068,
+    "name": "谵妄圣主的神面",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114069.png",
+    "id": 114069,
+    "name": "神合秘烟的思绪",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114070.png",
+    "id": 114070,
+    "name": "神合秘烟的预感",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114071.png",
+    "id": 114071,
+    "name": "神合秘烟的征兆",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114072.png",
+    "id": 114072,
+    "name": "神合秘烟的启示",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114073.png",
+    "id": 114073,
+    "name": "奇巧秘器的残件",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114074.png",
+    "id": 114074,
+    "name": "奇巧秘器的模本",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114075.png",
+    "id": 114075,
+    "name": "奇巧秘器的继业",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114076.png",
+    "id": 114076,
+    "name": "奇巧秘器的真愿",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114077.png",
+    "id": 114077,
+    "name": "长夜燧火的余烬",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114078.png",
+    "id": 114078,
+    "name": "长夜燧火的残照",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114079.png",
+    "id": 114079,
+    "name": "长夜燧火的明焰",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114080.png",
+    "id": 114080,
+    "name": "长夜燧火的烈辉",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114081.png",
+    "id": 114081,
+    "name": "终北遗嗣的哀荣",
+    "source": "礼包商城兑换"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114082.png",
+    "id": 114082,
+    "name": "终北遗嗣的迷顽",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114083.png",
+    "id": 114083,
+    "name": "终北遗嗣的祷献",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "武器突破素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_114084.png",
+    "id": 114084,
+    "name": "终北遗嗣的煌熠",
+    "source": "占位-可合成数量:{0}"
+  },
+  {
+    "category": "纪行经验",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_116001.png",
+    "id": 116001,
+    "name": "纪行经验",
+    "source": "纪行即是将长旅中所经历的一切都记录下来。这些就是将被谱写成诗的素材。"
+  },
+  {
+    "category": "贵重物品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_118001.png",
+    "id": 118002,
+    "name": "给旅行者的小蛋糕",
+    "source": "某个意义重大的日子留下的纪念品。\n\n献给星海之中熠熠生辉的你。\n祈愿你在这片大地上的旅程美好幸福。\n\n「这是第一次为你庆祝这个日子吧。每隔七天，推荐菜就会轮换一次。每隔三十天，月亮就会播撒新的祝福。下次为你庆祝，居然还要接近九千小时！」"
+  },
+  {
+    "category": "贵重物品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_118003.png",
+    "id": 118004,
+    "name": "给旅行者的小蛋糕",
+    "source": "某个意义重大的日子留下的纪念品。\n\n献给大陆上奔忙着的你。\n祈愿你在这片大地上的旅程美好幸福。\n\n「每隔七天，推荐菜就会轮换一次。每隔三十天，月亮就会播撒新的祝福。下次为你庆祝，居然还要接近九千小时！这上面文字的意思，大概是派蒙陪着旅行者哦。」"
+  },
+  {
+    "category": "贵重物品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_118005.png",
+    "id": 118006,
+    "name": "给旅行者的小蛋糕",
+    "source": "某个意义重大的日子留下的纪念品。\n\n献给越过海浪与山峦的你。\n祈愿你在这片大地上的旅程美好幸福。\n\n「每隔七天，推荐菜就会轮换一次。每隔三十天，月亮就会播撒新的祝福。下次为你庆祝，居然还要接近九千小时！往后的日子无论是晴还是阴雨，派蒙都要和旅行者一起度过，嘿嘿。」"
+  },
+  {
+    "category": "贵重物品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_118007.png",
+    "id": 118008,
+    "name": "给旅行者的小蛋糕",
+    "source": "某个意义重大的日子获得的礼品。\n\n献给于林中奏曲并探听婆娑回音的你。\n祈愿你在甜美的梦境中得享幸福与安宁。\n\n「每隔七天，推荐菜就会轮换一次。每隔三十天，月亮就会播撒新的祝福。下次为你庆祝，居然还要接近九千小时！嘿嘿，现在派蒙我就按照蛋糕上的乐谱，弹奏给你听吧，先说好，不许笑，我练习了好久呢！」"
+  },
+  {
+    "category": "贵重物品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_118009.png",
+    "id": 118010,
+    "name": "给旅行者的小蛋糕",
+    "source": "某个意义重大的日子获得的礼品。\n\n献给静心聆听海潮歌声的你。\n祈愿你在这片大地上的旅程美好幸福。\n\n「每隔七天，推荐菜就会轮换一次。每隔三十天，月亮就会播撒新的祝福。下次为你庆祝，居然还要接近九千小时！就像贝壳总是会陪伴着悠悠海獭一样，派蒙也会一直陪着旅行者喔！」"
+  },
+  {
+    "category": "贵重物品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_118011.png",
+    "id": 118012,
+    "name": "给旅行者的小蛋糕",
+    "source": "某个意义重大的日子获得的礼品。\n\n献给凝望着营火摇曳的你。\n祈愿你在旅途中找到属于自己的温暖与幸福。\n\n「每隔七天，推荐菜就会轮换一次。每隔三十天，月亮就会播撒新的祝福。下次为你庆祝，居然还要接近九千小时！我们一起度过的时光就像巧克力一样，软软甜甜，还不舍得一口气吃完…嗯！派蒙最喜欢和你一起旅行了！」"
+  },
+  {
+    "category": "CONSUME",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120815.png",
+    "id": 120815,
+    "name": "培育区域扩展·其一",
+    "source": "增加一块可用于培育药材的区域。"
+  },
+  {
+    "category": "CONSUME",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120815.png",
+    "id": 120816,
+    "name": "培育区域扩展·其二",
+    "source": "增加一块可用于培育药材的区域。"
+  },
+  {
+    "category": "CONSUME",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120815.png",
+    "id": 120817,
+    "name": "培育区域扩展·其三",
+    "source": "增加一块可用于培育药材的区域。"
+  },
+  {
+    "category": "CONSUME",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120815.png",
+    "id": 120818,
+    "name": "培育区域扩展·其四",
+    "source": "增加一块可用于培育药材的区域。"
+  },
+  {
+    "category": "CONSUME",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120815.png",
+    "id": 120819,
+    "name": "培育区域扩展·其五",
+    "source": "增加一块可用于培育药材的区域。"
+  },
+  {
+    "category": "CONSUME",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120815.png",
+    "id": 120820,
+    "name": "培育区域扩展·其六",
+    "source": "增加一块可用于培育药材的区域。"
+  },
+  {
+    "category": "CONSUME",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120821.png",
+    "id": 120821,
+    "name": "改进炼金釜·其一",
+    "source": "改进炼金釜的性能，扩展炼制药剂时放置药材的区域大小。"
+  },
+  {
+    "category": "CONSUME",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120821.png",
+    "id": 120822,
+    "name": "改进炼金釜·其二",
+    "source": "改进炼金釜的性能，扩展炼制药剂时放置药材的区域大小。"
+  },
+  {
+    "category": "CONSUME",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120821.png",
+    "id": 120823,
+    "name": "改进炼金釜·其三",
+    "source": "改进炼金釜的性能，扩展炼制药剂时放置药材的区域大小。"
+  },
+  {
+    "category": "CONSUME",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120821.png",
+    "id": 120824,
+    "name": "改进炼金釜·其四",
+    "source": "改进炼金釜的性能，扩展炼制药剂时放置药材的区域大小。"
+  },
+  {
+    "category": "CONSUME",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120825.png",
+    "id": 120825,
+    "name": "棱角水滴瓶",
+    "source": "棱角分明的药剂瓶体，如同方方正正的水滴，对于宝贵的炼金药剂而言，确实每一滴都不能浪费…\n可以略微提升药剂的品质，所有特殊瓶体提供的增益效果相同。"
+  },
+  {
+    "category": "CONSUME",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120826.png",
+    "id": 120826,
+    "name": "妙妙心心瓶",
+    "source": "高脚设计的药剂瓶体，采用了心形的设计，据说无论装着什么颜色的药剂，都能给顾客带来愉快的观感…\n可以略微提升药剂的品质，所有特殊瓶体提供的增益效果相同。"
+  },
+  {
+    "category": "CONSUME",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120827.png",
+    "id": 120827,
+    "name": "宁静水湾瓶",
+    "source": "设计巧妙的药剂瓶体，采用了长瓶颈的独特设计，据说这种瓶型被设计师比作「宁静的水湾」…\n可以略微提升药剂的品质，所有特殊瓶体提供的增益效果相同。"
+  },
+  {
+    "category": "CONSUME",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120828.png",
+    "id": 120828,
+    "name": "华丽宝石瓶",
+    "source": "窄口宽体的药剂瓶体，大量直线交织的外观如同一颗大型宝石，可以给顾客格外华丽的观感…\n可以略微提升药剂的品质，所有特殊瓶体提供的增益效果相同。"
+  },
+  {
+    "category": "CONSUME",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120829.png",
+    "id": 120829,
+    "name": "胖胖猫猫瓶",
+    "source": "弧线圆润的药剂瓶体，如同胖胖的猫猫头，喜欢可爱事物的顾客很容易被这种瓶体吸引注意力…\n可以略微提升药剂的品质，所有特殊瓶体提供的增益效果相同。"
+  },
+  {
+    "category": "CONSUME",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120830.png",
+    "id": 120830,
+    "name": "风车菊的气息",
+    "source": "风车菊与翠绿树叶相结合的瓶体配饰，似乎能让药剂被和煦之风环绕…"
+  },
+  {
+    "category": "CONSUME",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120831.png",
+    "id": 120831,
+    "name": "如晶蝶般璀璨",
+    "source": "晶蝶造型的瓶体配饰，尤为亮眼，有时能瞬间吸引顾客的目光…"
+  },
+  {
+    "category": "CONSUME",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120832.png",
+    "id": 120832,
+    "name": "完美赠礼织带",
+    "source": "蝴蝶结缎带造型的瓶体配饰，似乎能让药剂充满礼物盒包装般的惊喜感…"
+  },
+  {
+    "category": "CONSUME",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120833.png",
+    "id": 120833,
+    "name": "莓红飞花一羽",
+    "source": "有着莓红点缀物的羽毛造型瓶体配饰，据说能让顾客和使用者联想到飞鸟的意象…"
+  },
+  {
+    "category": "CONSUME",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120834.png",
+    "id": 120834,
+    "name": "鎏金与青宝石",
+    "source": "金色框体与青色宝石外形的瓶体配饰，「宝石」由玻璃制成，兼顾了美观与成本…"
+  },
+  {
+    "category": "CONSUME",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120835.png",
+    "id": 120835,
+    "name": "店铺饰物-「士气花花」",
+    "source": "骑士团的炼金店铺专用的特别装潢，美观的双层花坛，据说是由某位调查小队的队员捐赠的「士气提升品」。"
+  },
+  {
+    "category": "CONSUME",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120836.png",
+    "id": 120836,
+    "name": "店铺饰物-「氛围花花」",
+    "source": "骑士团的炼金店铺专用的特别装潢，栽有蓝色与米色的花卉，据说是某位后勤小队队员打造的「氛围营造品」。"
+  },
+  {
+    "category": "CONSUME",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120837.png",
+    "id": 120837,
+    "name": "店铺饰物-「高效药剂」",
+    "source": "骑士团的炼金店铺专用的特别装潢，可被悬挂在店铺的棚体上，画面上的药剂采用了大众印象中的经典造型…"
+  },
+  {
+    "category": "CONSUME",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120838.png",
+    "id": 120838,
+    "name": "店铺饰物-「奇妙药剂」",
+    "source": "骑士团的炼金店铺专用的特别装潢，也是在蒙德城各处宣传炼金店铺所用的广告牌，画面上的药剂采用了大众印象中的经典造型…"
+  },
+  {
+    "category": "CONSUME",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120839.png",
+    "id": 120839,
+    "name": "店铺饰物-「多色效应」",
+    "source": "骑士团的炼金店铺专用的特别装潢，悬挂着多种颜色的小彩旗，据说「多彩」也象征着奇妙炼金药剂的多种功效…"
+  },
+  {
+    "category": "CONSUME",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120840.png",
+    "id": 120840,
+    "name": "经销拓展合同",
+    "source": "额外聘用一位经销商。"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120858.png",
+    "id": 120858,
+    "name": "明黄曜石断片",
+    "source": "坚岩隘谷、万火之瓯探索奖励"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120859.png",
+    "id": 120859,
+    "name": "明黄曜石环",
+    "source": "刻画有「回声之子」风格纹饰的黑曜石环，是部族与深沉夜晚建立联系所用的古老媒介，或许可以凭借它的力量跨越某处的边界…"
+  },
+  {
+    "category": "CONSUME",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120815.png",
+    "id": 120875,
+    "name": "培育区域扩展·其七",
+    "source": "增加一块可用于培育药材的区域。"
+  },
+  {
+    "category": "CONSUME",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120876.png",
+    "id": 120876,
+    "name": "药材研析仪",
+    "source": "骑士团特制的药材研析装置，可以将炼金店铺中用到的药材置入其中，分析其特性，提升相应的「药材等级」，进而从多方面改善使用药材时的效能…"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120912.png",
+    "id": 120912,
+    "name": "翠青曜石断片",
+    "source": "踞石山、万火之瓯探索奖励"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120913.png",
+    "id": 120913,
+    "name": "翠青曜石环",
+    "source": "刻画有「悬木人」风格纹饰的黑曜石环，是部族与深沉夜晚建立联系所用的古老媒介，或许可以凭借它的力量跨越某处的边界…"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120914.png",
+    "id": 120914,
+    "name": "湛蓝曜石断片",
+    "source": "涌流地探索奖励"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_120915.png",
+    "id": 120915,
+    "name": "湛蓝曜石环",
+    "source": "刻画有「流泉之众」风格纹饰的黑曜石环，是部族与深沉夜晚建立联系所用的古老媒介，或许可以凭借它的力量跨越某处的边界…"
+  },
+  {
+    "category": "获取燃素",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_2020.png",
+    "id": 120961,
+    "name": "采集用-燃素能量球",
+    "source": "燃素能量球"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_121103.png",
+    "id": 121103,
+    "name": "幽紫曜石断片",
+    "source": "镜璧山探索奖励"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_121104.png",
+    "id": 121104,
+    "name": "幽紫曜石环",
+    "source": "刻画有「烟谜主」风格纹饰的黑曜石环，是部族与深沉夜晚建立联系所用的古老媒介，或许可以凭借它的力量跨越某处的边界…"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_121105.png",
+    "id": 121105,
+    "name": "灼赤曜石断片",
+    "source": "翘枝崖、奥奇卡纳塔探索奖励"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_121106.png",
+    "id": 121106,
+    "name": "灼赤曜石环",
+    "source": "刻画有「花羽会」风格纹饰的黑曜石环，是部族与深沉夜晚建立联系所用的古老媒介，或许可以凭借它的力量跨越某处的边界…"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_121107.png",
+    "id": 121107,
+    "name": "青绛曜石断片",
+    "source": "安饶之野探索奖励"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_121108.png",
+    "id": 121108,
+    "name": "青绛曜石环",
+    "source": "刻画有「沃陆之邦」风格纹饰的黑曜石环，是部族与深沉夜晚建立联系所用的古老媒介，或许可以凭借它的力量跨越某处的边界…"
+  },
+  {
+    "category": "贵重物品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_121250.png",
+    "id": 121251,
+    "name": "爱诺的工具箱（空）",
+    "source": "存放爱诺小饰品的工具箱，如今饰品已被取走。"
+  },
+  {
+    "category": "贵重物品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_121252.png",
+    "id": 121253,
+    "name": "伊涅芙的工具箱（空）",
+    "source": "存放伊涅芙小饰品的工具箱，如今饰品已被取走。"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_121279.png",
+    "id": 121279,
+    "name": "蛋卷螺栓",
+    "source": "刻着蛋卷工坊标识的螺栓，似乎可以在那里派上用场。"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_121283.png",
+    "id": 121283,
+    "name": "恒月印磐",
+    "source": "希汐岛探索奖励"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_121284.png",
+    "id": 121284,
+    "name": "恒月印磐",
+    "source": "帕哈岛探索奖励"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_121285.png",
+    "id": 121285,
+    "name": "恒月印磐",
+    "source": "伦波岛探索奖励"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_121330.png",
+    "id": 121330,
+    "name": "已记载的情报",
+    "source": "由「秘闻馆」中的人士所调查且记载下的情报。或许冒险家协会对此会有兴趣…"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_121450.png",
+    "id": 121450,
+    "name": "虹月印磐",
+    "source": "虚海望探索奖励"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_121451.png",
+    "id": 121451,
+    "name": "虹月印磐",
+    "source": "逐浪野探索奖励"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_121452.png",
+    "id": 121452,
+    "name": "虹月印磐",
+    "source": "烟硌山峰探索奖励"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_121601.png",
+    "id": 121601,
+    "name": "古蒙德宗室之印",
+    "source": "风息山探索奖励"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_121602.png",
+    "id": 121602,
+    "name": "切片辖域管控模块·零质点",
+    "source": "空之神殿探索奖励"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131000.png",
+    "id": 131000,
+    "name": "花鳉",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131001.png",
+    "id": 131001,
+    "name": "琉璃花鳉",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131002.png",
+    "id": 131002,
+    "name": "甜甜花鳉",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131003.png",
+    "id": 131003,
+    "name": "蓝染花鳉",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131004.png",
+    "id": 131004,
+    "name": "擒霞客",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131005.png",
+    "id": 131005,
+    "name": "水晶宴",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131006.png",
+    "id": 131006,
+    "name": "肺棘鱼",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131007.png",
+    "id": 131007,
+    "name": "斗棘鱼",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131008.png",
+    "id": 131008,
+    "name": "鸩棘鱼",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131009.png",
+    "id": 131009,
+    "name": "赤魔王",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131010.png",
+    "id": 131010,
+    "name": "雪中君",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131011.png",
+    "id": 131011,
+    "name": "金赤假龙",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131012.png",
+    "id": 131012,
+    "name": "锖假龙",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131013.png",
+    "id": 131013,
+    "name": "流纹褐蝶鱼",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131014.png",
+    "id": 131014,
+    "name": "流纹京紫蝶鱼",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131015.png",
+    "id": 131015,
+    "name": "流纹茶蝶鱼",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131016.png",
+    "id": 131016,
+    "name": "长生仙",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131017.png",
+    "id": 131017,
+    "name": "雷鸣仙",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131019.png",
+    "id": 131019,
+    "name": "炮鲀",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131020.png",
+    "id": 131020,
+    "name": "苦炮鲀",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131021.png",
+    "id": 131021,
+    "name": "迪芙妲鳐",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131022.png",
+    "id": 131022,
+    "name": "佛玛洛鳐",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131023.png",
+    "id": 131023,
+    "name": "真果角鲀",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131024.png",
+    "id": 131024,
+    "name": "沉波蜜桃",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131025.png",
+    "id": 131025,
+    "name": "吹沙角鲀",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131026.png",
+    "id": 131026,
+    "name": "暮云角鲀",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131027.png",
+    "id": 131027,
+    "name": "青金斧枪鱼",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131028.png",
+    "id": 131028,
+    "name": "翡玉斧枪鱼",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131029.png",
+    "id": 131029,
+    "name": "海涛斧枪鱼",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131030.png",
+    "id": 131030,
+    "name": "波波心羽鲈",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131031.png",
+    "id": 131031,
+    "name": "烘烘心羽鲈",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131032.png",
+    "id": 131032,
+    "name": "维护机关·初始能力型",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131033.png",
+    "id": 131033,
+    "name": "维护机关·水域清理者",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131034.png",
+    "id": 131034,
+    "name": "维护机关·态势控制者",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131035.png",
+    "id": 131035,
+    "name": "维护机关·白金典藏型",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131036.png",
+    "id": 131036,
+    "name": "维护机关·澄金领队型",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131037.png",
+    "id": 131037,
+    "name": "玉玉心羽鲈",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131038.png",
+    "id": 131038,
+    "name": "繁花斗士急流鱼",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131039.png",
+    "id": 131039,
+    "name": "深潜斗士急流鱼",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131040.png",
+    "id": 131040,
+    "name": "炽岩斗士急流鱼",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131041.png",
+    "id": 131041,
+    "name": "青浪翻车鲀",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131042.png",
+    "id": 131042,
+    "name": "晚霞翻车鲀",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131043.png",
+    "id": 131043,
+    "name": "拟似燃素独角鱼",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131044.png",
+    "id": 131044,
+    "name": "伪装鲨鲨独角鱼",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131045.png",
+    "id": 131045,
+    "name": "秘源机关·巡戒使",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131046.png",
+    "id": 131046,
+    "name": "无奇巨斧鱼",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131047.png",
+    "id": 131047,
+    "name": "冷冽巨斧鱼",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131048.png",
+    "id": 131048,
+    "name": "炽铁巨斧鱼",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131049.png",
+    "id": 131049,
+    "name": "素素凶凶鲨",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131050.png",
+    "id": 131050,
+    "name": "虹光凶凶鲨",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131051.png",
+    "id": 131051,
+    "name": "蓝昼明眼鱼",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131052.png",
+    "id": 131052,
+    "name": "夜色明眼鱼",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "鱼",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_131053.png",
+    "id": 131053,
+    "name": "綦假龙",
+    "source": "钓鱼获得"
+  },
+  {
+    "category": "海灯节材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200001.png",
+    "id": 200001,
+    "name": "灯纸纤维",
+    "source": "植物类采集物中获取"
+  },
+  {
+    "category": "海灯节材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200002.png",
+    "id": 200002,
+    "name": "灯芯绒材",
+    "source": "丘丘人系列魔物产出\n愚人众精英产出"
+  },
+  {
+    "category": "海灯节材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200003.png",
+    "id": 200003,
+    "name": "浮生石片",
+    "source": "矿物类采集物中获取\n幼岩龙蜥、岩龙蜥产出\n丘丘岩盔王产出"
+  },
+  {
+    "category": "雪山材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200101.png",
+    "id": 200101,
+    "name": "霜噬碎屑",
+    "source": "从龙脊雪山的魔物处提取出来的小块结晶。\n仅仅会在特殊的时期产生。"
+  },
+  {
+    "category": "雪山材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200102.png",
+    "id": 200102,
+    "name": "霜噬结晶",
+    "source": "从龙脊雪山的魔物处提取出来的结晶块。\n仅仅会在特殊的时期产生。"
+  },
+  {
+    "category": "精炼材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200103.png",
+    "id": 200103,
+    "name": "腐殖龙髓",
+    "source": "「腐殖之剑」专用的精炼道具。\n将散布在龙脊雪山的地脉当中的，「杜林」的腐毒提纯后得到的物质。用在亲和这种物质的「渴血之剑」上的话，可以提升这把剑的力量。"
+  },
+  {
+    "category": "精炼材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200104.png",
+    "id": 200104,
+    "name": "「看得见的风」",
+    "source": "「风花之颂」专用的精炼道具。\n象征着风车与风之花的精致饰物，也是「风花之颂」的弓臂上的装饰品。「风」本身看不见、摸不着，而恒常转动着的风车、绿地上摇摆的花朵则是「看得见的风」，向人们昭示着，轻柔的风无时无刻不眷顾蒙德的大地与众生。"
+  },
+  {
+    "category": "精炼材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200105.png",
+    "id": 200105,
+    "name": "「童真的断篇」",
+    "source": "「嘟嘟可故事集」专用的精炼道具。\n随风散落的断篇，每一页上都写满童趣之事，而尺寸恰好与《嘟嘟可故事集》完美相合。其间满溢的童心与纯真的爱永不褪色，就像书中永无完结的大冒险一样，热忱的童话永远随着其作者的脚步飞扬。"
+  },
+  {
+    "category": "精炼材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200106.png",
+    "id": 200106,
+    "name": "海皇香脂",
+    "source": "「衔珠海皇」专用的精炼道具。\n香气浓郁的膏体，似乎凝结着水中生命的灵气。涂抹在「衔珠海皇」上之后，能将这柄形貌独特的大剑淬炼得更为坚韧。"
+  },
+  {
+    "category": "精炼材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200107.png",
+    "id": 200107,
+    "name": "赤穗酒枡",
+    "source": "「渔获」专用的精炼道具。\n过去称霸清籁地方的赤穗百目鬼一众爱用的酒具。被海水带到了渔师的钓钩上。"
+  },
+  {
+    "category": "精炼材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200108.png",
+    "id": 200108,
+    "name": "「溶媒」",
+    "source": "「辰砂之纺锤」专用的精炼道具。\n隐隐泛着世外之光的白银液体，对地上之物或许有着蚀骨的猛毒吧。但也具有使物质升华的力量。"
+  },
+  {
+    "category": "精炼材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200109.png",
+    "id": 200109,
+    "name": "明目之油膏",
+    "source": "「证誓之明瞳」专用的精炼道具。\n由特殊的深海鳗鳗精炼出的鱼油，曾经被拿来保养渊下宫的神器，使其灼目长明。"
+  },
+  {
+    "category": "精炼材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200110.png",
+    "id": 200110,
+    "name": "霞色宝珠",
+    "source": "「落霞」专用的精炼道具。\n以层岩巨渊先民的古老工艺精致打磨而成的石珀宝珠。能够微微散发出如同黎明或夕暮的辉光。对于在不见天日的岩窟中，与漆黑之敌战斗的人而言，或许能带来小小的慰藉吧。"
+  },
+  {
+    "category": "精炼材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200111.png",
+    "id": 200111,
+    "name": "原海鱼油",
+    "source": "「竭泽」专用的精炼道具。\n从北方大湖的渔获中提炼出的油膏，能短暂地让成为良弓的鱼恢复生机。\n据说那个大湖中生活着大陆别处绝对无法见到的水生物种。"
+  },
+  {
+    "category": "精炼材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200112.png",
+    "id": 200112,
+    "name": "迁风的苍翎",
+    "source": "「风信之锋」专用的精炼道具。\n由松石雕而成的古旧羽翮，在过去似乎曾被用作饰品或信物。"
+  },
+  {
+    "category": "精炼材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200113.png",
+    "id": 200113,
+    "name": "若狭的藁末",
+    "source": "「东花坊时雨」专用的精炼道具。\n用以粘接竹簳与伞面的粉剂。\n纵然时节流转、昔日之雨散落成烟，总会有回忆重接思念，宛若置伞、伴梦同眠。"
+  },
+  {
+    "category": "精炼材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200114.png",
+    "id": 200114,
+    "name": "「不凋的绢华」",
+    "source": "「饰铁之花」专用的精炼道具。\n「装饰」能够为任何事物附上一份超出其自身价值与功能的小小心意。即便是战斗的工具，在这样的时日，这种不再枯萎的花朵也能为它赋予些许浪漫的内涵。"
+  },
+  {
+    "category": "精炼材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200115.png",
+    "id": 200115,
+    "name": "凝恒的脂蜡",
+    "source": "「鹮穿之喙」专用的精炼道具。\n据说后来成为「召唤王」的少年曾在大赤沙海之中受鹮之王的后裔所托，花费数日收集脂蛹熬制护弦之蜡。只是传说中的宝弓随鹮之王消失不复归来，唯有脂蜡的做法代代相传，也许，是为了能够再度使用的某日而作出的准备。"
+  },
+  {
+    "category": "精炼材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200116.png",
+    "id": 200116,
+    "name": "马腾斯万能护养剂",
+    "source": "「灰河渡手」专用的精炼道具。\n不但能够在特定材质的表面形成隔离层来避免金属氧化和腐蚀，还有润滑、清洁、抛光作用，曾经在枫丹风靡一时。在当时的广告中，灰河的传奇人物就用它来维护那根著名的弯头铜管。"
+  },
+  {
+    "category": "精炼材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200117.png",
+    "id": 200117,
+    "name": "蒲公英书签",
+    "source": "「无垠蔚蓝之歌」专用的精炼道具。\n在许多诗与故事中，蒲公英都是不受拘束、自在、旅行远方的象征。将蒲公英图案的书签夹在书中从某种意义上而言并不是一种禁锢，反而使它能在比现实更广阔、更光明的世界中遨游。"
+  },
+  {
+    "category": "精炼材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200118.png",
+    "id": 200118,
+    "name": "涌现的圣杯",
+    "source": "「水仙十字之剑」专用的精炼道具。\n古代枫丹文明喜欢用螺贝制作仪式道具，这个被选做圣杯的螺壳内终于涌现出圣油。从象征意义来说，圣杯是太初的言语，圣油是锤炼的意志，圣剑则是破开一切的理性。"
+  },
+  {
+    "category": "精炼材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200119.png",
+    "id": 200119,
+    "name": "「超级无敌闪亮亮魔晶」",
+    "source": "「究极霸王超级魔剑」专用的精炼道具。\n能够将许多心愿（以及帅气的硬纸板）牢牢地拼合在一起，从而诞生出究极无敌的神奇力量。\n虽说造型差不多（或者说完全一样）的小道具在达莫维百货也买得到，但两者之间其实说不定有着本质上的区别，所以千万不要搞混。"
+  },
+  {
+    "category": "精炼材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200120.png",
+    "id": 200120,
+    "name": "「大地之王」",
+    "source": "「沙中伟贤的对答」专用的精炼道具。\n在炼金术的基础教程中，水银被叫做「大地之王」，因为它甚至可以贪婪地吞吃黄金。因此炼金术也以它代表金属。\n干涸化为粉尘后依然拥有转变的性质。"
+  },
+  {
+    "category": "精炼材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200121.png",
+    "id": 200121,
+    "name": "衡仪机枢",
+    "source": "「筑云」专用的精炼道具。\n由玉衡星委托黑岩厂锻造的新型机件，据工匠所说有着「不逊仙家机关」的传动载荷。安装在对应的实验式兵器上，便可以进一步提升其威力。\n人治之世亦如良弓之弦，唯有定度衡仪，方能使其不至绷断。"
+  },
+  {
+    "category": "精炼材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200122.png",
+    "id": 200122,
+    "name": "「凝静的海色」",
+    "source": "「苍纹角杯」专用的精炼道具。\n细密温润的彩砂，质地如傍晚的海风般轻柔。\n在梅兹特利的古老传说中，海是群星的归宿，沉落的星芒终将化作苍色的海砂。静静聆听，瓶中摇晃的，正是星光与海潮的絮语。"
+  },
+  {
+    "category": "精炼材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200123.png",
+    "id": 200123,
+    "name": "纺灵之梭",
+    "source": "「厄水之祸」专用的精炼道具。\n如棱镜般折射着奇异光泽的玉石坠饰，即便置于焚火上灼烤，那份萦绕的阴冷依然挥之不去。\n古老的巫术传承中，「梭」本身便象征着穿刺不同界域的媒介。据说在众人尚不知晓怎样数算自己日子、怎样将故事纺成织物的蛮荒年岁，那些流徙于灵火之原的巨龙早已被忘却的语言中，亦将在漆黑死寂的群星间巡行的造物称作「空梭」，哪怕是将一个世界笼罩在内的厚重面纱，也会被流火的梭镖刺破。\n当然，这些说法全部来自狡狯的欺诈师桑哈杰，与他曾经编织出的无数戏言一样，说不定只是用来骗吃骗喝的故事——时至今日，烟谜主一些德高望重的祭司依然抱持着这样的观点。"
+  },
+  {
+    "category": "精炼材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200124.png",
+    "id": 200124,
+    "name": "灼幽的磷焰",
+    "source": "「且住亭御咄」专用的精炼道具。\n昔时以火焰为身奔行稻妻的妖怪，散落于四野的残留磷火。就像每一盏油灯都曾记忆围炉夜谈之人的话语，散落的焰火之中，或许也有对某人而言相当重要的回忆。"
+  },
+  {
+    "category": "精炼材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200125.png",
+    "id": 200125,
+    "name": "强弓校调工具组",
+    "source": "「冷寂迸音」专属的精炼道具。\n古老的故事中，劫富济贫的逐影猎人、人称「幻戏师」与「行刑人」的沃尔特总是善于利用精密机关的力学效应辅助拉弓射击。据说这种射击方式极度节省体能，从而让沃尔特能够应对可能追至的大量恶人与邪魔。\n这一特性在幻想映影中得到强调，以至于发展出「机关技术强化战士」的夸张形象。\n而探索极限远射与安静射击性能极限的「复合结构猎弓」同样需要多次校准和调试，才能发挥出最为理想的性能。"
+  },
+  {
+    "category": "精炼材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200126.png",
+    "id": 200126,
+    "name": "漫行者的晶髓",
+    "source": "「拾慧铸熔」专用的精炼道具。\n看上去只是普通的矿石，在纳塔各地都有出土。但正因为产地的不同，即使是同样的矿石，其石髓亦有细看才能看出的差别——这也是曾经漫行纳塔的旅人收集矿石的原因，有些东西要真切地触碰或握于手中，才可仔细品会其中的不同。"
+  },
+  {
+    "category": "精炼材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200127.png",
+    "id": 200127,
+    "name": "金色弦丝",
+    "source": "「天光的纺琴」专用的精炼道具。\n在早已失落的古代文明中，曾有人认为主宰世界的命运就像舞台上的唱段，是由高天之上一架巨大的竖琴编制而成。或许是因为他们曾亲眼见过天使从天光中抽出金色的琴弦，在宏伟的乐声中宣告命运的无情。"
+  },
+  {
+    "category": "精炼材料",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200128.png",
+    "id": 200128,
+    "name": "练心",
+    "source": "「虹蛇的雨弦」专用的精炼道具。\n被弓手长期佩戴的护指，色彩鲜艳，制作精良。\n箭矢的准头有赖于弓手的经验，其人凝息拨弦的次数越多，弓与箭越能随心而动。搭弦挽弓便是练心，护指有多破损，心就有多锐利。"
+  },
+  {
+    "category": "鱼竿",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200900.png",
+    "id": 200900,
+    "name": "林野钓竿",
+    "source": "任务获得"
+  },
+  {
+    "category": "鱼竿",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200901.png",
+    "id": 200901,
+    "name": "风缠",
+    "source": "蒙德钓鱼协会兑换"
+  },
+  {
+    "category": "鱼竿",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200902.png",
+    "id": 200902,
+    "name": "愿者",
+    "source": "璃月钓鱼协会兑换"
+  },
+  {
+    "category": "鱼竿",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200903.png",
+    "id": 200903,
+    "name": "鸣川鹈饲",
+    "source": "稻妻钓鱼协会兑换"
+  },
+  {
+    "category": "鱼竿",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200904.png",
+    "id": 200904,
+    "name": "长绳系月",
+    "source": "活动获得"
+  },
+  {
+    "category": "鱼竿",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200905.png",
+    "id": 200905,
+    "name": "盘缘",
+    "source": "须弥钓鱼协会兑换"
+  },
+  {
+    "category": "鱼竿",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200906.png",
+    "id": 200906,
+    "name": "穿浪斗枪",
+    "source": "枫丹钓鱼协会兑换"
+  },
+  {
+    "category": "鱼竿",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200907.png",
+    "id": 200907,
+    "name": "长犀圆鸟和扁鱼",
+    "source": "纳塔钓鱼协会兑换"
+  },
+  {
+    "category": "鱼竿",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_200908.png",
+    "id": 200908,
+    "name": "谧晖白枝",
+    "source": "挪德卡莱钓鱼协会兑换"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_211.png",
+    "id": 220007,
+    "name": "浓缩树脂",
+    "source": "合成获得"
+  },
+  {
+    "category": "小道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_220060.png",
+    "id": 220060,
+    "name": "试验型超燃灯",
+    "source": "能够通过消耗矿物，提高食材加工效率的小装置。\n教令院的年轻学者有着利用实验器材进行烹饪的习惯。为了提高效率，节约时间，有人发明了「超燃灯」这种能将矿物中的能量提取出来，增加功率的装置。\n手中的是这种超燃灯的民用试验型，限制了出力功率，消除了明火，以降低火灾风险。不过，就算如此，还是能够熬制果酱、烘干香肠，十分方便。"
+  },
+  {
+    "category": "锻造图纸",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_100865.png",
+    "id": 221018,
+    "name": "附有记忆的面具",
+    "source": "巫女「花散里」曾经戴着的面具，内侧有着深色的污渍。\n其中承载着一部分记忆。通过这份记忆，可以学会法器「白辰之环」的锻造方法。\n如今面具与花散里分别了，派蒙也不会叫她「面具巫女」了吧。"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_222001.png",
+    "id": 222001,
+    "name": "「绘绮之枕印」",
+    "source": "饰有彩画的绘马，由品质上佳的梦见木精雕细刻而成，描绘着明丽的稻妻风光。\n借由「外景之能」，方可将彩画上的风雅景致呈现在「尘歌壶」之中…"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_222002.png",
+    "id": 222002,
+    "name": "「烟林之真果」",
+    "source": "蕴含着奇妙香气的果实，是周游壶灵阿嘟从须弥带回的纪念品。\n轻嗅这种果实的香气，脑海中似乎就有某种意象浮现而出。借由「外景之能」，方可在壶中洞天构筑奇妙的须弥景致…"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_222003.png",
+    "id": 222003,
+    "name": "「旋流之瓶景」",
+    "source": "内部景观优美的生态瓶，是周游壶灵阿嘟从枫丹带回的纪念品。\n凝望瓶内的景致，脑海中似乎就有某种意象浮现而出。借由「外景之能」，方可在壶中洞天构筑奇妙的枫丹景致…"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_222004.png",
+    "id": 222004,
+    "name": "「炽空的绘卷」",
+    "source": "绘有独特风光，隐含着独特力量的纳塔织卷，是周游壶灵阿嘟从纳塔带回的纪念品。\n注视绘卷上的图案，脑海中似乎就有某种意象浮现而出。借由「外景之能」，方可将绘卷上的纳塔景致呈现在「尘歌壶」之中…"
+  },
+  {
+    "category": "消耗品",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_222005.png",
+    "id": 222005,
+    "name": "「掠影之球机」",
+    "source": "具有播放音乐与制造炫丽光效功能的挪德卡莱月矩力机关球，是周游壶灵阿嘟从挪德卡莱带回的纪念品。\n注视机关球上放出的光影，脑海中似乎就有某种意象浮现而出。借由「外景之能」，方可在壶中洞天构筑奇妙的挪德卡莱景致…"
+  }
+]

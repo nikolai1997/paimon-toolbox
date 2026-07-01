@@ -1,0 +1,9 @@
+.build/
+.swiftpm/
+.codex/
+__pycache__/
+dist/
+.DS_Store
+/.cache/
+/data/releases/*.zip
+/PaimonToolbox.xcodeproj/
