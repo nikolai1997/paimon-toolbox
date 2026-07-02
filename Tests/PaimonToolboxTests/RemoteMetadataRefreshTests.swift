@@ -3,6 +3,16 @@ import XCTest
 
 @MainActor
 final class RemoteMetadataRefreshTests: XCTestCase {
+    override func setUp() {
+        super.setUp()
+        UserDefaults.standard.removeObject(forKey: RemoteDataSettings.lastAutoRefreshAttemptKey)
+    }
+
+    override func tearDown() {
+        UserDefaults.standard.removeObject(forKey: RemoteDataSettings.lastAutoRefreshAttemptKey)
+        super.tearDown()
+    }
+
     func testLoadAutomaticallyRefreshesFromConfiguredRemoteMetadataURL() async {
         let local = makeMetadata(version: "local")
         let remote = makeMetadata(version: "remote")
@@ -27,6 +37,37 @@ final class RemoteMetadataRefreshTests: XCTestCase {
         XCTAssertNil(store.errorMessage)
         XCTAssertEqual(overviewService.loadCount, 2)
         XCTAssertEqual(store.overviewData.gachaEvents.first?.name, "新卡池")
+    }
+
+    func testAutomaticRemoteRefreshRunsAtMostOncePerDay() async {
+        let local = makeMetadata(version: "local")
+        let remote = makeMetadata(version: "remote")
+        let service = MockMetadataService(local: local, remote: remote)
+        let store = makeStore(metadataService: service)
+
+        await store.load(
+            remoteMetadataURLString: "https://example.com/metadata.json",
+            offlinePackageURLString: "",
+            autoRefreshRemoteMetadata: true,
+            now: Date(timeIntervalSince1970: 1_788_480_000)
+        )
+        await store.load(
+            remoteMetadataURLString: "https://example.com/metadata.json",
+            offlinePackageURLString: "",
+            autoRefreshRemoteMetadata: true,
+            now: Date(timeIntervalSince1970: 1_788_483_600)
+        )
+
+        XCTAssertEqual(service.refreshCallCount, 1)
+
+        await store.load(
+            remoteMetadataURLString: "https://example.com/metadata.json",
+            offlinePackageURLString: "",
+            autoRefreshRemoteMetadata: true,
+            now: Date(timeIntervalSince1970: 1_788_566_401)
+        )
+
+        XCTAssertEqual(service.refreshCallCount, 2)
     }
 
     func testImportingOfflinePackageReloadsOverviewDataFromPublicCache() async {
@@ -116,6 +157,7 @@ private final class MockMetadataService: MetadataServicing {
     let remote: MetadataBundle
     var refreshedURL: URL?
     var refreshError: Error?
+    private(set) var refreshCallCount = 0
 
     init(local: MetadataBundle, remote: MetadataBundle) {
         self.local = local
@@ -127,6 +169,7 @@ private final class MockMetadataService: MetadataServicing {
     }
 
     func refreshMetadata(from url: URL) async throws -> MetadataBundle {
+        refreshCallCount += 1
         refreshedURL = url
         if let refreshError {
             throw refreshError

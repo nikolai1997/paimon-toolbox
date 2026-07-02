@@ -134,7 +134,8 @@ final class AppStore {
             await refreshRemoteMetadataIfNeeded(
                 urlString: remoteMetadataURLString,
                 offlinePackageURLString: offlinePackageURLString,
-                isEnabled: autoRefreshRemoteMetadata
+                isEnabled: autoRefreshRemoteMetadata,
+                now: now
             )
         }
 
@@ -1085,12 +1086,18 @@ final class AppStore {
     private func refreshRemoteMetadataIfNeeded(
         urlString: String,
         offlinePackageURLString: String,
-        isEnabled: Bool
+        isEnabled: Bool,
+        now: Date
     ) async {
         let trimmedURL = urlString.trimmingCharacters(in: .whitespacesAndNewlines)
         guard isEnabled, !trimmedURL.isEmpty, let url = URL(string: trimmedURL) else {
             return
         }
+        guard RemoteDataSettings.shouldAttemptAutoRefresh(now: now) else {
+            return
+        }
+
+        RemoteDataSettings.markAutoRefreshAttempt(at: now)
 
         do {
             metadata = try await metadataService.refreshMetadata(from: url)
