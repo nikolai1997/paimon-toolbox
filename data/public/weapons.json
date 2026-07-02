@@ -880,6 +880,26 @@
     "type": "长柄武器"
   },
   {
+    "iconURL": "https://enka.network/ui/UI_EquipIcon_Claymore_CrystallineSword.png",
+    "id": 12516,
+    "materials": [
+      "终北遗嗣的哀荣",
+      "残损的月铁",
+      "磨损的执凭",
+      "终北遗嗣的迷顽",
+      "空竭的月铁",
+      "精致的执凭",
+      "终北遗嗣的祷献",
+      "无秽的月铁",
+      "霜镌的执凭",
+      "终北遗嗣的煌熠"
+    ],
+    "name": "超越之匙",
+    "rarity": 5,
+    "stat": "暴击伤害",
+    "type": "双手剑"
+  },
+  {
     "iconURL": "https://enka.network/ui/UI_EquipIcon_Claymore_EnsisAquilonis.png",
     "id": 12515,
     "materials": [

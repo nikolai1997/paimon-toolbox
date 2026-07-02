@@ -2,6 +2,53 @@
   {
     "cultivation": {
       "ascensionGemNames": [
+        "哀叙冰玉碎屑",
+        "哀叙冰玉断片",
+        "哀叙冰玉块",
+        "哀叙冰玉"
+      ],
+      "bossMaterialName": "堕天的落羽",
+      "commonMaterialNames": [
+        "毁损机轴",
+        "加固机轴",
+        "精制机轴"
+      ],
+      "localSpecialtyName": "子探测单元",
+      "talentBookNames": [
+        "「浪迹」的教导",
+        "「浪迹」的指引",
+        "「浪迹」的哲学"
+      ],
+      "weeklyBossMaterialName": "狂人的约束"
+    },
+    "element": "冰",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_MarionetteNew.png",
+    "id": 10000133,
+    "materials": [
+      "哀叙冰玉碎屑",
+      "子探测单元",
+      "毁损机轴",
+      "哀叙冰玉断片",
+      "堕天的落羽",
+      "加固机轴",
+      "哀叙冰玉块",
+      "精制机轴",
+      "哀叙冰玉",
+      "「浪迹」的哲学",
+      "狂人的约束",
+      "智识之冕",
+      "「浪迹」的教导",
+      "「浪迹」的指引"
+    ],
+    "name": "桑多涅",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_MarionetteNew.png",
+    "rarity": 5,
+    "region": "愚人众",
+    "weaponType": "双手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
         "燃愿玛瑙碎屑",
         "燃愿玛瑙断片",
         "燃愿玛瑙块",
@@ -1188,7 +1235,7 @@
     "name": "阿蕾奇诺",
     "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Arlecchino.png",
     "rarity": 5,
-    "region": "至冬",
+    "region": "愚人众",
     "weaponType": "长柄武器"
   },
   {
@@ -2786,7 +2833,7 @@
     "name": "达达利亚",
     "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Tartaglia.png",
     "rarity": 5,
-    "region": "至冬",
+    "region": "愚人众",
     "weaponType": "弓"
   },
   {

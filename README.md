@@ -51,7 +51,7 @@ swift test --disable-sandbox
 安装包输出到：
 
 ```txt
-dist/PaimonToolbox-0.1.0.dmg
+dist/PaimonToolbox-0.1.1.dmg
 ```
 
 ## 数据更新工具

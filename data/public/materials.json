@@ -1253,6 +1253,13 @@
     "source": "噩影泽地采集\n推荐：西风戍垒附近采集\n尘歌壶种植\n前往采集"
   },
   {
+    "category": "挪德卡莱区域特产",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_101270.png",
+    "id": 101270,
+    "name": "凝月泪滴",
+    "source": "霜月采集\n前往采集"
+  },
+  {
     "category": "食材",
     "iconURL": "https://enka.network/ui/UI_ItemIcon_101271.png",
     "id": 101271,
@@ -3605,6 +3612,27 @@
     "source": "60级以上辖域守护者掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
   },
   {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112143.png",
+    "id": 112143,
+    "name": "残损的月铁",
+    "source": "先驱秘源统辖阵列掉落\n星尘兑换"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112144.png",
+    "id": 112144,
+    "name": "空竭的月铁",
+    "source": "40级以上先驱秘源统辖阵列掉落\n星尘兑换\n占位-可合成数量:{0}"
+  },
+  {
+    "category": "角色与武器培养素材",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_112145.png",
+    "id": 112145,
+    "name": "无秽的月铁",
+    "source": "60级以上先驱秘源统辖阵列掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+  },
+  {
     "category": "角色培养素材",
     "iconURL": "https://enka.network/ui/UI_ItemIcon_113001.png",
     "id": 113001,
@@ -3693,21 +3721,21 @@
     "iconURL": "https://enka.network/ui/UI_ItemIcon_113013.png",
     "id": 113013,
     "name": "吞天之鲸·只角",
-    "source": "70级以上公子挑战奖励\n合成台-转化页签：转化获取"
+    "source": "70级以上「公子」挑战奖励\n合成台-转化页签：转化获取"
   },
   {
     "category": "角色培养素材",
     "iconURL": "https://enka.network/ui/UI_ItemIcon_113014.png",
     "id": 113014,
     "name": "魔王之刃·残片",
-    "source": "70级以上公子挑战奖励\n合成台-转化页签：转化获取"
+    "source": "70级以上「公子」挑战奖励\n合成台-转化页签：转化获取"
   },
   {
     "category": "角色培养素材",
     "iconURL": "https://enka.network/ui/UI_ItemIcon_113015.png",
     "id": 113015,
     "name": "武炼之魂·孤影",
-    "source": "70级以上公子挑战奖励\n合成台-转化页签：转化获取"
+    "source": "70级以上「公子」挑战奖励\n合成台-转化页签：转化获取"
   },
   {
     "category": "角色培养素材",
@@ -3777,21 +3805,21 @@
     "iconURL": "https://enka.network/ui/UI_ItemIcon_113025.png",
     "id": 113025,
     "name": "熔毁之刻",
-    "source": "70级以上女士挑战奖励\n合成台-转化页签：转化获取"
+    "source": "70级以上「女士」挑战奖励\n合成台-转化页签：转化获取"
   },
   {
     "category": "角色培养素材",
     "iconURL": "https://enka.network/ui/UI_ItemIcon_113026.png",
     "id": 113026,
     "name": "狱火之蝶",
-    "source": "70级以上女士挑战奖励\n合成台-转化页签：转化获取"
+    "source": "70级以上「女士」挑战奖励\n合成台-转化页签：转化获取"
   },
   {
     "category": "角色培养素材",
     "iconURL": "https://enka.network/ui/UI_ItemIcon_113027.png",
     "id": 113027,
     "name": "灰烬之心",
-    "source": "70级以上女士挑战奖励\n合成台-转化页签：转化获取"
+    "source": "70级以上「女士」挑战奖励\n合成台-转化页签：转化获取"
   },
   {
     "category": "角色培养素材",
@@ -5234,6 +5262,20 @@
     "id": 121602,
     "name": "切片辖域管控模块·零质点",
     "source": "空之神殿探索奖励"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_121603.png",
+    "id": 121603,
+    "name": "霜月印磐",
+    "source": "月之高地探索奖励"
+  },
+  {
+    "category": "冒险道具",
+    "iconURL": "https://enka.network/ui/UI_ItemIcon_121604.png",
+    "id": 121604,
+    "name": "霜月印磐",
+    "source": "月荡海、杜南纳深坑、月之暗面探索奖励"
   },
   {
     "category": "鱼",

@@ -78,12 +78,12 @@ class RemoteDataPayload:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Update GenshinToolbox remote data artifacts.")
+    parser = argparse.ArgumentParser(description="Update PaimonToolbox remote data artifacts.")
     parser.add_argument(
         "--source",
         choices=["snap-metadata", "official-manual", "genshin-db"],
-        default="snap-metadata",
-        help="data source provider, default: snap-metadata",
+        default="genshin-db",
+        help="data source provider, default: genshin-db",
     )
     parser.add_argument("--locale", default="CHS", help="Snap.Metadata locale folder, default: CHS")
     parser.add_argument("--source-cache", default=".cache/Snap.Metadata", help="local Snap.Metadata checkout")
@@ -92,8 +92,8 @@ def main() -> int:
     parser.add_argument(
         "--gacha-source",
         choices=["manual", "snap-metadata"],
-        default="manual",
-        help="gacha event source for official-manual mode, default: manual",
+        default="snap-metadata",
+        help="gacha event source for genshin-db/official-manual mode, default: snap-metadata",
     )
     parser.add_argument(
         "--official-announcements-json",

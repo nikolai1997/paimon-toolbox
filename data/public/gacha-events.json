@@ -5053,5 +5053,52 @@
       15410
     ],
     "version": "6.6"
+  },
+  {
+    "banner": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/06/17/e3291fbde4889a6b5c6f498fe10d3f25_5202897138544319925_transformed.jpg",
+    "from": "2026-06-29T12:00:00+08:00",
+    "name": "镜中的茶宴",
+    "to": "2026-07-21T17:59:00+08:00",
+    "type": 301,
+    "upOrangeList": [
+      10000133
+    ],
+    "upPurpleList": [],
+    "version": "月之八"
+  },
+  {
+    "banner": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/06/17/224b737812e20929c4485452a2f1e1bc_7347526875978743745_transformed.jpg",
+    "from": "2026-06-29T12:00:00+08:00",
+    "name": "星边夜语",
+    "to": "2026-07-21T17:59:00+08:00",
+    "type": 400,
+    "upOrangeList": [
+      10000107
+    ],
+    "upPurpleList": [],
+    "version": "月之八"
+  },
+  {
+    "banner": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/06/17/331e1ba3b0d467685cc70edce96fd72c_5362978686770159579_transformed.jpg",
+    "from": "2026-06-29T12:00:00+08:00",
+    "name": "神铸赋形",
+    "to": "2026-07-21T17:59:00+08:00",
+    "type": 302,
+    "upOrangeList": [
+      12516,
+      14517
+    ],
+    "upPurpleList": [],
+    "version": "月之八"
+  },
+  {
+    "banner": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/06/17/1d5156638949b67cf0d1e5bc192c8b9e_2860105966740958802_transformed.jpg",
+    "from": "2026-06-29T12:00:00+08:00",
+    "name": "辉天的星告",
+    "to": "2026-07-21T17:59:00+08:00",
+    "type": 500,
+    "upOrangeList": [],
+    "upPurpleList": [],
+    "version": "月之八"
   }
 ]

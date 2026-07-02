@@ -3,7 +3,7 @@ set -euo pipefail
 
 APP_NAME="PaimonToolbox"
 DISPLAY_NAME="派蒙工具箱"
-VERSION="0.1.0"
+VERSION="0.1.1"
 EXTENSION_NAME="PaimonToolboxWidgetsExtension"
 EXTENSION_BUNDLE_NAME="PaimonToolboxWidgetsExtension.appex"
 WIDGET_BUNDLE_ID="com.nikolai.paimon-toolbox.widgets"

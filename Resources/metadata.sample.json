@@ -3,6 +3,53 @@
     {
       "cultivation": {
         "ascensionGemNames": [
+          "哀叙冰玉碎屑",
+          "哀叙冰玉断片",
+          "哀叙冰玉块",
+          "哀叙冰玉"
+        ],
+        "bossMaterialName": "堕天的落羽",
+        "commonMaterialNames": [
+          "毁损机轴",
+          "加固机轴",
+          "精制机轴"
+        ],
+        "localSpecialtyName": "子探测单元",
+        "talentBookNames": [
+          "「浪迹」的教导",
+          "「浪迹」的指引",
+          "「浪迹」的哲学"
+        ],
+        "weeklyBossMaterialName": "狂人的约束"
+      },
+      "element": "冰",
+      "iconURL": "https://enka.network/ui/UI_AvatarIcon_MarionetteNew.png",
+      "id": 10000133,
+      "materials": [
+        "哀叙冰玉碎屑",
+        "子探测单元",
+        "毁损机轴",
+        "哀叙冰玉断片",
+        "堕天的落羽",
+        "加固机轴",
+        "哀叙冰玉块",
+        "精制机轴",
+        "哀叙冰玉",
+        "「浪迹」的哲学",
+        "狂人的约束",
+        "智识之冕",
+        "「浪迹」的教导",
+        "「浪迹」的指引"
+      ],
+      "name": "桑多涅",
+      "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_MarionetteNew.png",
+      "rarity": 5,
+      "region": "愚人众",
+      "weaponType": "双手剑"
+    },
+    {
+      "cultivation": {
+        "ascensionGemNames": [
           "燃愿玛瑙碎屑",
           "燃愿玛瑙断片",
           "燃愿玛瑙块",
@@ -1189,7 +1236,7 @@
       "name": "阿蕾奇诺",
       "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Arlecchino.png",
       "rarity": 5,
-      "region": "至冬",
+      "region": "愚人众",
       "weaponType": "长柄武器"
     },
     {
@@ -2787,7 +2834,7 @@
       "name": "达达利亚",
       "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Tartaglia.png",
       "rarity": 5,
-      "region": "至冬",
+      "region": "愚人众",
       "weaponType": "弓"
     },
     {
@@ -6799,6 +6846,13 @@
       "source": "噩影泽地采集\n推荐：西风戍垒附近采集\n尘歌壶种植\n前往采集"
     },
     {
+      "category": "挪德卡莱区域特产",
+      "iconURL": "https://enka.network/ui/UI_ItemIcon_101270.png",
+      "id": 101270,
+      "name": "凝月泪滴",
+      "source": "霜月采集\n前往采集"
+    },
+    {
       "category": "食材",
       "iconURL": "https://enka.network/ui/UI_ItemIcon_101271.png",
       "id": 101271,
@@ -9151,6 +9205,27 @@
       "source": "60级以上辖域守护者掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
     },
     {
+      "category": "角色与武器培养素材",
+      "iconURL": "https://enka.network/ui/UI_ItemIcon_112143.png",
+      "id": 112143,
+      "name": "残损的月铁",
+      "source": "先驱秘源统辖阵列掉落\n星尘兑换"
+    },
+    {
+      "category": "角色与武器培养素材",
+      "iconURL": "https://enka.network/ui/UI_ItemIcon_112144.png",
+      "id": 112144,
+      "name": "空竭的月铁",
+      "source": "40级以上先驱秘源统辖阵列掉落\n星尘兑换\n占位-可合成数量:{0}"
+    },
+    {
+      "category": "角色与武器培养素材",
+      "iconURL": "https://enka.network/ui/UI_ItemIcon_112145.png",
+      "id": 112145,
+      "name": "无秽的月铁",
+      "source": "60级以上先驱秘源统辖阵列掉落\n星尘兑换：兑换后合成\n占位-可合成数量:{0}"
+    },
+    {
       "category": "角色培养素材",
       "iconURL": "https://enka.network/ui/UI_ItemIcon_113001.png",
       "id": 113001,
@@ -9239,21 +9314,21 @@
       "iconURL": "https://enka.network/ui/UI_ItemIcon_113013.png",
       "id": 113013,
       "name": "吞天之鲸·只角",
-      "source": "70级以上公子挑战奖励\n合成台-转化页签：转化获取"
+      "source": "70级以上「公子」挑战奖励\n合成台-转化页签：转化获取"
     },
     {
       "category": "角色培养素材",
       "iconURL": "https://enka.network/ui/UI_ItemIcon_113014.png",
       "id": 113014,
       "name": "魔王之刃·残片",
-      "source": "70级以上公子挑战奖励\n合成台-转化页签：转化获取"
+      "source": "70级以上「公子」挑战奖励\n合成台-转化页签：转化获取"
     },
     {
       "category": "角色培养素材",
       "iconURL": "https://enka.network/ui/UI_ItemIcon_113015.png",
       "id": 113015,
       "name": "武炼之魂·孤影",
-      "source": "70级以上公子挑战奖励\n合成台-转化页签：转化获取"
+      "source": "70级以上「公子」挑战奖励\n合成台-转化页签：转化获取"
     },
     {
       "category": "角色培养素材",
@@ -9323,21 +9398,21 @@
       "iconURL": "https://enka.network/ui/UI_ItemIcon_113025.png",
       "id": 113025,
       "name": "熔毁之刻",
-      "source": "70级以上女士挑战奖励\n合成台-转化页签：转化获取"
+      "source": "70级以上「女士」挑战奖励\n合成台-转化页签：转化获取"
     },
     {
       "category": "角色培养素材",
       "iconURL": "https://enka.network/ui/UI_ItemIcon_113026.png",
       "id": 113026,
       "name": "狱火之蝶",
-      "source": "70级以上女士挑战奖励\n合成台-转化页签：转化获取"
+      "source": "70级以上「女士」挑战奖励\n合成台-转化页签：转化获取"
     },
     {
       "category": "角色培养素材",
       "iconURL": "https://enka.network/ui/UI_ItemIcon_113027.png",
       "id": 113027,
       "name": "灰烬之心",
-      "source": "70级以上女士挑战奖励\n合成台-转化页签：转化获取"
+      "source": "70级以上「女士」挑战奖励\n合成台-转化页签：转化获取"
     },
     {
       "category": "角色培养素材",
@@ -10782,6 +10857,20 @@
       "source": "空之神殿探索奖励"
     },
     {
+      "category": "冒险道具",
+      "iconURL": "https://enka.network/ui/UI_ItemIcon_121603.png",
+      "id": 121603,
+      "name": "霜月印磐",
+      "source": "月之高地探索奖励"
+    },
+    {
+      "category": "冒险道具",
+      "iconURL": "https://enka.network/ui/UI_ItemIcon_121604.png",
+      "id": 121604,
+      "name": "霜月印磐",
+      "source": "月荡海、杜南纳深坑、月之暗面探索奖励"
+    },
+    {
       "category": "鱼",
       "iconURL": "https://enka.network/ui/UI_ItemIcon_131000.png",
       "id": 131000,
@@ -11489,8 +11578,8 @@
       "source": "具有播放音乐与制造炫丽光效功能的挪德卡莱月矩力机关球，是周游壶灵阿嘟从挪德卡莱带回的纪念品。\n注视机关球上放出的光影，脑海中似乎就有某种意象浮现而出。借由「外景之能」，方可在壶中洞天构筑奇妙的挪德卡莱景致…"
     }
   ],
-  "updatedAt": "2026-06-30T10:36:45Z",
-  "version": "genshin-db-2026.06.30",
+  "updatedAt": "2026-07-02T03:46:34Z",
+  "version": "genshin-db-2026.07.02",
   "weapons": [
     {
       "iconURL": "https://enka.network/ui/UI_EquipIcon_Bow_Alkonost.png",
@@ -12371,6 +12460,26 @@
       "rarity": 5,
       "stat": "暴击伤害",
       "type": "长柄武器"
+    },
+    {
+      "iconURL": "https://enka.network/ui/UI_EquipIcon_Claymore_CrystallineSword.png",
+      "id": 12516,
+      "materials": [
+        "终北遗嗣的哀荣",
+        "残损的月铁",
+        "磨损的执凭",
+        "终北遗嗣的迷顽",
+        "空竭的月铁",
+        "精致的执凭",
+        "终北遗嗣的祷献",
+        "无秽的月铁",
+        "霜镌的执凭",
+        "终北遗嗣的煌熠"
+      ],
+      "name": "超越之匙",
+      "rarity": 5,
+      "stat": "暴击伤害",
+      "type": "双手剑"
     },
     {
       "iconURL": "https://enka.network/ui/UI_EquipIcon_Claymore_EnsisAquilonis.png",

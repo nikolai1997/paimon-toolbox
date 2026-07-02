@@ -3,7 +3,7 @@ set -euo pipefail
 
 APP_NAME="PaimonToolbox"
 DISPLAY_NAME="派蒙工具箱"
-VERSION="0.1.0"
+VERSION="0.1.1"
 EXTENSION_NAME="PaimonToolboxWidgetsExtension"
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
