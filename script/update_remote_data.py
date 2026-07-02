@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import shutil
 import ssl
 import subprocess
@@ -13,7 +14,7 @@ import sys
 import urllib.error
 import urllib.request
 import zipfile
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -77,12 +78,12 @@ class RemoteDataPayload:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Update PaimonToolbox remote data artifacts.")
+    parser = argparse.ArgumentParser(description="Update GenshinToolbox remote data artifacts.")
     parser.add_argument(
         "--source",
         choices=["snap-metadata", "official-manual", "genshin-db"],
-        default="genshin-db",
-        help="data source provider, default: genshin-db",
+        default="snap-metadata",
+        help="data source provider, default: snap-metadata",
     )
     parser.add_argument("--locale", default="CHS", help="Snap.Metadata locale folder, default: CHS")
     parser.add_argument("--source-cache", default=".cache/Snap.Metadata", help="local Snap.Metadata checkout")
@@ -91,8 +92,8 @@ def main() -> int:
     parser.add_argument(
         "--gacha-source",
         choices=["manual", "snap-metadata"],
-        default="snap-metadata",
-        help="gacha event source for genshin-db/official-manual mode, default: snap-metadata",
+        default="manual",
+        help="gacha event source for official-manual mode, default: manual",
     )
     parser.add_argument(
         "--official-announcements-json",
@@ -171,6 +172,16 @@ def main() -> int:
                 print(f"warning: Snap.Metadata gacha fetch failed, using manual gacha-events.json: {error}", file=sys.stderr)
         ensure_genshin_db_checkout(genshin_db_cache, skip_fetch=args.skip_fetch)
         payload = build_genshin_db_payload(genshin_db_cache, gacha_events=gacha_events, announcements=announcements)
+
+    payload = replace(
+        payload,
+        gacha_events=merge_official_gacha_events(
+            payload.gacha_events,
+            payload.announcements,
+            characters=payload.characters,
+            weapons=payload.weapons,
+        ),
+    )
 
     generated = generate_public_data(payload, public_dir, args.base_url)
     zip_path = package_release(public_dir, release_dir, generated)
@@ -760,6 +771,169 @@ def convert_official_announcements(payload: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def merge_official_gacha_events(
+    events: list[dict[str, Any]],
+    announcements: dict[str, Any],
+    characters: list[dict[str, Any]],
+    weapons: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    official_events = official_gacha_events_from_announcements(announcements, characters, weapons)
+    if not official_events:
+        return events
+
+    merged: dict[tuple[int, str, str], dict[str, Any]] = {}
+    order: list[tuple[int, str, str]] = []
+    for event in [*events, *official_events]:
+        key = (int(event.get("type") or 0), str(event.get("name") or ""), str(event.get("from") or ""))
+        if key not in merged:
+            order.append(key)
+        merged[key] = event
+    return [merged[key] for key in order]
+
+
+def official_gacha_events_from_announcements(
+    announcements: dict[str, Any],
+    characters: list[dict[str, Any]],
+    weapons: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    items = announcements.get("items") if isinstance(announcements, dict) else []
+    if not isinstance(items, list):
+        return []
+
+    character_ids = id_lookup(characters)
+    weapon_ids = id_lookup(weapons)
+    version_ranges = official_version_ranges(items)
+    candidates: list[dict[str, Any]] = []
+    character_candidate_indexes: list[int] = []
+
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        title = str(item.get("title") or "")
+        subtitle = str(item.get("subtitle") or "")
+        combined = f"{title} {subtitle}"
+        if "祈愿" not in combined:
+            continue
+        if "常驻祈愿" in combined or "奔行世间" in combined:
+            continue
+
+        quoted = re.findall(r"「([^」]+)」", title)
+        if not quoted:
+            quoted = re.findall(r"「([^」]+)」", subtitle)
+        if not quoted:
+            continue
+
+        name = quoted[0]
+        event_type = official_gacha_type(name, combined)
+        if event_type == 0 and "概率UP" not in combined:
+            continue
+
+        start = official_time_to_iso(item.get("startTime"))
+        end = official_time_to_iso(item.get("endTime"))
+        if not start or not end:
+            continue
+
+        up_names = [clean_gacha_item_name(value) for value in quoted[1:]]
+        lookup = weapon_ids if event_type == 302 else character_ids
+        if event_type == 500:
+            lookup = {**character_ids, **weapon_ids}
+        candidate = {
+            "name": name,
+            "version": official_version_for_event(start, version_ranges),
+            "type": event_type,
+            "from": start,
+            "to": end,
+            "upOrangeList": ids_for_names(up_names, lookup),
+            "upPurpleList": [],
+            "banner": item.get("banner") or "",
+        }
+        if event_type == 0:
+            character_candidate_indexes.append(len(candidates))
+        candidates.append(candidate)
+
+    assign_character_gacha_types(candidates, character_candidate_indexes)
+    return [event for event in candidates if int(event.get("type") or 0) != 0]
+
+
+def official_gacha_type(name: str, text: str) -> int:
+    if name == "神铸赋形":
+        return 302
+    if "溯光祈愿" in text or "集录祈愿" in text:
+        return 500
+    return 0
+
+
+def assign_character_gacha_types(events: list[dict[str, Any]], indexes: list[int]) -> None:
+    grouped: dict[tuple[str, str], list[int]] = {}
+    for index in indexes:
+        event = events[index]
+        grouped.setdefault((str(event.get("from") or ""), str(event.get("to") or "")), []).append(index)
+
+    for group in grouped.values():
+        for offset, index in enumerate(group):
+            events[index]["type"] = 301 if offset == 0 else 400
+
+
+def official_version_ranges(items: list[Any]) -> list[tuple[str, str, str]]:
+    ranges: list[tuple[str, str, str]] = []
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        text = f"{item.get('title') or ''} {item.get('subtitle') or ''}"
+        match = re.search(r"「([^」]+)」版本", text)
+        if not match:
+            continue
+        start = official_time_to_iso(item.get("startTime"))
+        end = official_time_to_iso(item.get("endTime"))
+        if start and end:
+            ranges.append((start, end, match.group(1)))
+    return ranges
+
+
+def official_version_for_event(start: str, ranges: list[tuple[str, str, str]]) -> str:
+    event_time = parse_gacha_datetime(start)
+    for range_start, range_end, label in ranges:
+        if parse_gacha_datetime(range_start) <= event_time <= parse_gacha_datetime(range_end):
+            return label
+    if ranges:
+        return ranges[0][2]
+    return ""
+
+
+def official_time_to_iso(value: Any) -> str:
+    if not isinstance(value, str) or not value:
+        return ""
+    if "T" in value:
+        return value
+    return value.replace(" ", "T") + "+08:00"
+
+
+def clean_gacha_item_name(value: str) -> str:
+    name = re.sub(r"[（(][^）)]*[）)]", "", value).strip()
+    if "·" in name:
+        name = name.split("·")[-1]
+    return name.strip()
+
+
+def id_lookup(items: list[dict[str, Any]]) -> dict[str, int]:
+    result: dict[str, int] = {}
+    for item in items:
+        name = item.get("name")
+        item_id = item.get("id")
+        if isinstance(name, str) and isinstance(item_id, int):
+            result[name] = item_id
+    return result
+
+
+def ids_for_names(names: list[str], lookup: dict[str, int]) -> list[int]:
+    ids: list[int] = []
+    for name in names:
+        item_id = lookup.get(name)
+        if isinstance(item_id, int) and item_id not in ids:
+            ids.append(item_id)
+    return ids
+
+
 def resolve_materials(ids: list[int], material_names: dict[int, str]) -> list[str]:
     names: list[str] = []
     for item_id in ids:
@@ -979,6 +1153,72 @@ def run_self_test() -> None:
         }
     )
     assert official_announcements["items"][0]["title"] == "祈愿活动开启"
+    official_gacha_announcements = convert_official_announcements(
+        {
+            "data": {
+                "list": [
+                    {
+                        "type_label": "活动公告",
+                        "list": [
+                            {
+                                "ann_id": 21743,
+                                "title": "「镜中的茶宴」祈愿：「镜水析谬·桑多涅(冰)」概率UP！",
+                                "subtitle": "「镜中的茶宴」祈愿",
+                                "start_time": "2026-06-29 12:00:00",
+                                "end_time": "2026-07-21 17:59:00",
+                            },
+                            {
+                                "ann_id": 21744,
+                                "title": "「星边夜语」祈愿：「白星黑曜·茜特菈莉(冰)」概率UP！",
+                                "subtitle": "「星边夜语」祈愿",
+                                "start_time": "2026-06-29 12:00:00",
+                                "end_time": "2026-07-21 17:59:00",
+                            },
+                            {
+                                "ann_id": 21745,
+                                "title": "「神铸赋形」祈愿：「双手剑·超越之匙」「法器·祭星者之望」概率UP！",
+                                "subtitle": "「神铸赋形」祈愿",
+                                "start_time": "2026-06-29 12:00:00",
+                                "end_time": "2026-07-21 17:59:00",
+                            },
+                        ],
+                    },
+                    {
+                        "type_label": "游戏公告",
+                        "list": [
+                            {
+                                "ann_id": 21788,
+                                "title": "全新内容一览：地区·角色·祈愿·武器·衣装·剧情等",
+                                "subtitle": "「月之八」版本现已开启",
+                                "start_time": "2026-07-01 07:00:00",
+                                "end_time": "2026-08-12 06:00:00",
+                            }
+                        ],
+                    },
+                ]
+            }
+        }
+    )
+    official_gacha_events = merge_official_gacha_events(
+        [],
+        official_gacha_announcements,
+        characters=[
+            {"id": 10002001, "name": "桑多涅"},
+            {"id": 10000107, "name": "茜特菈莉"},
+        ],
+        weapons=[
+            {"id": 12517, "name": "超越之匙"},
+            {"id": 14517, "name": "祭星者之望"},
+        ],
+    )
+    assert [(event["name"], event["type"]) for event in official_gacha_events] == [
+        ("镜中的茶宴", 301),
+        ("星边夜语", 400),
+        ("神铸赋形", 302),
+    ]
+    assert official_gacha_events[0]["version"] == "月之八"
+    assert official_gacha_events[0]["upOrangeList"] == [10002001]
+    assert official_gacha_events[2]["upOrangeList"] == [12517, 14517]
 
     manual_payload = RemoteDataPayload(
         source="official-manual",
