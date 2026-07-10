@@ -5,8 +5,7 @@
 本项目是非官方工具，和 HoYoverse / 米哈游没有从属关系。
 
 ## 截图
-
-![软件截图](./assets/screenshot.png)
+![截图](assets/screenshot.png)
 ## 功能
 
 - 角色、武器、材料资料库
