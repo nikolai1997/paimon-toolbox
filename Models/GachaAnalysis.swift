@@ -19,16 +19,20 @@ struct GachaAnalysis: Equatable {
     }
 
     var averageFiveStarPityText: String {
-        let values = bannerStats.compactMap(\.averageFiveStarPity)
-        guard !values.isEmpty else {
+        let hits = recentFiveStarIntervals
+        guard !hits.isEmpty else {
             return "--"
         }
-        let average = Double(values.reduce(0, +)) / Double(values.count)
+        let average = Double(hits.reduce(0, +)) / Double(hits.count)
         return "\(Int(average.rounded())) 抽"
     }
 
+    private var recentFiveStarIntervals: [Int] {
+        bannerStats.flatMap(\.fiveStarIntervals)
+    }
+
     static func make(from records: [GachaRecord]) -> GachaAnalysis {
-        let sortedNewest = records.sorted { $0.time > $1.time }
+        let sortedNewest = GachaRecord.sortedNewestFirst(records)
         let total = records.count
         let fiveStarCount = records.filter { $0.rarity == 5 }.count
         let fourStarCount = records.filter { $0.rarity == 4 }.count
@@ -39,7 +43,7 @@ struct GachaAnalysis: Equatable {
             fourStarRate: total == 0 ? 0 : Double(fourStarCount) / Double(total),
             rarityBreakdown: rarityBreakdown(from: records, total: total),
             bannerBreakdown: bannerBreakdown(from: records, total: total),
-            bannerStats: BannerKind.allCases.map { bannerStat(for: $0, in: records) },
+            bannerStats: GachaPool.allCases.map { bannerStat(for: $0, in: records) },
             monthlyTrend: monthlyTrend(from: records),
             recentFiveStars: recentFiveStars(from: sortedNewest)
         )
@@ -67,10 +71,8 @@ struct GachaAnalysis: Equatable {
         }
     }
 
-    private static func bannerStat(for banner: BannerKind, in records: [GachaRecord]) -> GachaBannerStat {
-        let bannerRecords = records
-            .filter { $0.banner == banner }
-            .sorted { $0.time > $1.time }
+    private static func bannerStat(for pool: GachaPool, in records: [GachaRecord]) -> GachaBannerStat {
+        let bannerRecords = GachaRecord.sortedNewestFirst(records.filter { pool.contains($0.banner) })
         let fiveStarHits = fiveStarHits(for: bannerRecords)
         let averagePity: Int?
         if fiveStarHits.isEmpty {
@@ -80,12 +82,13 @@ struct GachaAnalysis: Equatable {
         }
 
         return GachaBannerStat(
-            banner: banner,
+            banner: pool.representativeBanner,
             count: bannerRecords.count,
             fiveStarCount: bannerRecords.filter { $0.rarity == 5 }.count,
             fourStarCount: bannerRecords.filter { $0.rarity == 4 }.count,
             currentPity: bannerRecords.firstIndex { $0.rarity == 5 } ?? bannerRecords.count,
-            averageFiveStarPity: averagePity
+            averageFiveStarPity: averagePity,
+            fiveStarIntervals: fiveStarHits.map(\.pullsSincePreviousFiveStar)
         )
     }
 
@@ -108,10 +111,13 @@ struct GachaAnalysis: Equatable {
     }
 
     private static func recentFiveStars(from sortedNewest: [GachaRecord]) -> [GachaFiveStarHit] {
-        BannerKind.allCases.flatMap { banner in
-            fiveStarHits(for: sortedNewest.filter { $0.banner == banner })
+        GachaPool.allCases.flatMap { pool in
+            fiveStarHits(for: sortedNewest.filter { pool.contains($0.banner) })
         }
-        .sorted { $0.time > $1.time }
+        .sorted { lhs, rhs in
+            if lhs.time != rhs.time { return lhs.time > rhs.time }
+            return lhs.id > rhs.id
+        }
         .prefix(8)
         .map(\.self)
     }
@@ -173,6 +179,7 @@ struct GachaBannerStat: Identifiable, Equatable {
     var fourStarCount: Int
     var currentPity: Int
     var averageFiveStarPity: Int?
+    var fiveStarIntervals: [Int] = []
 }
 
 struct GachaMonthlyTrend: Identifiable, Equatable {

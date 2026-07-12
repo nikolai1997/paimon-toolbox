@@ -6,6 +6,7 @@ struct SettingsView: View {
     @AppStorage(RemoteDataSettings.offlinePackageURLKey) private var offlinePackageURL = RemoteDataSettings.defaultOfflinePackageURLString
     @AppStorage(RemoteDataSettings.autoRefreshEnabledKey) private var isAutoRefreshEnabled = true
     @AppStorage(AutoSignInSettings.enabledKey) private var isAutoSignInEnabled = false
+    @AppStorage(AutoSignInSettings.windowKey) private var autoSignInWindowRawValue = AutoSignInSettings.defaultWindow.rawValue
     @AppStorage(AppAppearanceSettings.themeKey) private var appThemeRawValue = AppTheme.system.rawValue
     @State private var isImportingDataPackage = false
 
@@ -30,7 +31,18 @@ struct SettingsView: View {
                                 await store.runAutomaticSignInCheck()
                             }
                         }
-                    Text("开启后，App 打开且米游社账号已登录时，会每天自动尝试签到一次；触发安全验证时会保留提示，需要手动完成验证。")
+                    Picker("自动签到时间", selection: $autoSignInWindowRawValue) {
+                        ForEach(AutoSignInWindow.allCases) { window in
+                            Text("\(window.title) \(window.timeRangeText)").tag(window.rawValue)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .onChange(of: autoSignInWindowRawValue) { _, _ in
+                        Task {
+                            await store.runAutomaticSignInCheck()
+                        }
+                    }
+                    Text("开启后，App 打开且米游社账号已登录时，会在 \(selectedAutoSignInWindow.timeRangeText) 内随机选择一次签到；如果窗口已过且今天还没签，会在下一次检查时尝试。触发安全验证时会先刷新状态确认是否已经签上，仍未签到才保留验证提示。")
                         .foregroundStyle(.secondary)
                 }
 
@@ -111,6 +123,10 @@ struct SettingsView: View {
                 store.errorMessage = "选择数据包失败：\(error.localizedDescription)"
             }
         }
+    }
+
+    private var selectedAutoSignInWindow: AutoSignInWindow {
+        AutoSignInWindow(rawValue: autoSignInWindowRawValue) ?? AutoSignInSettings.defaultWindow
     }
 
     private func settingsSection<Content: View>(_ title: String, @ViewBuilder content: () -> Content) -> some View {

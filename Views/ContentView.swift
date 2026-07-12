@@ -10,7 +10,7 @@ struct ContentView: View {
         GlobalSearchIndex.results(
             matching: store.searchText,
             metadata: store.metadata,
-            gachaRecords: store.gachaRecords,
+            gachaRecords: store.activeGachaRecords,
             plans: store.plans
         )
     }

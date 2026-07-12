@@ -108,7 +108,7 @@ struct LocalAccountSessionService: AccountSessionServicing {
         return Self.status(from: metadata)
     }
 
-    private func runAccountSyncStep<T>(_ name: String, operation: () async throws -> T) async throws -> T {
+    private func runAccountSyncStep<T: Sendable>(_ name: String, operation: () async throws -> T) async throws -> T {
         do {
             return try await operation()
         } catch let error as AccountSessionError {
@@ -140,7 +140,11 @@ struct LocalAccountSessionService: AccountSessionServicing {
         let secrets = try requireSecrets(metadata)
         let result = try await signInClient.claim(role: role, secrets: secrets, verification: verification)
         try Self.validateClaimResult(result)
-        return try await refreshSignInStatus()
+        let status = try await refreshSignInStatus()
+        guard status.signInSummary?.isTodaySigned == true else {
+            throw AccountSessionError.invalidResponse("签到状态未确认成功")
+        }
+        return status
     }
 
     func loadResignInfo() async throws -> SignInResignInfoPayload {
@@ -156,7 +160,12 @@ struct LocalAccountSessionService: AccountSessionServicing {
         let secrets = try requireSecrets(metadata)
         let result = try await signInClient.resign(role: role, secrets: secrets, verification: verification)
         try Self.validateClaimResult(result)
-        return try await refreshSignInStatus()
+        let status = try await refreshSignInStatus()
+        let refreshedInfo = try await signInClient.loadResignInfo(role: role, secrets: secrets)
+        guard refreshedInfo.signed else {
+            throw AccountSessionError.invalidResponse("补签状态未确认成功")
+        }
+        return status
     }
 
     func refreshLoginTokens() async throws -> LocalAccountStatus {
@@ -165,11 +174,11 @@ struct LocalAccountSessionService: AccountSessionServicing {
         var secrets = try requireSecrets(metadata)
         secrets = try await passportClient.refreshLToken(secrets: secrets)
         secrets = try await passportClient.refreshCookieToken(secrets: secrets)
-        try secretStore.save(secrets, accountID: metadata.account.accountID)
 
         let summary = try await signInClient.loadSummary(role: role, secrets: secrets)
         let account = await refreshedAccountProfile(metadata.account)
         let updated = AccountMetadata(account: account, selectedRole: role, lastSummary: summary)
+        try secretStore.save(secrets, accountID: metadata.account.accountID)
         try metadataStore.save(updated)
         return Self.status(from: updated)
     }
@@ -217,9 +226,21 @@ struct LocalAccountSessionService: AccountSessionServicing {
             selectedRole: metadata.selectedRole,
             signInSummary: metadata.lastSummary,
             sessionMessage: nil,
-            lastCheckInDate: metadata.lastSummary?.isTodaySigned == true ? Date() : nil
+            lastCheckInDate: metadata.lastSummary.flatMap { summary in
+                guard summary.isTodaySigned, let serverDate = summary.serverDate else { return nil }
+                return Self.serverDateFormatter.date(from: serverDate)
+            }
         )
     }
+
+    nonisolated private static let serverDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 8 * 60 * 60)
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter
+    }()
 
     nonisolated static func validateClaimResult(_ result: SignInResultPayload) throws {
         let needsVerification = result.riskCode == -5003
@@ -229,6 +250,11 @@ struct LocalAccountSessionService: AccountSessionServicing {
             || result.challenge != nil
         if needsVerification {
             throw AccountSessionError.requiresVerification(result)
+        }
+
+        let code = result.code?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        guard result.success == 0 || code == "ok" else {
+            throw AccountSessionError.invalidResponse("签到接口未明确确认成功")
         }
     }
 

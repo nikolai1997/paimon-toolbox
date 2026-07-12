@@ -8,6 +8,10 @@ struct QRCodeLoginSheet: View {
 
     @Environment(\.dismiss) private var dismiss
 
+    @State private var manualQueryTask: Task<Void, Never>?
+    @State private var pollingTask: Task<Void, Never>?
+    @State private var didFinishWithConfirmation = false
+
     private let context = CIContext()
 
     var body: some View {
@@ -43,13 +47,7 @@ struct QRCodeLoginSheet: View {
 
             HStack(spacing: 12) {
                 Button {
-                    Task {
-                        guard let ticket = store.qrLoginSession?.ticket else { return }
-                        await store.queryQrLogin(ticket: ticket)
-                        if store.qrLoginState == .confirmed {
-                            dismiss()
-                        }
-                    }
+                    startManualQuery()
                 } label: {
                     Label("我已确认登录", systemImage: "checkmark.circle")
                 }
@@ -57,6 +55,7 @@ struct QRCodeLoginSheet: View {
                 .disabled(!canConfirmLogin)
 
                 Button {
+                    cancelTasks()
                     Task { await store.startQrLogin() }
                 } label: {
                     Label("刷新二维码", systemImage: "arrow.clockwise")
@@ -65,16 +64,24 @@ struct QRCodeLoginSheet: View {
                 .disabled(store.isAccountBusy)
 
                 Button("取消") {
-                    dismiss()
+                    cancelAndDismiss()
                 }
                 .buttonStyle(.bordered)
             }
         }
         .padding(24)
         .frame(width: 420)
-        .task(id: store.qrLoginSession?.ticket) {
-            guard let ticket = store.qrLoginSession?.ticket else { return }
-            await pollLoginStatus(ticket: ticket)
+        .onAppear {
+            restartPolling()
+        }
+        .onChange(of: store.qrLoginSession?.ticket) { _, _ in
+            restartPolling()
+        }
+        .onDisappear {
+            cancelTasks()
+            if !didFinishWithConfirmation {
+                store.cancelQrLogin(sessionID: store.qrLoginSessionID)
+            }
         }
     }
 
@@ -131,24 +138,68 @@ struct QRCodeLoginSheet: View {
         return NSImage(cgImage: cgImage, size: NSSize(width: 220, height: 220))
     }
 
-    private func pollLoginStatus(ticket: String) async {
+    private func startManualQuery() {
+        guard let ticket = store.qrLoginSession?.ticket,
+              let sessionID = store.qrLoginSessionID else { return }
+        manualQueryTask?.cancel()
+        manualQueryTask = Task {
+            await store.queryQrLogin(ticket: ticket, sessionID: sessionID)
+            guard !Task.isCancelled,
+                  store.confirmedQrLoginSessionID == sessionID else { return }
+            didFinishWithConfirmation = true
+            pollingTask?.cancel()
+            dismiss()
+        }
+    }
+
+    private func restartPolling() {
+        pollingTask?.cancel()
+        guard let ticket = store.qrLoginSession?.ticket,
+              let sessionID = store.qrLoginSessionID else { return }
+        pollingTask = Task {
+            await pollLoginStatus(ticket: ticket, sessionID: sessionID)
+        }
+    }
+
+    private func cancelAndDismiss() {
+        let sessionID = store.qrLoginSessionID
+        cancelTasks()
+        store.cancelQrLogin(sessionID: sessionID)
+        dismiss()
+    }
+
+    private func cancelTasks() {
+        manualQueryTask?.cancel()
+        manualQueryTask = nil
+        pollingTask?.cancel()
+        pollingTask = nil
+    }
+
+    private func pollLoginStatus(ticket: String, sessionID: UUID) async {
         while !Task.isCancelled,
+              store.qrLoginSessionID == sessionID,
               store.qrLoginSession?.ticket == ticket,
               !store.accountStatus.isSignedIn {
-            try? await Task.sleep(nanoseconds: 3_000_000_000)
+            do {
+                try await Task.sleep(nanoseconds: 3_000_000_000)
+            } catch {
+                return
+            }
 
             guard !Task.isCancelled,
+                  store.qrLoginSessionID == sessionID,
                   store.qrLoginSession?.ticket == ticket,
                   !store.isAccountBusy else {
                 continue
             }
 
-            await store.queryQrLogin(ticket: ticket)
+            await store.queryQrLogin(ticket: ticket, sessionID: sessionID)
 
             switch store.qrLoginState {
             case .waiting, .scanned:
                 continue
             case .confirmed:
+                didFinishWithConfirmation = true
                 dismiss()
                 return
             case .idle, .expired, .canceled, .failed:

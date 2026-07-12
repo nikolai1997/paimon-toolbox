@@ -55,6 +55,44 @@ final class MiHoYoPassportClientTests: XCTestCase {
         XCTAssertEqual(headers["User-Agent"], HoYoConstants.userAgent)
     }
 
+    func testRefreshCookieTokenRejectsEmptyValue() async throws {
+        CapturingURLProtocol.requestHandler = { request in
+            let body = #"{"retcode":0,"message":"OK","data":{"uid":"10001","cookie_token":"   "}}"#
+            return (HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!, Data(body.utf8))
+        }
+        let client = MiHoYoPassportClient(httpClient: HoYoHTTPClient(session: Self.capturingSession()))
+
+        do {
+            _ = try await client.refreshCookieToken(
+                secrets: AccountSecrets(stuid: "10001", stoken: "stoken-value", mid: "mid-value", cookieToken: "old-cookie", ltoken: nil)
+            )
+            XCTFail("Expected invalid response")
+        } catch let error as AccountSessionError {
+            guard case .invalidResponse = error else {
+                return XCTFail("Expected invalidResponse, got \(error)")
+            }
+        }
+    }
+
+    func testRefreshCookieTokenRejectsMismatchedUID() async throws {
+        CapturingURLProtocol.requestHandler = { request in
+            let body = #"{"retcode":0,"message":"OK","data":{"uid":"20002","cookie_token":"new-cookie"}}"#
+            return (HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!, Data(body.utf8))
+        }
+        let client = MiHoYoPassportClient(httpClient: HoYoHTTPClient(session: Self.capturingSession()))
+
+        do {
+            _ = try await client.refreshCookieToken(
+                secrets: AccountSecrets(stuid: "10001", stoken: "stoken-value", mid: "mid-value", cookieToken: "old-cookie", ltoken: nil)
+            )
+            XCTFail("Expected invalid response")
+        } catch let error as AccountSessionError {
+            guard case .invalidResponse = error else {
+                return XCTFail("Expected invalidResponse, got \(error)")
+            }
+        }
+    }
+
     func testRefreshLTokenUsesBbsRpcHeaders() async throws {
         let capturedRequest = expectation(description: "Captured refresh ltoken request")
         var headers: [String: String] = [:]
@@ -76,6 +114,43 @@ final class MiHoYoPassportClientTests: XCTestCase {
         XCTAssertEqual(headers["x-rpc-client_type"], "2")
         XCTAssertEqual(headers["Accept"], "application/json")
         XCTAssertEqual(headers["User-Agent"], HoYoConstants.userAgent)
+    }
+
+    func testRefreshLTokenPreservesAPIRetcode() async throws {
+        CapturingURLProtocol.requestHandler = { request in
+            let body = #"{"retcode":-100,"message":"session rejected","data":null}"#
+            return (HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!, Data(body.utf8))
+        }
+        let client = MiHoYoPassportClient(httpClient: HoYoHTTPClient(session: Self.capturingSession()))
+
+        do {
+            _ = try await client.refreshLToken(
+                secrets: AccountSecrets(stuid: "10001", stoken: "stoken-value", mid: "mid-value", cookieToken: nil, ltoken: nil)
+            )
+            XCTFail("Expected API failure")
+        } catch let error as AccountSessionError {
+            XCTAssertEqual(error.apiRetcode, -100)
+            XCTAssertEqual(error.localizedDescription, "接口返回错误：session rejected")
+        }
+    }
+
+    func testRefreshLTokenRejectsEmptyValue() async throws {
+        CapturingURLProtocol.requestHandler = { request in
+            let body = #"{"retcode":0,"message":"OK","data":{"ltoken":"\n\t"}}"#
+            return (HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!, Data(body.utf8))
+        }
+        let client = MiHoYoPassportClient(httpClient: HoYoHTTPClient(session: Self.capturingSession()))
+
+        do {
+            _ = try await client.refreshLToken(
+                secrets: AccountSecrets(stuid: "10001", stoken: "stoken-value", mid: "mid-value", cookieToken: nil, ltoken: "old-ltoken")
+            )
+            XCTFail("Expected invalid response")
+        } catch let error as AccountSessionError {
+            guard case .invalidResponse = error else {
+                return XCTFail("Expected invalidResponse, got \(error)")
+            }
+        }
     }
 
     func testLoadUserFullInfoUsesAidAndReturnsNicknameAvatarURL() async throws {

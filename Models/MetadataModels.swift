@@ -9,6 +9,8 @@ struct MetadataBundle: Codable, Equatable {
 }
 
 struct RemoteDataManifest: Codable, Equatable {
+    static let currentSchemaVersion = 1
+
     var schemaVersion: Int
     var generatedAt: Date
     var files: [RemoteDataFile]
@@ -20,7 +22,7 @@ struct RemoteDataFile: Codable, Equatable {
     var kind: RemoteDataFileKind
 }
 
-enum RemoteDataFileKind: String, Codable, Equatable {
+enum RemoteDataFileKind: String, Codable, Equatable, Hashable, CaseIterable {
     case metadata
     case characters
     case weapons
@@ -29,6 +31,29 @@ enum RemoteDataFileKind: String, Codable, Equatable {
     case config
     case announcements
     case latest
+
+    static let requiredPublicKinds: Set<Self> = [
+        .characters,
+        .weapons,
+        .materials,
+        .gachaEvents,
+        .config,
+        .announcements,
+        .latest
+    ]
+
+    var canonicalPath: String {
+        switch self {
+        case .metadata: "metadata.json"
+        case .characters: "characters.json"
+        case .weapons: "weapons.json"
+        case .materials: "materials.json"
+        case .gachaEvents: "gacha-events.json"
+        case .config: "config.json"
+        case .announcements: "announcements.json"
+        case .latest: "latest.json"
+        }
+    }
 }
 
 struct GameCharacter: Codable, Identifiable, Equatable {
@@ -70,6 +95,17 @@ struct Weapon: Codable, Identifiable, Equatable {
     var stat: String
     var iconURL: URL? = nil
     var materials: [String]
+    var ascensionStages: [WeaponAscensionStage]? = nil
+}
+
+struct WeaponAscensionStage: Codable, Equatable {
+    var breakpoint: Int
+    var costs: [WeaponAscensionCost]
+}
+
+struct WeaponAscensionCost: Codable, Equatable {
+    var materialName: String
+    var count: Int
 }
 
 struct MaterialItem: Codable, Identifiable, Equatable {

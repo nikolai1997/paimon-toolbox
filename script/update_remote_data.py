@@ -6,12 +6,15 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import re
 import shutil
 import ssl
 import subprocess
 import sys
+import tempfile
 import urllib.error
+import urllib.parse
 import urllib.request
 import zipfile
 from dataclasses import dataclass, replace
@@ -24,6 +27,7 @@ SNAP_METADATA_REPO_URL = "https://github.com/SnapHutaoRemasteringProject/Snap.Me
 GENSHIN_DB_REPO_URL = "https://github.com/theBowja/genshin-db.git"
 ASSET_BASE_URL = "https://enka.network/ui"
 OFFICIAL_ANNOUNCEMENTS_URL = "https://hk4e-ann-api.mihoyo.com/common/hk4e_cn/announcement/api/getAnnList?game=hk4e&game_biz=hk4e_cn&lang=zh-cn&bundle_id=hk4e_cn&platform=pc&region=cn_gf01&level=55&uid=100000000"
+MANAGED_CACHE_MARKER = ".paimon-toolbox-managed-cache"
 GENSHIN_DB_SPARSE_PATHS = [
     "src/data/ChineseSimplified/characters",
     "src/data/ChineseSimplified/talents",
@@ -64,6 +68,19 @@ STAT_TYPES = {
 class GeneratedFile:
     path: str
     kind: str
+
+
+PUBLIC_DATA_FILE_SPECS = (
+    GeneratedFile("metadata.json", "metadata"),
+    GeneratedFile("characters.json", "characters"),
+    GeneratedFile("weapons.json", "weapons"),
+    GeneratedFile("materials.json", "materials"),
+    GeneratedFile("gacha-events.json", "gachaEvents"),
+    GeneratedFile("config.json", "config"),
+    GeneratedFile("latest.json", "latest"),
+    GeneratedFile("announcements.json", "announcements"),
+    GeneratedFile("manifest.json", "manifest"),
+)
 
 
 @dataclass(frozen=True)
@@ -112,6 +129,7 @@ def main() -> int:
     parser.add_argument("--push", action="store_true", help="commit and push generated files")
     parser.add_argument("--commit-message", default="chore: update remote data", help="git commit message for --push")
     parser.add_argument("--self-test", action="store_true", help="run converter self tests")
+    parser.add_argument("--validate-public-dir", default="", help="validate an existing public data directory and exit")
     args = parser.parse_args()
 
     if args.self_test:
@@ -119,12 +137,23 @@ def main() -> int:
         print("self-test passed")
         return 0
 
-    root = Path.cwd()
-    source_cache = root / args.source_cache
-    genshin_db_cache = root / args.genshin_db_cache
-    manual_dir = root / args.manual_dir
-    public_dir = root / args.public_dir
-    release_dir = root / args.release_dir
+    if args.validate_public_dir:
+        public_dir = resolve_repository_path(args.validate_public_dir)
+        validate_existing_public_data(public_dir)
+        print(f"public data validation passed: {public_dir}")
+        return 0
+
+    root = repository_root()
+    source_cache = resolve_repository_path(args.source_cache, root)
+    genshin_db_cache = resolve_repository_path(args.genshin_db_cache, root)
+    manual_dir = resolve_repository_path(args.manual_dir, root)
+    public_dir = resolve_repository_path(args.public_dir, root)
+    release_dir = resolve_repository_path(args.release_dir, root)
+    official_announcements_json = (
+        resolve_repository_path(args.official_announcements_json, root)
+        if args.official_announcements_json
+        else None
+    )
 
     if args.source == "snap-metadata":
         ensure_source_checkout(source_cache, skip_fetch=args.skip_fetch)
@@ -145,18 +174,21 @@ def main() -> int:
                     fallback_label="manual gacha-events.json",
                 )
             except Exception as error:
-                print(f"warning: Snap.Metadata gacha fetch failed, using manual gacha-events.json: {error}", file=sys.stderr)
+                gacha_events_override = current_or_manual_gacha_events(public_dir, manual_gacha_events)
+                print(f"warning: Snap.Metadata gacha fetch failed, preserving freshest local gacha data: {error}", file=sys.stderr)
         payload = build_official_manual_payload(
             manual_dir,
-            official_announcements_json=Path(args.official_announcements_json) if args.official_announcements_json else None,
+            official_announcements_json=official_announcements_json,
             fetch_official_announcements=args.fetch_official_announcements,
             gacha_events_override=gacha_events_override,
+            current_public_announcements=public_dir / "announcements.json",
         )
     else:
         announcements = load_announcements(
             manual_dir,
-            official_announcements_json=Path(args.official_announcements_json) if args.official_announcements_json else None,
+            official_announcements_json=official_announcements_json,
             fetch_official_announcements=args.fetch_official_announcements,
+            current_public_announcements=public_dir / "announcements.json",
         )
         gacha_events = read_json(manual_dir / "gacha-events.json")
         if args.gacha_source == "snap-metadata":
@@ -169,7 +201,8 @@ def main() -> int:
                     fallback_label="manual gacha-events.json",
                 )
             except Exception as error:
-                print(f"warning: Snap.Metadata gacha fetch failed, using manual gacha-events.json: {error}", file=sys.stderr)
+                gacha_events = current_or_manual_gacha_events(public_dir, gacha_events)
+                print(f"warning: Snap.Metadata gacha fetch failed, preserving freshest local gacha data: {error}", file=sys.stderr)
         ensure_genshin_db_checkout(genshin_db_cache, skip_fetch=args.skip_fetch)
         payload = build_genshin_db_payload(genshin_db_cache, gacha_events=gacha_events, announcements=announcements)
 
@@ -189,9 +222,20 @@ def main() -> int:
     print(f"wrote {zip_path}")
 
     if args.push:
-        commit_and_push([public_dir, zip_path], args.commit_message)
+        commit_and_push([public_dir], args.commit_message, repository=root)
 
     return 0
+
+
+def repository_root() -> Path:
+    return Path(__file__).resolve().parents[1]
+
+
+def resolve_repository_path(value: str | Path, root: Path | None = None) -> Path:
+    path = Path(value).expanduser()
+    if path.is_absolute():
+        return path.resolve()
+    return ((root or repository_root()) / path).resolve()
 
 
 def ensure_source_checkout(source_cache: Path, skip_fetch: bool) -> None:
@@ -202,14 +246,28 @@ def ensure_genshin_db_checkout(source_cache: Path, skip_fetch: bool) -> None:
     ensure_git_checkout(GENSHIN_DB_REPO_URL, source_cache, skip_fetch=skip_fetch, sparse_paths=GENSHIN_DB_SPARSE_PATHS)
 
 
-def ensure_git_checkout(repo_url: str, source_cache: Path, skip_fetch: bool, sparse_paths: list[str] | None = None) -> None:
+def ensure_git_checkout(
+    repo_url: str,
+    source_cache: Path,
+    skip_fetch: bool,
+    sparse_paths: list[str] | None = None,
+    workspace: Path | None = None,
+) -> None:
+    workspace = (workspace or repository_root()).resolve()
+    source_cache = source_cache.expanduser().resolve()
+    validate_cache_location(source_cache, workspace)
+
     if skip_fetch:
         if not source_cache.exists():
             raise SystemExit(f"{source_cache} does not exist; rerun without --skip-fetch")
+        validate_managed_cache_path(source_cache, workspace, repo_url)
         return
 
     source_cache.parent.mkdir(parents=True, exist_ok=True)
     if (source_cache / ".git").exists():
+        if not (source_cache / MANAGED_CACHE_MARKER).is_file():
+            raise RuntimeError(f"refusing to manage unmarked existing checkout: {source_cache}")
+        validate_managed_cache_path(source_cache, workspace, repo_url)
         run(["git", "-C", str(source_cache), "fetch", "--depth", "1", "origin", "main"])
         run(["git", "-C", str(source_cache), "reset", "--hard", "origin/main"])
         if sparse_paths:
@@ -221,6 +279,49 @@ def ensure_git_checkout(repo_url: str, source_cache: Path, skip_fetch: bool, spa
         run(["git", "-C", str(source_cache), "sparse-checkout", "set", *sparse_paths])
     else:
         run(["git", "clone", "--depth", "1", repo_url, str(source_cache)])
+    write_managed_cache_marker(source_cache)
+
+
+def validate_cache_location(source_cache: Path, workspace: Path) -> None:
+    resolved = source_cache.expanduser().resolve()
+    workspace = workspace.expanduser().resolve()
+    managed_root = workspace / ".cache"
+    if resolved in {workspace, Path.home().resolve(), Path("/")}:
+        raise RuntimeError(f"refusing destructive git operation at unsafe path: {resolved}")
+    try:
+        resolved.relative_to(managed_root)
+    except ValueError as error:
+        raise RuntimeError(f"cache must be inside {managed_root}: {resolved}") from error
+
+
+def validate_managed_cache_path(source_cache: Path, workspace: Path, expected_repo_url: str) -> Path:
+    resolved = source_cache.expanduser().resolve()
+    validate_cache_location(resolved, workspace)
+    marker = resolved / MANAGED_CACHE_MARKER
+    if not marker.is_file() or marker.read_text(encoding="utf-8").strip() != "managed":
+        raise RuntimeError(f"refusing destructive git operation outside managed cache: {resolved}")
+    try:
+        origin = subprocess.run(
+            ["git", "-C", str(resolved), "remote", "get-url", "origin"],
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+    except subprocess.CalledProcessError as error:
+        raise RuntimeError(f"refusing destructive git operation without a readable origin: {resolved}") from error
+    if normalize_git_remote(origin) != normalize_git_remote(expected_repo_url):
+        raise RuntimeError(
+            f"refusing destructive git operation for mismatched origin: {origin} (expected {expected_repo_url})"
+        )
+    return resolved
+
+
+def write_managed_cache_marker(source_cache: Path) -> None:
+    (source_cache / MANAGED_CACHE_MARKER).write_text("managed\n", encoding="utf-8")
+
+
+def normalize_git_remote(value: str) -> str:
+    return value.strip().rstrip("/").removesuffix(".git").rstrip("/").lower()
 
 
 def build_snap_metadata_payload(locale_dir: Path) -> RemoteDataPayload:
@@ -313,14 +414,43 @@ def load_announcements(
     manual_dir: Path,
     official_announcements_json: Path | None,
     fetch_official_announcements: bool,
+    current_public_announcements: Path | None = None,
 ) -> dict[str, Any]:
-    announcements = read_json_if_exists(manual_dir / "announcements.json") or empty_announcements()
+    manual = read_json_if_exists(manual_dir / "announcements.json") or empty_announcements()
+    current = read_json_if_exists(current_public_announcements) if current_public_announcements else None
     official_json_path = official_announcements_json
     if fetch_official_announcements:
         official_json_path = fetch_official_announcements_json_if_available(manual_dir)
     if official_json_path is not None:
-        return convert_official_announcements(read_json(official_json_path))
-    return announcements
+        official = convert_official_announcements(read_json(official_json_path))
+        return select_announcement_feed(official, current, manual)
+    selected = select_announcement_feed(current, manual)
+    if fetch_official_announcements and not selected.get("items"):
+        raise RuntimeError("official announcement fetch failed and no nonempty fallback feed is available")
+    return selected
+
+
+def select_announcement_feed(*feeds: dict[str, Any] | None) -> dict[str, Any]:
+    valid = [feed for feed in feeds if isinstance(feed, dict) and isinstance(feed.get("items"), list)]
+    if not valid:
+        raise RuntimeError("no valid announcement feed is available")
+    nonempty = [feed for feed in valid if feed.get("items")]
+    candidates = nonempty or valid
+    return max(candidates, key=lambda feed: parse_gacha_datetime(feed.get("updatedAt")))
+
+
+def current_or_manual_gacha_events(public_dir: Path, manual_events: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    current = read_json_if_exists(public_dir / "gacha-events.json") or []
+    if not current:
+        return manual_events
+    if not manual_events:
+        return current
+    return select_fresher_gacha_events(
+        current,
+        manual_events,
+        primary_label="current public gacha-events.json",
+        fallback_label="manual gacha-events.json",
+    )
 
 
 def build_official_manual_payload(
@@ -328,6 +458,7 @@ def build_official_manual_payload(
     official_announcements_json: Path | None,
     fetch_official_announcements: bool,
     gacha_events_override: list[dict[str, Any]] | None = None,
+    current_public_announcements: Path | None = None,
 ) -> RemoteDataPayload:
     required = [
         "characters.json",
@@ -343,6 +474,7 @@ def build_official_manual_payload(
         manual_dir,
         official_announcements_json=official_announcements_json,
         fetch_official_announcements=fetch_official_announcements,
+        current_public_announcements=current_public_announcements,
     )
 
     payload = RemoteDataPayload(
@@ -361,13 +493,31 @@ def build_official_manual_payload(
 
 
 def generate_public_data(payload: RemoteDataPayload, public_dir: Path, base_url: str) -> list[GeneratedFile]:
-    public_dir.mkdir(parents=True, exist_ok=True)
+    public_dir = public_dir.expanduser().resolve()
+    public_dir.parent.mkdir(parents=True, exist_ok=True)
+    staging_dir = Path(tempfile.mkdtemp(prefix=f".{public_dir.name}.staging-", dir=public_dir.parent))
+    try:
+        generated = write_public_data(payload, staging_dir, public_dir, base_url)
+        validate_public_data(staging_dir, generated)
+        replace_directory_atomically(staging_dir, public_dir)
+        return generated
+    finally:
+        if staging_dir.exists():
+            shutil.rmtree(staging_dir)
+
+
+def write_public_data(
+    payload: RemoteDataPayload,
+    output_dir: Path,
+    previous_public_dir: Path,
+    base_url: str,
+) -> list[GeneratedFile]:
     now = datetime.now(timezone.utc)
-    announcements = payload.announcements or empty_announcements()
-    previous_metadata = read_json_if_exists(public_dir / "metadata.json") or {}
+    announcements = normalize_announcement_feed(payload.announcements or empty_announcements())
+    previous_metadata = read_json_if_exists(previous_public_dir / "metadata.json") or {}
     apply_asset_overrides(payload, previous_metadata)
-    previous_announcements = read_json_if_exists(public_dir / "announcements.json") or {}
-    previous_gacha_events = read_json_if_exists(public_dir / "gacha-events.json") or []
+    previous_announcements = read_json_if_exists(previous_public_dir / "announcements.json") or {}
+    previous_gacha_events = read_json_if_exists(previous_public_dir / "gacha-events.json") or []
     data_changed = (
         previous_metadata.get("characters") != payload.characters
         or previous_metadata.get("weapons") != payload.weapons
@@ -419,8 +569,8 @@ def generate_public_data(payload: RemoteDataPayload, public_dir: Path, base_url:
     ]
 
     generated: list[GeneratedFile] = []
-    for file_name, kind, payload in files:
-        write_json(public_dir / file_name, payload)
+    for file_name, kind, file_payload in files:
+        write_json(output_dir / file_name, file_payload)
         generated.append(GeneratedFile(file_name, kind))
 
     manifest = {
@@ -429,15 +579,84 @@ def generate_public_data(payload: RemoteDataPayload, public_dir: Path, base_url:
         "files": [
             {
                 "path": item.path,
-                "sha256": sha256_file(public_dir / item.path),
+                "sha256": sha256_file(output_dir / item.path),
                 "kind": item.kind,
             }
             for item in generated
         ],
     }
-    write_json(public_dir / "manifest.json", manifest)
+    write_json(output_dir / "manifest.json", manifest)
     generated.append(GeneratedFile("manifest.json", "manifest"))
     return generated
+
+
+def validate_public_data(public_dir: Path, generated: list[GeneratedFile]) -> None:
+    expected = {item.path: item.kind for item in generated}
+    if expected.get("manifest.json") != "manifest" or len(expected) != len(generated):
+        raise RuntimeError("generated public data file list is invalid")
+
+    actual = {path.name for path in public_dir.iterdir() if path.is_file()}
+    if actual != set(expected) or any(not path.is_file() for path in public_dir.iterdir()):
+        raise RuntimeError(f"public data staging members mismatch: expected {sorted(expected)}, got {sorted(actual)}")
+
+    for path in expected:
+        read_json(public_dir / path)
+
+    validate_announcement_feed(read_json(public_dir / "announcements.json"))
+
+    manifest = read_json(public_dir / "manifest.json")
+    records = manifest.get("files")
+    if not isinstance(records, list):
+        raise RuntimeError("public data manifest files must be a list")
+    expected_payloads = {path: kind for path, kind in expected.items() if path != "manifest.json"}
+    if len(records) != len(expected_payloads):
+        raise RuntimeError("public data manifest member count mismatch")
+
+    seen: set[str] = set()
+    for record in records:
+        if not isinstance(record, dict):
+            raise RuntimeError("public data manifest contains an invalid record")
+        path = record.get("path")
+        if path in seen or path not in expected_payloads:
+            raise RuntimeError(f"public data manifest contains an unexpected path: {path}")
+        seen.add(path)
+        if record.get("kind") != expected_payloads[path]:
+            raise RuntimeError(f"public data manifest kind mismatch: {path}")
+        if record.get("sha256") != sha256_file(public_dir / path):
+            raise RuntimeError(f"public data manifest hash mismatch: {path}")
+    if seen != set(expected_payloads):
+        raise RuntimeError("public data manifest is incomplete")
+
+
+def validate_existing_public_data(public_dir: Path) -> None:
+    public_dir = public_dir.expanduser().resolve()
+    if not public_dir.is_dir():
+        raise RuntimeError(f"public data directory is missing: {public_dir}")
+    validate_public_data(public_dir, list(PUBLIC_DATA_FILE_SPECS))
+
+
+def replace_directory_atomically(staging_dir: Path, target_dir: Path) -> None:
+    if not target_dir.exists():
+        os.replace(staging_dir, target_dir)
+        return
+    if not target_dir.is_dir():
+        raise RuntimeError(f"public data target is not a directory: {target_dir}")
+
+    backup_dir = Path(tempfile.mkdtemp(prefix=f".{target_dir.name}.backup-", dir=target_dir.parent))
+    backup_dir.rmdir()
+    os.replace(target_dir, backup_dir)
+    try:
+        os.replace(staging_dir, target_dir)
+    except Exception:
+        try:
+            os.replace(backup_dir, target_dir)
+        except Exception as restore_error:
+            raise RuntimeError(
+                f"failed to publish public data and restore previous directory; backup remains at {backup_dir}"
+            ) from restore_error
+        raise
+    else:
+        shutil.rmtree(backup_dir, ignore_errors=True)
 
 
 def apply_asset_overrides(payload: RemoteDataPayload, asset_payload: dict[str, Any]) -> None:
@@ -525,11 +744,36 @@ def convert_genshin_db_weapons(weapon_dir: Path, image_index: dict[str, Any]) ->
             "stat": weapon.get("mainStatText") or "基础攻击力",
             "materials": collect_cost_names(weapon.get("costs")),
         }
+        ascension_stages = convert_weapon_ascension_stages(weapon.get("costs"))
+        if ascension_stages:
+            item["ascensionStages"] = ascension_stages
         image_payload = image_index.get(path.stem) if isinstance(image_index, dict) else None
         if isinstance(image_payload, dict):
             add_asset_url(item, "iconURL", first_string(image_payload, "filename_icon"))
         weapons.append(item)
     return sorted(weapons, key=lambda item: (item["rarity"], item["id"]), reverse=True)
+
+
+def convert_weapon_ascension_stages(costs: Any) -> list[dict[str, Any]]:
+    if not isinstance(costs, dict):
+        return []
+    breakpoints = [20, 40, 50, 60, 70, 80]
+    stages: list[dict[str, Any]] = []
+    for index, breakpoint in enumerate(breakpoints, start=1):
+        entries = costs.get(f"ascend{index}")
+        if not isinstance(entries, list) or not entries:
+            return []
+        converted_costs: list[dict[str, Any]] = []
+        for entry in entries:
+            if not isinstance(entry, dict):
+                return []
+            name = entry.get("name")
+            count = entry.get("count")
+            if not isinstance(name, str) or not name or not isinstance(count, int) or count <= 0:
+                return []
+            converted_costs.append({"materialName": name, "count": count})
+        stages.append({"breakpoint": breakpoint, "costs": converted_costs})
+    return stages
 
 
 def convert_genshin_db_materials(material_dir: Path, image_index: dict[str, Any]) -> list[dict[str, Any]]:
@@ -760,8 +1004,8 @@ def convert_official_announcements(payload: dict[str, Any]) -> dict[str, Any]:
                     "type": announcement.get("type_label") or group.get("type_label") or "",
                     "startTime": announcement.get("start_time", ""),
                     "endTime": announcement.get("end_time", ""),
-                    "banner": announcement.get("banner", ""),
-                    "contentURL": announcement.get("content_url", ""),
+                    "banner": normalize_optional_http_url(announcement.get("banner")),
+                    "contentURL": normalize_optional_http_url(announcement.get("content_url")),
                 }
             )
     return {
@@ -769,6 +1013,74 @@ def convert_official_announcements(payload: dict[str, Any]) -> dict[str, Any]:
         "updatedAt": isoformat_z(datetime.now(timezone.utc)),
         "items": items,
     }
+
+
+def normalize_announcement_feed(feed: dict[str, Any]) -> dict[str, Any]:
+    normalized = dict(feed)
+    items = feed.get("items")
+    if not isinstance(items, list):
+        return normalized
+
+    normalized_items: list[Any] = []
+    for item in items:
+        if not isinstance(item, dict):
+            normalized_items.append(item)
+            continue
+        normalized_item = dict(item)
+        for field in ("banner", "contentURL", "url"):
+            if field in normalized_item:
+                normalized_item[field] = normalize_optional_http_url(normalized_item[field])
+        normalized_items.append(normalized_item)
+
+    normalized["items"] = normalized_items
+    return normalized
+
+
+def normalize_optional_http_url(value: Any) -> str | None:
+    if not isinstance(value, str):
+        return None
+    normalized = value.strip()
+    if not normalized:
+        return None
+    parsed = urllib.parse.urlsplit(normalized)
+    if parsed.scheme.lower() not in {"http", "https"} or not parsed.netloc:
+        return None
+    return normalized
+
+
+def validate_announcement_feed(feed: Any) -> None:
+    if not isinstance(feed, dict):
+        raise RuntimeError("announcement feed must be an object")
+    if type(feed.get("schemaVersion")) is not int or feed["schemaVersion"] != 1:
+        raise RuntimeError("announcement schemaVersion must be 1")
+    updated_at = feed.get("updatedAt")
+    timestamp_pattern = r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})"
+    if not isinstance(updated_at, str) or re.fullmatch(timestamp_pattern, updated_at) is None:
+        raise RuntimeError("announcement updatedAt must be an ISO 8601 timestamp")
+    if parse_gacha_datetime(updated_at) == datetime.min.replace(tzinfo=timezone.utc):
+        raise RuntimeError("announcement updatedAt must be an ISO 8601 timestamp")
+    if not isinstance(feed.get("items"), list):
+        raise RuntimeError("announcement feed items must be a list")
+    for index, item in enumerate(feed["items"]):
+        if not isinstance(item, dict):
+            raise RuntimeError(f"announcement item is invalid: {index}")
+
+        for field in ("id", "title"):
+            value = item.get(field)
+            if not isinstance(value, str) or not value.strip():
+                raise RuntimeError(f"announcement field is invalid: items[{index}].{field}")
+
+        for field in ("subtitle", "type", "typeLabel", "startTime", "endTime", "startsAt", "endsAt"):
+            value = item.get(field)
+            if value is not None and not isinstance(value, str):
+                raise RuntimeError(f"announcement field is invalid: items[{index}].{field}")
+
+        for field in ("banner", "contentURL", "url"):
+            value = item.get(field)
+            if value is None:
+                continue
+            if not isinstance(value, str) or normalize_optional_http_url(value) != value:
+                raise RuntimeError(f"announcement url field is invalid: items[{index}].{field}")
 
 
 def merge_official_gacha_events(
@@ -783,12 +1095,36 @@ def merge_official_gacha_events(
 
     merged: dict[tuple[int, str, str], dict[str, Any]] = {}
     order: list[tuple[int, str, str]] = []
-    for event in [*events, *official_events]:
-        key = (int(event.get("type") or 0), str(event.get("name") or ""), str(event.get("from") or ""))
+    for event in events:
+        key = gacha_event_merge_key(event)
         if key not in merged:
             order.append(key)
         merged[key] = event
+    for event in official_events:
+        key = gacha_event_merge_key(event)
+        if key not in merged:
+            order.append(key)
+            merged[key] = event
+        else:
+            merged[key] = merge_gacha_event_fields(merged[key], event)
     return [merged[key] for key in order]
+
+
+def gacha_event_merge_key(event: dict[str, Any]) -> tuple[int, str, str]:
+    return (int(event.get("type") or 0), str(event.get("name") or ""), str(event.get("to") or ""))
+
+
+def merge_gacha_event_fields(existing: dict[str, Any], fallback: dict[str, Any]) -> dict[str, Any]:
+    merged = dict(existing)
+    list_fields = {"upOrangeList", "upPurpleList"}
+    for field, value in fallback.items():
+        current = merged.get(field)
+        if field in list_fields:
+            if (not isinstance(current, list) or not current) and isinstance(value, list):
+                merged[field] = value
+        elif (current is None or current == "") and value not in (None, ""):
+            merged[field] = value
+    return merged
 
 
 def official_gacha_events_from_announcements(
@@ -828,8 +1164,8 @@ def official_gacha_events_from_announcements(
         if event_type == 0 and "概率UP" not in combined:
             continue
 
-        start = official_time_to_iso(item.get("startTime"))
-        end = official_time_to_iso(item.get("endTime"))
+        start = official_time_to_iso(item.get("startsAt") or item.get("startTime"))
+        end = official_time_to_iso(item.get("endsAt") or item.get("endTime"))
         if not start or not end:
             continue
 
@@ -883,8 +1219,8 @@ def official_version_ranges(items: list[Any]) -> list[tuple[str, str, str]]:
         match = re.search(r"「([^」]+)」版本", text)
         if not match:
             continue
-        start = official_time_to_iso(item.get("startTime"))
-        end = official_time_to_iso(item.get("endTime"))
+        start = official_time_to_iso(item.get("startsAt") or item.get("startTime"))
+        end = official_time_to_iso(item.get("endsAt") or item.get("endTime"))
         if start and end:
             ranges.append((start, end, match.group(1)))
     return ranges
@@ -1052,28 +1388,116 @@ def package_release(public_dir: Path, release_dir: Path, generated: list[Generat
     manifest = read_json(public_dir / "manifest.json")
     stamp = (manifest.get("generatedAt") or isoformat_z(datetime.now(timezone.utc)))[:10].replace("-", ".")
     zip_path = release_dir / f"data-pack-{stamp}.zip"
-    if zip_path.exists():
-        zip_path.unlink()
-
     allowed = {item.path for item in generated}
-    with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
-        for path in sorted(allowed):
-            info = zipfile.ZipInfo(path)
-            info.date_time = (1980, 1, 1, 0, 0, 0)
-            info.compress_type = zipfile.ZIP_DEFLATED
-            info.external_attr = 0o644 << 16
-            archive.writestr(info, (public_dir / path).read_bytes())
+    file_descriptor, temporary_name = tempfile.mkstemp(
+        prefix=f".{zip_path.name}.",
+        suffix=".tmp",
+        dir=release_dir,
+    )
+    os.close(file_descriptor)
+    temporary_zip = Path(temporary_name)
+    try:
+        with zipfile.ZipFile(temporary_zip, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
+            for path in sorted(allowed):
+                info = zipfile.ZipInfo(path)
+                info.date_time = (1980, 1, 1, 0, 0, 0)
+                info.compress_type = zipfile.ZIP_DEFLATED
+                info.external_attr = 0o644 << 16
+                archive.writestr(info, (public_dir / path).read_bytes())
+        validate_release_archive(temporary_zip, public_dir, generated)
+        os.replace(temporary_zip, zip_path)
+    finally:
+        temporary_zip.unlink(missing_ok=True)
     return zip_path
 
 
-def commit_and_push(paths: list[Path], message: str) -> None:
-    run(["git", "add", *[str(path) for path in paths]])
-    diff = subprocess.run(["git", "diff", "--cached", "--quiet"], check=False)
+def validate_release_archive(zip_path: Path, public_dir: Path, generated: list[GeneratedFile]) -> None:
+    expected = {item.path for item in generated}
+    with zipfile.ZipFile(zip_path, "r") as archive:
+        names = archive.namelist()
+        if len(names) != len(set(names)) or set(names) != expected:
+            raise RuntimeError(f"release archive members mismatch: expected {sorted(expected)}, got {sorted(names)}")
+        bad_member = archive.testzip()
+        if bad_member is not None:
+            raise RuntimeError(f"release archive CRC check failed: {bad_member}")
+        for path in expected:
+            archived = archive.read(path)
+            if archived != (public_dir / path).read_bytes():
+                raise RuntimeError(f"release archive content mismatch: {path}")
+
+        manifest = json.loads(archive.read("manifest.json"))
+        records = manifest.get("files")
+        if not isinstance(records, list):
+            raise RuntimeError("release archive manifest files must be a list")
+        expected_hashed = expected - {"manifest.json"}
+        seen: set[str] = set()
+        for record in records:
+            if not isinstance(record, dict):
+                raise RuntimeError("release archive manifest contains an invalid record")
+            path = record.get("path")
+            if path in seen or path not in expected_hashed:
+                raise RuntimeError(f"release archive manifest contains an unexpected path: {path}")
+            seen.add(path)
+            digest = hashlib.sha256(archive.read(path)).hexdigest()
+            if record.get("sha256") != digest:
+                raise RuntimeError(f"release archive hash mismatch: {path}")
+        if seen != expected_hashed:
+            raise RuntimeError("release archive manifest is incomplete")
+
+
+def commit_and_push(paths: list[Path], message: str, repository: Path | None = None) -> None:
+    if repository is None:
+        repository = Path(
+            subprocess.run(
+                ["git", "rev-parse", "--show-toplevel"],
+                check=True,
+                capture_output=True,
+                text=True,
+            ).stdout.strip()
+        )
+    repository = repository.expanduser().resolve()
+    pathspecs = [str(path.expanduser().resolve().relative_to(repository)) for path in paths]
+    staged = subprocess.run(
+        ["git", "diff", "--cached", "--name-only", "-z"],
+        check=True,
+        capture_output=True,
+        cwd=repository,
+    ).stdout.decode("utf-8").split("\0")
+    unrelated = [path for path in staged if path and not any(path == spec or path.startswith(f"{spec}/") for spec in pathspecs)]
+    if unrelated:
+        raise RuntimeError(f"refusing to commit unrelated staged files: {', '.join(unrelated)}")
+
+    run(["git", "add", "--", *pathspecs], cwd=repository)
+    diff = subprocess.run(
+        ["git", "diff", "--cached", "--quiet", "--", *pathspecs],
+        check=False,
+        cwd=repository,
+    )
     if diff.returncode == 0:
-        print("no generated data changes to commit")
+        if has_unpushed_commits(repository):
+            print("no generated data changes to commit; pushing existing unpushed commit")
+            run(["git", "push"], cwd=repository)
+        else:
+            print("no generated data changes to commit")
         return
-    run(["git", "commit", "-m", message])
-    run(["git", "push"])
+    run(["git", "commit", "--only", "-m", message, "--", *pathspecs], cwd=repository)
+    run(["git", "push"], cwd=repository)
+
+
+def has_unpushed_commits(repository: Path) -> bool:
+    result = subprocess.run(
+        ["git", "rev-list", "--count", "@{upstream}..HEAD"],
+        check=False,
+        capture_output=True,
+        text=True,
+        cwd=repository,
+    )
+    if result.returncode != 0:
+        return False
+    try:
+        return int(result.stdout.strip()) > 0
+    except ValueError:
+        return False
 
 
 def run_self_test() -> None:
@@ -1219,6 +1643,31 @@ def run_self_test() -> None:
     assert official_gacha_events[0]["version"] == "月之八"
     assert official_gacha_events[0]["upOrangeList"] == [10002001]
     assert official_gacha_events[2]["upOrangeList"] == [12517, 14517]
+
+    complete_snap_event = {
+        "name": "镜中的茶宴",
+        "version": "月之八",
+        "type": 301,
+        "from": "2026-06-29T12:00:00+08:00",
+        "to": "2026-07-21T17:59:00+08:00",
+        "upOrangeList": [10002001],
+        "upPurpleList": [10000020, 10000031, 10000064],
+        "banner": "https://snap.example/banner.jpg",
+    }
+    merged_complete_event = merge_official_gacha_events(
+        [complete_snap_event],
+        official_gacha_announcements,
+        characters=[
+            {"id": 10002001, "name": "桑多涅"},
+            {"id": 10000107, "name": "茜特菈莉"},
+        ],
+        weapons=[
+            {"id": 12517, "name": "超越之匙"},
+            {"id": 14517, "name": "祭星者之望"},
+        ],
+    )[0]
+    assert merged_complete_event["upPurpleList"] == [10000020, 10000031, 10000064]
+    assert merged_complete_event["banner"] == "https://snap.example/banner.jpg"
 
     manual_payload = RemoteDataPayload(
         source="official-manual",
@@ -1431,9 +1880,9 @@ def isoformat_z(value: datetime) -> str:
     return value.astimezone(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 
-def run(command: list[str]) -> None:
+def run(command: list[str], cwd: Path | None = None) -> None:
     print("+", " ".join(command))
-    subprocess.run(command, check=True)
+    subprocess.run(command, check=True, cwd=cwd)
 
 
 if __name__ == "__main__":

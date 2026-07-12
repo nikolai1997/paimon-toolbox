@@ -1,6 +1,66 @@
 import XCTest
+@testable import PaimonToolbox
 
 final class AccountViewLayoutTests: XCTestCase {
+    func testVerificationPolicyAllowsOnlyExactSignInAndGeetestHosts() {
+        XCTAssertTrue(MiHoYoVerificationPolicy.allowsNavigation(
+            url: URL(string: "https://act.mihoyo.com/bbs/event/signin")!,
+            isMainFrame: true
+        ))
+        XCTAssertTrue(MiHoYoVerificationPolicy.allowsNavigation(
+            url: URL(string: "https://static.geetest.com/static/js/gt.0.5.2.js")!,
+            isMainFrame: true
+        ))
+        XCTAssertTrue(MiHoYoVerificationPolicy.allowsNavigation(
+            url: URL(string: "https://api.geetest.com/get.php")!,
+            isMainFrame: true
+        ))
+        XCTAssertTrue(MiHoYoVerificationPolicy.allowsBridgeMessage(
+            pageURL: URL(string: "https://act.mihoyo.com/bbs/event/signin")!,
+            isMainFrame: true
+        ))
+        XCTAssertFalse(MiHoYoVerificationPolicy.allowsNavigation(
+            url: URL(string: "http://act.mihoyo.com/bbs/event/signin")!,
+            isMainFrame: true
+        ))
+        XCTAssertFalse(MiHoYoVerificationPolicy.allowsNavigation(
+            url: URL(string: "https://evil-mihoyo.com/")!,
+            isMainFrame: true
+        ))
+        XCTAssertFalse(MiHoYoVerificationPolicy.allowsNavigation(
+            url: URL(string: "https://mihoyo.com.evil.example/")!,
+            isMainFrame: true
+        ))
+        XCTAssertFalse(MiHoYoVerificationPolicy.allowsNavigation(
+            url: URL(string: "https://bbs.mihoyo.com/ys/")!,
+            isMainFrame: true
+        ))
+        XCTAssertFalse(MiHoYoVerificationPolicy.allowsNavigation(
+            url: URL(string: "https://bbs.miyoushe.com/ys/")!,
+            isMainFrame: true
+        ))
+        XCTAssertFalse(MiHoYoVerificationPolicy.allowsBridgeMessage(
+            pageURL: URL(string: "https://bbs.mihoyo.com/ys/")!,
+            isMainFrame: true
+        ))
+        XCTAssertFalse(MiHoYoVerificationPolicy.allowsBridgeMessage(
+            pageURL: URL(string: "https://bbs.miyoushe.com/ys/")!,
+            isMainFrame: true
+        ))
+        XCTAssertFalse(MiHoYoVerificationPolicy.allowsBridgeMessage(
+            pageURL: URL(string: "https://sub.act.mihoyo.com/bbs/event/signin")!,
+            isMainFrame: true
+        ))
+        XCTAssertFalse(MiHoYoVerificationPolicy.allowsBridgeMessage(
+            pageURL: URL(string: "https://act.mihoyo.com/bbs/event/signin")!,
+            isMainFrame: false
+        ))
+        XCTAssertFalse(MiHoYoVerificationPolicy.allowsBridgeMessage(
+            pageURL: URL(string: "https://static.geetest.com/")!,
+            isMainFrame: true
+        ))
+    }
+
     func testSignedInActionsAreFloatingInsteadOfScrollContent() throws {
         let sourceURL = URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()
@@ -73,7 +133,7 @@ final class AccountViewLayoutTests: XCTestCase {
         XCTAssertTrue(source.contains("\"miHoYo\""))
     }
 
-    func testVerificationWebViewInjectsCookiesForMiHoYoAndMiYouSheDomains() throws {
+    func testVerificationWebViewInjectsCookiesOnlyForExactSignInHost() throws {
         let sourceURL = URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()
             .deletingLastPathComponent()
@@ -81,9 +141,10 @@ final class AccountViewLayoutTests: XCTestCase {
             .appendingPathComponent("Views/MiHoYoVerificationWebView.swift")
         let source = try String(contentsOf: sourceURL, encoding: .utf8)
 
-        XCTAssertTrue(source.contains("\".mihoyo.com\""))
-        XCTAssertTrue(source.contains("\".miyoushe.com\""))
-        XCTAssertTrue(source.contains("cookieDomains(for:"))
+        XCTAssertTrue(source.contains("cookieDomain(for: webContext.url)"))
+        XCTAssertFalse(source.contains("\".mihoyo.com\""))
+        XCTAssertFalse(source.contains("\".miyoushe.com\""))
+        XCTAssertFalse(source.contains("cookieDomains(for:"))
     }
 
     func testVerificationWebViewUsesIsolatedCookieBackedSession() throws {
@@ -97,6 +158,9 @@ final class AccountViewLayoutTests: XCTestCase {
         XCTAssertTrue(source.contains("WKWebsiteDataStore.nonPersistent()"))
         XCTAssertTrue(source.contains("configuration.websiteDataStore = websiteDataStore"))
         XCTAssertTrue(source.contains("clearBrowsingData(in: webView.configuration.websiteDataStore)"))
+        XCTAssertTrue(source.contains("forMainFrameOnly: true"))
+        XCTAssertTrue(source.contains("webView.navigationDelegate = context.coordinator"))
+        XCTAssertTrue(source.contains("message.frameInfo.isMainFrame"))
     }
 
     func testVerificationWebViewPrefersSignedInWebContextOverInlineGeetest() throws {
@@ -125,5 +189,42 @@ final class AccountViewLayoutTests: XCTestCase {
 
         XCTAssertTrue(closeBlock.contains("await store.refreshSignInStatus()"))
         XCTAssertFalse(closeBlock.contains("await store.claimDailyReward()"))
+    }
+
+    func testAccountViewExposesConfirmedLoginSyncRetryAndPreservesResignPurpose() throws {
+        let sourceURL = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .appendingPathComponent("Views/AccountView.swift")
+        let source = try String(contentsOf: sourceURL, encoding: .utf8)
+
+        XCTAssertTrue(source.contains("store.canRetryConfirmedQrLoginSync"))
+        XCTAssertTrue(source.contains("await store.retryConfirmedQrLoginSync()"))
+        XCTAssertTrue(source.contains("Label(\"重试同步\""))
+        XCTAssertTrue(source.contains("switch verification.purpose"))
+        XCTAssertTrue(source.contains("await store.claimResignReward()"))
+    }
+
+    func testQrLoginSheetCancelsTasksAndAccountViewUsesConfirmedSessionID() throws {
+        let projectRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let sheetSource = try String(
+            contentsOf: projectRoot.appendingPathComponent("Views/QRCodeLoginSheet.swift"),
+            encoding: .utf8
+        )
+        let accountSource = try String(
+            contentsOf: projectRoot.appendingPathComponent("Views/AccountView.swift"),
+            encoding: .utf8
+        )
+
+        XCTAssertTrue(sheetSource.contains("manualQueryTask"))
+        XCTAssertTrue(sheetSource.contains("pollingTask"))
+        XCTAssertTrue(sheetSource.contains(".onDisappear"))
+        XCTAssertTrue(sheetSource.contains("store.cancelQrLogin(sessionID:"))
+        XCTAssertTrue(accountSource.contains(".onChange(of: store.confirmedQrLoginSessionID)"))
+        XCTAssertTrue(accountSource.contains("finishConfirmedQrLogin(sessionID: sessionID)"))
     }
 }

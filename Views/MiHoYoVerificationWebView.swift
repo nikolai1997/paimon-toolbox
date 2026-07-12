@@ -1,6 +1,35 @@
 import SwiftUI
 import WebKit
 
+enum MiHoYoVerificationPolicy {
+    private static let signInHost = "act.mihoyo.com"
+    private static let navigationHosts = [signInHost, "static.geetest.com", "api.geetest.com"]
+
+    static func allowsNavigation(url: URL, isMainFrame: Bool) -> Bool {
+        isMainFrame && isTrustedHTTPS(url, hosts: navigationHosts)
+    }
+
+    static func allowsBridgeMessage(pageURL: URL?, isMainFrame: Bool) -> Bool {
+        guard isMainFrame, let pageURL else { return false }
+        return isTrustedHTTPS(pageURL, hosts: [signInHost])
+    }
+
+    static func allowsGeetestMessage(pageURL: URL?, isMainFrame: Bool) -> Bool {
+        guard isMainFrame, let pageURL else { return false }
+        return isTrustedHTTPS(pageURL, hosts: ["static.geetest.com"])
+    }
+
+    private static func isTrustedHTTPS(_ url: URL, hosts: [String]) -> Bool {
+        guard url.scheme?.lowercased() == "https", var host = url.host?.lowercased() else {
+            return false
+        }
+        if host.hasSuffix(".") {
+            host.removeLast()
+        }
+        return hosts.contains(host)
+    }
+}
+
 struct MiHoYoVerificationWebView: NSViewRepresentable {
     let payload: SignInResultPayload
     let fallbackURL: URL
@@ -24,6 +53,7 @@ struct MiHoYoVerificationWebView: NSViewRepresentable {
         configuration.userContentController.addUserScript(Self.jsBridgeScript())
 
         let webView = WKWebView(frame: .zero, configuration: configuration)
+        webView.navigationDelegate = context.coordinator
         webView.allowsBackForwardNavigationGestures = true
         webView.customUserAgent = HoYoConstants.mobileUserAgent
         context.coordinator.webView = webView
@@ -31,6 +61,10 @@ struct MiHoYoVerificationWebView: NSViewRepresentable {
             loadContent(in: webView)
         }
         return webView
+    }
+
+    static func dismantleNSView(_ webView: WKWebView, coordinator: Coordinator) {
+        coordinator.detach(from: webView)
     }
 
     func updateNSView(_ webView: WKWebView, context: Context) {
@@ -62,7 +96,11 @@ struct MiHoYoVerificationWebView: NSViewRepresentable {
             return
         }
 
-        setCookies(webContext.cookies, domains: cookieDomains(for: webContext.url), in: webView) {
+        guard let domain = cookieDomain(for: webContext.url) else {
+            webView.load(URLRequest(url: fallbackURL))
+            return
+        }
+        setCookies(webContext.cookies, domain: domain, in: webView) {
             webView.load(URLRequest(url: webContext.url))
         }
     }
@@ -87,22 +125,14 @@ struct MiHoYoVerificationWebView: NSViewRepresentable {
         "HYMobile"
     ]
 
-    private static let defaultCookieDomains = [
-        ".mihoyo.com",
-        ".miyoushe.com",
-        ".hoyoverse.com",
-        ".hoyo.com"
-    ]
-
-    private func cookieDomains(for url: URL) -> [String] {
-        var domains = Self.defaultCookieDomains
-        if let host = url.host, !domains.contains(host) {
-            domains.append(host)
+    private func cookieDomain(for url: URL) -> String? {
+        guard MiHoYoVerificationPolicy.allowsBridgeMessage(pageURL: url, isMainFrame: true) else {
+            return nil
         }
-        return domains
+        return url.host?.lowercased()
     }
 
-    private func setCookies(_ cookies: [AccountWebCookie], domains: [String], in webView: WKWebView, completion: @escaping () -> Void) {
+    private func setCookies(_ cookies: [AccountWebCookie], domain: String, in webView: WKWebView, completion: @escaping () -> Void) {
         guard !cookies.isEmpty else {
             completion()
             return
@@ -110,22 +140,20 @@ struct MiHoYoVerificationWebView: NSViewRepresentable {
 
         let group = DispatchGroup()
         for cookie in cookies {
-            for domain in domains {
-                group.enter()
-                if let httpCookie = HTTPCookie(properties: [
-                    .domain: domain,
-                    .path: "/",
-                    .name: cookie.name,
-                    .value: cookie.value,
-                    .secure: true,
-                    .expires: Date(timeIntervalSinceNow: 60 * 60 * 24 * 30)
-                ]) {
-                    webView.configuration.websiteDataStore.httpCookieStore.setCookie(httpCookie) {
-                        group.leave()
-                    }
-                } else {
+            group.enter()
+            if let httpCookie = HTTPCookie(properties: [
+                .domain: domain,
+                .path: "/",
+                .name: cookie.name,
+                .value: cookie.value,
+                .secure: true,
+                .expires: Date(timeIntervalSinceNow: 60 * 60 * 24 * 30)
+            ]) {
+                webView.configuration.websiteDataStore.httpCookieStore.setCookie(httpCookie) {
                     group.leave()
                 }
+            } else {
+                group.leave()
             }
         }
         group.notify(queue: .main, execute: completion)
@@ -297,10 +325,10 @@ struct MiHoYoVerificationWebView: NSViewRepresentable {
           });
         })();
         """
-        return WKUserScript(source: source, injectionTime: .atDocumentStart, forMainFrameOnly: false)
+        return WKUserScript(source: source, injectionTime: .atDocumentStart, forMainFrameOnly: true)
     }
 
-    final class Coordinator: NSObject, WKScriptMessageHandler {
+    final class Coordinator: NSObject, WKScriptMessageHandler, WKNavigationDelegate {
         weak var webView: WKWebView?
         var webContext: SignInWebVerificationContext?
         var onComplete: (SignInVerificationResult) -> Void
@@ -319,10 +347,59 @@ struct MiHoYoVerificationWebView: NSViewRepresentable {
         func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
             switch message.name {
             case "geetest":
+                guard MiHoYoVerificationPolicy.allowsGeetestMessage(
+                    pageURL: message.frameInfo.request.url,
+                    isMainFrame: message.frameInfo.isMainFrame
+                ) else { return }
                 handleGeetestMessage(message)
             default:
+                guard MiHoYoVerificationPolicy.allowsBridgeMessage(
+                    pageURL: message.frameInfo.request.url,
+                    isMainFrame: message.frameInfo.isMainFrame
+                ) else { return }
                 handleMiHoYoMessage(message)
             }
+        }
+
+        func webView(
+            _ webView: WKWebView,
+            decidePolicyFor navigationAction: WKNavigationAction,
+            decisionHandler: @escaping @MainActor @Sendable (WKNavigationActionPolicy) -> Void
+        ) {
+            guard let url = navigationAction.request.url else {
+                decisionHandler(.cancel)
+                return
+            }
+            let isMainFrame = navigationAction.targetFrame?.isMainFrame == true
+            decisionHandler(MiHoYoVerificationPolicy.allowsNavigation(url: url, isMainFrame: isMainFrame) ? .allow : .cancel)
+        }
+
+        func webView(
+            _ webView: WKWebView,
+            decidePolicyFor navigationResponse: WKNavigationResponse,
+            decisionHandler: @escaping @MainActor @Sendable (WKNavigationResponsePolicy) -> Void
+        ) {
+            guard let url = navigationResponse.response.url else {
+                decisionHandler(.cancel)
+                return
+            }
+            decisionHandler(
+                MiHoYoVerificationPolicy.allowsNavigation(url: url, isMainFrame: navigationResponse.isForMainFrame)
+                    ? .allow
+                    : .cancel
+            )
+        }
+
+        func detach(from webView: WKWebView) {
+            webView.stopLoading()
+            webView.navigationDelegate = nil
+            let controller = webView.configuration.userContentController
+            controller.removeScriptMessageHandler(forName: "geetest")
+            for name in MiHoYoVerificationWebView.miHoYoBridgeHandlerNames {
+                controller.removeScriptMessageHandler(forName: name)
+            }
+            self.webView = nil
+            webContext = nil
         }
 
         private func handleGeetestMessage(_ message: WKScriptMessage) {

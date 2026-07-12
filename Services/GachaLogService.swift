@@ -30,8 +30,7 @@ struct LocalGachaLogService: GachaLogServicing {
 
         for url in candidateRecordURLs(primaryURL: primaryURL) where FileManager.default.fileExists(atPath: url.path()) {
             do {
-                let data = try Data(contentsOf: url)
-                let records = try GachaLogDocument.decodeRecords(from: data)
+                let records = try await Self.decodeRecords(at: url)
                 merged = GachaLogDocument.mergedRecords(existing: merged, imported: records)
                 didReadAnyRecordsFile = true
                 if !Self.isSameFile(url, primaryURL) {
@@ -44,7 +43,7 @@ struct LocalGachaLogService: GachaLogServicing {
             }
         }
 
-        if let mirrored = try loadMirroredRecords(), !mirrored.isEmpty {
+        if let mirrored = try await loadMirroredRecords(), !mirrored.isEmpty {
             merged = GachaLogDocument.mergedRecords(existing: merged, imported: mirrored)
             didReadAnyRecordsFile = true
             didReadMigratableFile = true
@@ -54,7 +53,7 @@ struct LocalGachaLogService: GachaLogServicing {
             if didReadMigratableFile {
                 try? await replaceRecords(merged)
             }
-            return merged.sorted { $0.time > $1.time }
+            return GachaRecord.sortedNewestFirst(merged)
         }
 
         if let firstDecodeError {
@@ -64,24 +63,28 @@ struct LocalGachaLogService: GachaLogServicing {
     }
 
     func importRecords(from url: URL, into existing: [GachaRecord]) async throws -> [GachaRecord] {
-        let data = try Data(contentsOf: url)
-        let imported = try GachaLogDocument.decodeRecords(from: data)
+        let imported = try await Self.decodeRecords(at: url)
         let merged = GachaLogDocument.mergedRecords(existing: existing, imported: imported)
         try await replaceRecords(merged)
         return merged
     }
 
     func exportRecords(_ records: [GachaRecord], to url: URL) async throws {
-        let data = try GachaLogDocument.encodeUIGFRecords(records)
-        try data.write(to: url, options: .atomic)
+        try await Task.detached(priority: .userInitiated) {
+            let data = try GachaLogDocument.encodeUIGFRecords(records)
+            try data.write(to: url, options: .atomic)
+        }.value
     }
 
     func replaceRecords(_ records: [GachaRecord]) async throws {
-        let data = try GachaLogDocument.encodeNativeRecords(records.sorted { $0.time > $1.time })
-        userDefaults.set(data, forKey: Self.recordsMirrorKey)
         let url = try recordsFileURL()
-        try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
-        try data.write(to: url, options: .atomic)
+        let data = try await Task.detached(priority: .userInitiated) {
+            let data = try GachaLogDocument.encodeNativeRecords(GachaRecord.sortedNewestFirst(records))
+            try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
+            try data.write(to: url, options: .atomic)
+            return data
+        }.value
+        userDefaults.set(data, forKey: Self.recordsMirrorKey)
     }
 
     func summary(for records: [GachaRecord]) -> GachaSummary {
@@ -92,11 +95,19 @@ struct LocalGachaLogService: GachaLogServicing {
         try recordsURL ?? AppPaths.gachaRecordsURL
     }
 
-    private func loadMirroredRecords() throws -> [GachaRecord]? {
+    private func loadMirroredRecords() async throws -> [GachaRecord]? {
         guard let data = userDefaults.data(forKey: Self.recordsMirrorKey) else {
             return nil
         }
-        return try GachaLogDocument.decodeRecords(from: data)
+        return try await Task.detached(priority: .userInitiated) {
+            try GachaLogDocument.decodeRecords(from: data)
+        }.value
+    }
+
+    nonisolated private static func decodeRecords(at url: URL) async throws -> [GachaRecord] {
+        try await Task.detached(priority: .userInitiated) {
+            try GachaLogDocument.decodeRecords(from: Data(contentsOf: url))
+        }.value
     }
 
     private func candidateRecordURLs(primaryURL: URL) -> [URL] {

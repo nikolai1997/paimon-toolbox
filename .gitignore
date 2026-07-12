@@ -6,4 +6,7 @@ dist/
 .DS_Store
 /.cache/
 /data/releases/*.zip
+/data/manual/official-announcements.raw.json
 /PaimonToolbox.xcodeproj/
+/promo_assets/
+/promo_frames/

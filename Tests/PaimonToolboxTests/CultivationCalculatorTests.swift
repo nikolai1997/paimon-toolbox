@@ -2,6 +2,47 @@ import XCTest
 @testable import PaimonToolbox
 
 final class CultivationCalculatorTests: XCTestCase {
+    func testWeaponRequirementsUseOnlyAscensionsCrossedByLevelRange() {
+        let stages = [
+            WeaponAscensionStage(breakpoint: 20, costs: [.init(materialName: "材料 A", count: 5)]),
+            WeaponAscensionStage(breakpoint: 40, costs: [.init(materialName: "材料 A", count: 5), .init(materialName: "材料 B", count: 3)]),
+            WeaponAscensionStage(breakpoint: 50, costs: [.init(materialName: "材料 B", count: 9)]),
+            WeaponAscensionStage(breakpoint: 60, costs: [.init(materialName: "材料 C", count: 5)]),
+            WeaponAscensionStage(breakpoint: 70, costs: [.init(materialName: "材料 C", count: 9)]),
+            WeaponAscensionStage(breakpoint: 80, costs: [.init(materialName: "材料 D", count: 6)])
+        ]
+
+        let result = CultivationCalculator.weaponRequirements(
+            stages: stages,
+            levelRange: .init(current: 20, target: 60)
+        )
+
+        guard case .exact(let totals) = result else {
+            return XCTFail("Expected exact weapon requirements")
+        }
+        XCTAssertEqual(totals, ["材料 A": 10, "材料 B": 12])
+    }
+
+    func testWeaponRequirementsReturnUnavailableForIncompleteStageData() {
+        let result = CultivationCalculator.weaponRequirements(
+            stages: [WeaponAscensionStage(breakpoint: 20, costs: [.init(materialName: "材料 A", count: 5)])],
+            levelRange: .init(current: 1, target: 90)
+        )
+
+        XCTAssertEqual(result, .unavailable)
+    }
+
+    func testWeaponRequirementsReturnEmptyExactResultForReverseRange() {
+        let stages = [20, 40, 50, 60, 70, 80].map {
+            WeaponAscensionStage(breakpoint: $0, costs: [.init(materialName: "材料", count: 1)])
+        }
+
+        XCTAssertEqual(
+            CultivationCalculator.weaponRequirements(stages: stages, levelRange: .init(current: 80, target: 20)),
+            .exact([:])
+        )
+    }
+
     func testCharacterAscensionCalculatesExactTieredMaterialsForLevelOneToNinety() {
         let materials = CharacterCultivationMaterials(
             ascensionGemNames: ["哀叙冰玉碎屑", "哀叙冰玉断片", "哀叙冰玉块", "哀叙冰玉"],

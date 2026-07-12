@@ -5,7 +5,11 @@ enum RemoteDataSettings {
     static let offlinePackageURLKey = "remoteData.offlinePackageURL"
     static let autoRefreshEnabledKey = "remoteData.autoRefreshEnabled"
     static let lastAutoRefreshAttemptKey = "remoteData.lastAutoRefreshAttemptAt"
+    static let lastAutoRefreshSuccessKey = "remoteData.lastAutoRefreshSuccessAt"
+    static let lastAutoRefreshFailureKey = "remoteData.lastAutoRefreshFailureAt"
     static let minimumAutoRefreshInterval: TimeInterval = 24 * 60 * 60
+    static let minimumFailedAutoRefreshRetryInterval: TimeInterval = 15 * 60
+    static let maximumClockSkew: TimeInterval = 5 * 60
 
     static let defaultGitHubMetadataURLString = "https://nikolai1997.github.io/paimon-toolbox-data/metadata.json"
     static let defaultOfflinePackageURLString = "https://www.jianguoyun.com/p/DcsA6I0Qg4qtDhi61acGIAA"
@@ -26,13 +30,35 @@ enum RemoteDataSettings {
     }
 
     static func shouldAttemptAutoRefresh(now: Date, userDefaults: UserDefaults = .standard) -> Bool {
-        guard let lastAttempt = userDefaults.object(forKey: lastAutoRefreshAttemptKey) as? Date else {
-            return true
+        if let lastSuccess = userDefaults.object(forKey: lastAutoRefreshSuccessKey) as? Date {
+            if lastSuccess.timeIntervalSince(now) > maximumClockSkew {
+                userDefaults.removeObject(forKey: lastAutoRefreshSuccessKey)
+            } else if now.timeIntervalSince(lastSuccess) < minimumAutoRefreshInterval {
+                return false
+            }
         }
-        return now.timeIntervalSince(lastAttempt) >= minimumAutoRefreshInterval
+        if let lastFailure = userDefaults.object(forKey: lastAutoRefreshFailureKey) as? Date {
+            if lastFailure.timeIntervalSince(now) > maximumClockSkew {
+                userDefaults.removeObject(forKey: lastAutoRefreshFailureKey)
+            } else if now.timeIntervalSince(lastFailure) < minimumFailedAutoRefreshRetryInterval {
+                return false
+            }
+        }
+        return true
     }
 
     static func markAutoRefreshAttempt(at date: Date, userDefaults: UserDefaults = .standard) {
-        userDefaults.set(date, forKey: lastAutoRefreshAttemptKey)
+        markAutoRefreshSucceeded(at: date, userDefaults: userDefaults)
+    }
+
+    static func markAutoRefreshSucceeded(at date: Date, userDefaults: UserDefaults = .standard) {
+        userDefaults.set(date, forKey: lastAutoRefreshSuccessKey)
+        userDefaults.removeObject(forKey: lastAutoRefreshFailureKey)
+        userDefaults.removeObject(forKey: lastAutoRefreshAttemptKey)
+    }
+
+    static func markAutoRefreshFailed(at date: Date, userDefaults: UserDefaults = .standard) {
+        userDefaults.set(date, forKey: lastAutoRefreshFailureKey)
+        userDefaults.removeObject(forKey: lastAutoRefreshAttemptKey)
     }
 }

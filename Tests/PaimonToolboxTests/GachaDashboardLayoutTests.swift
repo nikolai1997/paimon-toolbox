@@ -2,6 +2,16 @@ import XCTest
 @testable import PaimonToolbox
 
 final class GachaDashboardLayoutTests: XCTestCase {
+    func testHeaderDisplaysActivityAndStandardPitySeparately() throws {
+        let source = try Self.source("Views/GachaLogView.swift")
+
+        XCTAssertTrue(source.contains("活动池垫数"))
+        XCTAssertTrue(source.contains("常驻池垫数"))
+        XCTAssertTrue(source.contains("store.gachaSummary.activityPity"))
+        XCTAssertTrue(source.contains("store.gachaSummary.standardPity"))
+        XCTAssertFalse(source.contains("GlassMetricCard(title: \"当前垫数\""))
+    }
+
     func testDefaultOrderIncludesRecordsLast() {
         XCTAssertEqual(
             GachaDashboardLayout.defaultOrder,
@@ -53,5 +63,13 @@ final class GachaDashboardLayoutTests: XCTestCase {
             moved,
             [.rarityDistribution, .bannerDistribution, .monthlyTrend, .bannerPity, .recentFiveStars, .recordDetails, .insights]
         )
+    }
+
+    private static func source(_ relativePath: String) throws -> String {
+        let root = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        return try String(contentsOf: root.appendingPathComponent(relativePath), encoding: .utf8)
     }
 }

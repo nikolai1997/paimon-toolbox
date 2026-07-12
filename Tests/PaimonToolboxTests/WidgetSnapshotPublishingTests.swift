@@ -75,12 +75,15 @@ final class WidgetSnapshotPublishingTests: XCTestCase {
             Date(timeIntervalSince1970: 0),
             accountID: "10001",
             uid: "100000001",
-            serverDay: "cn_gf01:1970-01-01"
+            serverDay: AutoSignInSettings.scheduledAttemptIdentifier(
+                serverDay: "cn_gf01:1970-01-01",
+                window: .morning
+            )
         )
         let accountService = AutoSignInAccountSessionService(
             initialStatus: Self.signedInStatus(isTodaySigned: false),
             refreshedStatus: Self.signedInStatus(isTodaySigned: false),
-            claimedStatus: Self.signedInStatus(isTodaySigned: true)
+            claimedStatus: Self.signedInStatus(isTodaySigned: true, serverDate: "1970-01-01")
         )
         let store = AppStore(
             metadataService: EmptyMetadataService(),
@@ -101,7 +104,7 @@ final class WidgetSnapshotPublishingTests: XCTestCase {
         XCTAssertEqual(accountService.claimDailyRewardCallCount, 1)
     }
 
-    func testLoadDoesNotOverwriteMigratedUsefulWidgetSnapshotWithEmptyState() async {
+    func testLoadPublishesAuthoritativeEmptyStateOverMigratedSnapshot() async {
         let widgetStore = InMemoryWidgetSnapshotStore()
         widgetStore.snapshot = WidgetSnapshot(
             generatedAt: Date(timeIntervalSince1970: 1_780_000_200),
@@ -142,9 +145,45 @@ final class WidgetSnapshotPublishingTests: XCTestCase {
 
         await store.load(autoRefreshRemoteMetadata: false, now: Date(timeIntervalSince1970: 200))
 
-        XCTAssertEqual(widgetStore.savedSnapshots.last?.signIn.nickname, "我爱老登")
-        XCTAssertEqual(widgetStore.savedSnapshots.last?.gacha.totalPulls, 938)
-        XCTAssertEqual(store.widgetSnapshot.signIn.nickname, "我爱老登")
+        XCTAssertNil(widgetStore.savedSnapshots.last?.signIn.nickname)
+        XCTAssertEqual(widgetStore.savedSnapshots.last?.gacha.totalPulls, 0)
+        XCTAssertFalse(store.widgetSnapshot.hasDisplayableContent)
+    }
+
+    func testDeletingLastPlanPublishesAuthoritativeEmptyPlannerSnapshot() async {
+        let plan = CultivationPlan(
+            id: UUID(),
+            targetName: "神里绫华",
+            targetKind: "角色",
+            currentLevel: 1,
+            targetLevel: 90,
+            requirements: [MaterialRequirement(id: "材料", materialName: "材料", required: 10, owned: 0)]
+        )
+        let widgetStore = InMemoryWidgetSnapshotStore()
+        widgetStore.snapshot = WidgetSnapshot(
+            generatedAt: Date(),
+            signIn: .signedOut,
+            gacha: .empty,
+            planner: WidgetPlannerSnapshot(plans: [plan])
+        )
+        let plannerService = InMemoryPlannerService(plans: [plan])
+        let store = AppStore(
+            metadataService: EmptyMetadataService(),
+            overviewDataService: EmptyOverviewDataService(),
+            gachaService: InMemoryGachaService(records: []),
+            plannerService: plannerService,
+            accountService: EmptyAccountSessionService(status: .signedOut),
+            autoSignInStore: InMemoryAutoSignInStore(),
+            widgetSnapshotStore: widgetStore,
+            widgetTimelineReloader: InMemoryWidgetTimelineReloader()
+        )
+        store.plans = [plan]
+
+        await store.deletePlan(id: plan.id)
+
+        XCTAssertTrue(store.plans.isEmpty)
+        XCTAssertTrue(widgetStore.savedSnapshots.last?.planner.rows.isEmpty == true)
+        XCTAssertFalse(store.widgetSnapshot.hasDisplayableContent)
     }
 
     func testWidgetRefreshDeepLinkRefreshesStatusAndPublishesSnapshot() async {
@@ -174,16 +213,33 @@ final class WidgetSnapshotPublishingTests: XCTestCase {
         XCTAssertEqual(widgetReloader.reloadedKinds.last, PaimonToolboxWidgetConfiguration.kind)
     }
 
-    private static func signedInStatus(isTodaySigned: Bool) -> LocalAccountStatus {
-        LocalAccountStatus(
+    private static func signedInStatus(isTodaySigned: Bool, serverDate: String? = nil) -> LocalAccountStatus {
+        let resolvedServerDate = isTodaySigned ? (serverDate ?? currentServerDateKey()) : nil
+        return LocalAccountStatus(
             isSignedIn: true,
             nickname: "旅行者",
             accountID: "10001",
             selectedRole: GenshinRole(uid: "100000001", region: "cn_gf01", nickname: "空", level: 60, isSelected: true),
-            signInSummary: SignInSummary(uid: "100000001", month: 9, totalSignDay: isTodaySigned ? 3 : 2, isTodaySigned: isTodaySigned, rewards: []),
+            signInSummary: SignInSummary(
+                uid: "100000001",
+                month: 9,
+                totalSignDay: isTodaySigned ? 3 : 2,
+                isTodaySigned: isTodaySigned,
+                rewards: [],
+                serverDate: resolvedServerDate
+            ),
             sessionMessage: nil,
             lastCheckInDate: nil
         )
+    }
+
+    private static func currentServerDateKey() -> String {
+        let formatter = DateFormatter()
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 8 * 60 * 60)
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter.string(from: Date())
     }
 }
 

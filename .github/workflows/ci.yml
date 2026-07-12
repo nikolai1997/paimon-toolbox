@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: macos-15
+    timeout-minutes: 30
+    env:
+      CLANG_MODULE_CACHE_PATH: /tmp/paimon-toolbox-clang-cache
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Validate scripts and whitespace
+        run: |
+          bash -n script/*.sh script/*.command
+          python3 -m py_compile script/*.py script/tests/*.py
+          git diff --check
+
+      - name: Run Python tests
+        run: python3 -m unittest discover -s script/tests -p 'test_*.py'
+
+      - name: Run data generator self-check
+        run: python3 script/update_remote_data.py --self-test
+
+      - name: Validate bundled public data directory
+        run: python3 script/update_remote_data.py --validate-public-dir data/public
+
+      - name: Verify published announcement contract
+        run: |
+          curl --fail --location --retry 3 \
+            https://nikolai1997.github.io/paimon-toolbox-data/announcements.json \
+            --output "$RUNNER_TEMP/announcements.json"
+          ANNOUNCEMENTS_PATH="$RUNNER_TEMP/announcements.json" PYTHONPATH=script python3 -c \
+            'import os; from pathlib import Path; import update_remote_data as data; data.validate_announcement_feed(data.read_json(Path(os.environ["ANNOUNCEMENTS_PATH"])))'
+
+      - name: Run Swift tests
+        run: swift test --disable-sandbox
+
+      - name: Build and self-check release executable
+        run: |
+          swift build -c release --disable-sandbox
+          .build/release/PaimonToolbox --self-check

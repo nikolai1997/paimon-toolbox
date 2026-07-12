@@ -36,7 +36,7 @@ struct ToolboxWidgetProvider: TimelineProvider {
     private func entry(at date: Date) -> ToolboxWidgetEntry {
         ToolboxWidgetEntry(
             date: date,
-            snapshot: (try? snapshotStore.load()) ?? .empty,
+            snapshot: ((try? snapshotStore.load()) ?? .empty).normalized(at: date),
             isSystemPlaceholder: false
         )
     }

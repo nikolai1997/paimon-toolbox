@@ -33,6 +33,11 @@ BUNDLE_ID="com.nikolai.paimon-toolbox.widgets"
 MIN_SYSTEM_VERSION="14.0"
 EXTENSION_ENTITLEMENTS="Entitlements/PaimonToolboxWidgetsExtension.entitlements"
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+VERSION="$(<"$ROOT_DIR/VERSION")"
+if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+  echo "Invalid app version in $ROOT_DIR/VERSION: $VERSION" >&2
+  exit 1
+fi
 EXTENSION_MACOS="$EXTENSION_BUNDLE/Contents/MacOS"
 EXTENSION_CONTENTS="$EXTENSION_BUNDLE/Contents"
 EXTENSION_INFO_PLIST="$EXTENSION_CONTENTS/Info.plist"
@@ -87,7 +92,7 @@ write_extension_info_plist() {
   <key>CFBundlePackageType</key>
   <string>XPC!</string>
   <key>CFBundleShortVersionString</key>
-  <string>0.1.1</string>
+  <string>$VERSION</string>
   <key>CFBundleVersion</key>
   <string>1</string>
   <key>LSMinimumSystemVersion</key>

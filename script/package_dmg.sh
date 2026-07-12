@@ -1,12 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+VERSION="$(<"$ROOT_DIR/VERSION")"
+if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+  echo "Invalid app version in $ROOT_DIR/VERSION: $VERSION" >&2
+  exit 1
+fi
+
 APP_NAME="PaimonToolbox"
 DISPLAY_NAME="派蒙工具箱"
-VERSION="0.1.1"
 EXTENSION_NAME="PaimonToolboxWidgetsExtension"
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PROJECT_PATH="$ROOT_DIR/$APP_NAME.xcodeproj"
 DIST_DIR="$ROOT_DIR/dist"
 WORK_DIR="$(mktemp -d "${TMPDIR:-/tmp}/${APP_NAME}.package.XXXXXX")"
@@ -21,9 +26,12 @@ CODESIGN_IDENTITY="${CODESIGN_IDENTITY:--}"
 ARCH="${ARCH:-$(uname -m)}"
 DMG_STAGING="$WORK_DIR/dmg-staging"
 DMG_PATH="$DIST_DIR/$APP_NAME-$VERSION.dmg"
-TMP_DMG_PATH="$WORK_DIR/$APP_NAME-$VERSION.dmg"
+TMP_DMG_PATH=""
 
 cleanup() {
+  if [[ -n "$TMP_DMG_PATH" ]]; then
+    rm -f "$TMP_DMG_PATH"
+  fi
   rm -rf "$WORK_DIR"
 }
 trap cleanup EXIT
@@ -54,6 +62,7 @@ sign_app_bundle() {
 
 cd "$ROOT_DIR"
 
+python3 "$ROOT_DIR/script/update_remote_data.py" --validate-public-dir "$ROOT_DIR/data/public"
 "$ROOT_DIR/script/generate_xcode_project.py" >/dev/null
 
 xcodebuild \
@@ -65,8 +74,9 @@ xcodebuild \
   CODE_SIGNING_ALLOWED=NO \
   build
 
-rm -rf "$DMG_PATH"
 mkdir -p "$RELEASE_DIR" "$DMG_STAGING" "$DIST_DIR"
+TMP_DMG_PATH="$(mktemp "$DIST_DIR/.${APP_NAME}-${VERSION}.XXXXXX.dmg")"
+rm -f "$TMP_DMG_PATH"
 ditto --noextattr --noqtn "$DERIVED_DATA/Build/Products/Release/$APP_NAME.app" "$APP_BUNDLE"
 
 "$APP_BINARY" --self-check
@@ -86,7 +96,8 @@ hdiutil create \
   "$TMP_DMG_PATH"
 
 hdiutil verify "$TMP_DMG_PATH"
-ditto --noextattr --noqtn "$TMP_DMG_PATH" "$DMG_PATH"
+mv -f "$TMP_DMG_PATH" "$DMG_PATH"
+TMP_DMG_PATH=""
 hdiutil verify "$DMG_PATH"
 codesign --verify --deep --strict "$APP_BUNDLE"
 echo "$DMG_PATH"

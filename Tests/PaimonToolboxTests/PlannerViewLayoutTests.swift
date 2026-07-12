@@ -85,4 +85,17 @@ final class PlannerViewLayoutTests: XCTestCase {
         XCTAssertTrue(source.contains("private func toggleRequirementCompletion(plan: CultivationPlan, requirement: MaterialRequirement)"))
         XCTAssertTrue(source.contains("? 0"))
     }
+
+    func testPlannerShowsExactWeaponDataFailureInsteadOfFixedQuantities() throws {
+        let sourceURL = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .appendingPathComponent("Stores/AppStore.swift")
+        let source = try String(contentsOf: sourceURL, encoding: .utf8)
+
+        XCTAssertTrue(source.contains("CultivationCalculator.weaponRequirements"))
+        XCTAssertTrue(source.contains("当前资料缺少完整武器突破数量"))
+        XCTAssertFalse(source.contains("suggestedRequired: [5, 23, 27]"))
+    }
 }

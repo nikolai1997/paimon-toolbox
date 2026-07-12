@@ -31,6 +31,11 @@ struct CultivationBossFightEstimate: Identifiable, Equatable {
     var materialDropsPerFight: Int
 }
 
+enum WeaponCultivationResult: Equatable {
+    case exact([String: Int])
+    case unavailable
+}
+
 enum CultivationCalculator {
     static let moraName = "摩拉"
     static let heroExperienceName = "大英雄的经验"
@@ -64,6 +69,32 @@ enum CultivationCalculator {
             .map { name, required in
                 MaterialRequirement(id: name, materialName: name, required: required, owned: 0)
             }
+    }
+
+    static func weaponRequirements(
+        stages: [WeaponAscensionStage]?,
+        levelRange: CultivationLevelRange
+    ) -> WeaponCultivationResult {
+        guard let stages else { return .unavailable }
+        let expectedBreakpoints = [20, 40, 50, 60, 70, 80]
+        let byBreakpoint = Dictionary(grouping: stages, by: \.breakpoint)
+        guard Set(byBreakpoint.keys) == Set(expectedBreakpoints),
+              expectedBreakpoints.allSatisfy({ byBreakpoint[$0]?.count == 1 }),
+              stages.allSatisfy({ stage in
+                  !stage.costs.isEmpty && stage.costs.allSatisfy { !$0.materialName.isEmpty && $0.count > 0 }
+              }) else {
+            return .unavailable
+        }
+
+        let range = levelRange.normalized
+        guard range.current < range.target else { return .exact([:]) }
+        var totals: [String: Int] = [:]
+        for stage in stages where crosses(level: stage.breakpoint, range: range) {
+            for cost in stage.costs {
+                add(cost.materialName, cost.count, to: &totals)
+            }
+        }
+        return .exact(totals)
     }
 
     private static func addCharacterLevelRequirements(

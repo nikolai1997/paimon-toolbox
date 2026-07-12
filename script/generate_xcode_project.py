@@ -4,6 +4,10 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+VERSION_PATH = ROOT / "VERSION"
+APP_VERSION = VERSION_PATH.read_text(encoding="utf-8").strip()
+if len(APP_VERSION.split(".")) != 3 or not all(part.isdigit() for part in APP_VERSION.split(".")):
+    raise ValueError(f"Invalid app version in {VERSION_PATH}: {APP_VERSION}")
 PROJECT_NAME = "PaimonToolbox"
 WIDGET_NAME = "PaimonToolboxWidgetsExtension"
 PROJECT_DIR = ROOT / f"{PROJECT_NAME}.xcodeproj"
@@ -123,6 +127,8 @@ def write_info_plists():
   </array>
   <key>CFBundleVersion</key>
   <string>$(CURRENT_PROJECT_VERSION)</string>
+  <key>LSApplicationCategoryType</key>
+  <string>public.app-category.utilities</string>
   <key>LSMinimumSystemVersion</key>
   <string>14.0</string>
   <key>NSHighResolutionCapable</key>
@@ -238,7 +244,7 @@ def target_settings(product: str, bundle_id: str, plist: str, entitlements: str,
             "$(inherited)",
             "@executable_path/../Frameworks",
         ],
-        "MARKETING_VERSION": "0.1.1",
+        "MARKETING_VERSION": APP_VERSION,
         "PRODUCT_BUNDLE_IDENTIFIER": bundle_id,
         "PRODUCT_NAME": product,
         "PROVISIONING_PROFILE_SPECIFIER": "",

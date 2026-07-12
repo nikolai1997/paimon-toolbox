@@ -204,7 +204,8 @@ final class GachaLogRemoteClientTests: XCTestCase {
             maxPagesPerBanner: 1
         )
 
-        XCTAssertEqual(records.map(\.banner.rawValue), ["characterEvent2", "chronicled"])
+        XCTAssertEqual(records.map(\.id), ["500-1", "400-1"])
+        XCTAssertEqual(records.map(\.banner.rawValue), ["chronicled", "characterEvent2"])
     }
 
     private static func capturingSession() -> URLSession {

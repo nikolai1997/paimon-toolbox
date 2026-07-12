@@ -12,14 +12,14 @@ struct GachaLogView: View {
                 .padding(.horizontal, 24)
                 .padding(.top, 20)
 
-            if store.gachaRecords.isEmpty {
+            if store.activeGachaRecords.isEmpty {
                 ContentUnavailableView("暂无祈愿记录", systemImage: "sparkles", description: Text("会优先读取本机已保存的祈愿记录；没有本地记录时，可从账号更新或导入 UIGF JSON。"))
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .padding(24)
             } else {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 16) {
-                        GachaAnalysisDashboard(records: store.gachaRecords)
+                        GachaAnalysisDashboard(records: store.activeGachaRecords)
                     }
                     .padding(.horizontal, 24)
                     .padding(.vertical, 16)
@@ -66,13 +66,30 @@ private struct GachaLogHeader: View {
                     GlassMetricCard(title: "总抽数", value: "\(store.gachaSummary.totalPulls)", systemImage: "number")
                     GlassMetricCard(title: "五星", value: "\(store.gachaSummary.fiveStarCount)", systemImage: "star.fill", tint: .orange)
                     GlassMetricCard(title: "四星", value: "\(store.gachaSummary.fourStarCount)", systemImage: "star.leadinghalf.filled", tint: .purple)
-                    GlassMetricCard(title: "当前垫数", value: "\(store.gachaSummary.pitySinceLastFiveStar)", systemImage: "timer", tint: .green)
+                    GlassMetricCard(title: "活动池垫数", value: "\(store.gachaSummary.activityPity)", systemImage: "person.crop.circle.badge.clock", tint: .green)
+                    GlassMetricCard(title: "常驻池垫数", value: "\(store.gachaSummary.standardPity)", systemImage: "clock", tint: .blue)
                 }
                 .frame(maxWidth: 680, alignment: .leading)
 
                 Spacer(minLength: 16)
 
                 HStack {
+                    if store.availableGachaUIDs.count + (store.hasUnassignedGachaRecords ? 1 : 0) > 1 {
+                        Picker("记录账号", selection: Binding(
+                            get: { store.activeGachaUID },
+                            set: { store.selectGachaUID($0) }
+                        )) {
+                            ForEach(store.availableGachaUIDs, id: \.self) { uid in
+                                Text("UID \(uid)").tag(Optional(uid))
+                            }
+                            if store.hasUnassignedGachaRecords {
+                                Text("未归属记录").tag(String?.none)
+                            }
+                        }
+                        .pickerStyle(.menu)
+                        .frame(maxWidth: 180)
+                    }
+
                     Button {
                         Task {
                             await store.syncGachaRecordsFromAccount()
@@ -91,9 +108,9 @@ private struct GachaLogHeader: View {
                     Button {
                         exportRecords()
                     } label: {
-                        Label("导出 UIGF", systemImage: "square.and.arrow.up")
+                        Label("导出当前账号 UIGF", systemImage: "square.and.arrow.up")
                     }
-                    .disabled(store.gachaRecords.isEmpty)
+                    .disabled(store.activeGachaRecords.isEmpty)
                 }
                 .controlSize(.large)
             }
@@ -117,7 +134,7 @@ private struct GachaLogHeader: View {
     }
 
     private var gachaFreshnessText: String {
-        guard let latestTime = store.gachaRecords.map(\.time).max() else {
+        guard let latestTime = store.activeGachaRecords.map(\.time).max() else {
             return "本机暂无已保存记录；从账号更新只会获取官方祈愿历史接口已开放的数据。"
         }
 

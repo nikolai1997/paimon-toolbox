@@ -18,7 +18,7 @@ https://nikolai1997.github.io/paimon-toolbox-data/metadata.json
 Support/RemoteDataSettings.swift
 ```
 
-离线资料包兜底地址保存在同一个设置文件中。GitHub 无法访问时，用户可以手动下载 `data-pack-latest.zip` 并在 App 内导入。
+离线资料包兜底地址保存在同一个设置文件中。GitHub 无法访问时，用户可以手动下载按日期命名的离线资料包并在 App 内导入。
 
 ## GitHub 数据仓库
 
@@ -35,7 +35,7 @@ App 只访问你自己的 GitHub Pages，不直接访问任何上游项目。
 当前生成命令：
 
 ```bash
-python3 tools/update_remote_data.py \
+python3 script/update_remote_data.py \
   --source genshin-db \
   --gacha-source snap-metadata \
   --manual-dir data/manual \
@@ -48,7 +48,7 @@ python3 tools/update_remote_data.py \
 
 | 数据类型 | 当前来源 | 说明 |
 |---|---|---|
-| 角色、武器、材料 | `theBowja/genshin-db` | 基础资料库主来源。当前生成结果为角色 119、武器 236、材料 849。角色养成素材由 `characters/` 的突破消耗和 `talents/` 的天赋消耗共同生成。 |
+| 角色、武器、材料 | `theBowja/genshin-db` | 基础资料库主来源。当前生成结果为角色 120、武器 237、材料 855。角色养成素材由 `characters/` 的突破消耗和 `talents/` 的天赋消耗共同生成。 |
 | 卡池信息 | `SnapHutaoRemasteringProject/Snap.Metadata` | 使用 `Genshin/CHS/GachaEvent.json`，用于当前卡池、历史卡池和复刻统计。 |
 | 公告 | 米哈游官方公告接口 | 更新脚本抓取，并缓存到 `data/manual/official-announcements.raw.json`。 |
 | 图片 URL | 上游图片字段 + Enka URL 规则 | 生成器补齐 `iconURL` / `portraitURL`。 |
@@ -56,7 +56,7 @@ python3 tools/update_remote_data.py \
 当前素材覆盖情况：
 
 - 角色、武器、材料图片：全部有 URL。
-- 常规角色养成素材：115 / 119 个角色完整覆盖突破宝石、Boss 材料、本地特产、普通素材、天赋书、周本材料。
+- 常规角色养成素材：116 / 120 个角色完整覆盖突破宝石、Boss 材料、本地特产、普通素材、天赋书、周本材料。
 - 特殊例外：空、荧没有传统 Boss/周本三件套；`奇偶·男性`、`奇偶·女性` 当前上游只有天赋材料，缺突破材料。
 
 当前线上 `config.json` 标记：
@@ -100,10 +100,10 @@ data/public/
 data/releases/
 ```
 
-离线包文件名固定为：
+离线包文件名为：
 
 ```txt
-data-pack-latest.zip
+data-pack-YYYY.MM.DD.zip
 ```
 
 ## 兜底逻辑

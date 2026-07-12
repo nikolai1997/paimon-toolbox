@@ -83,7 +83,7 @@ struct MiHoYoPassportClient {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.applyHoyoPlayHeaders()
         let response: HoYoResponse<QrLoginSession> = try await httpClient.send(request)
-        return try response.requireData()
+        return try response.requireDataPreservingRetcode()
     }
 
     func queryQrLoginStatus(ticket: String) async throws -> QrLoginResultPayload {
@@ -104,9 +104,18 @@ struct MiHoYoPassportClient {
         request.setValue(HoYoRequestSigner.dsHeader(url: url, body: nil, version: .gen2, salt: HoYoSalt.prod, includeLetters: true), forHTTPHeaderField: "DS")
         request.applyBbsHeaders()
         let response: HoYoResponse<CookieTokenPayload> = try await httpClient.send(request)
-        let payload = try response.requireData()
+        let payload = try response.requireDataPreservingRetcode()
+        let cookieToken = payload.cookieToken.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !cookieToken.isEmpty else {
+            throw AccountSessionError.invalidResponse("CookieToken 为空")
+        }
+        if let responseUID = payload.uid?.trimmingCharacters(in: .whitespacesAndNewlines),
+           !responseUID.isEmpty,
+           responseUID != secrets.stuid {
+            throw AccountSessionError.invalidResponse("CookieToken 响应账号与当前账号不匹配")
+        }
         var updated = secrets
-        updated.cookieToken = payload.cookieToken
+        updated.cookieToken = cookieToken
         return updated
     }
 
@@ -118,9 +127,13 @@ struct MiHoYoPassportClient {
         request.setValue(HoYoRequestSigner.dsHeader(url: url, body: nil, version: .gen2, salt: HoYoSalt.prod, includeLetters: true), forHTTPHeaderField: "DS")
         request.applyBbsHeaders()
         let response: HoYoResponse<LTokenPayload> = try await httpClient.send(request)
-        let payload = try response.requireData()
+        let payload = try response.requireDataPreservingRetcode()
+        let ltoken = payload.ltoken.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !ltoken.isEmpty else {
+            throw AccountSessionError.invalidResponse("LToken 为空")
+        }
         var updated = secrets
-        updated.ltoken = payload.ltoken
+        updated.ltoken = ltoken
         return updated
     }
 
@@ -137,7 +150,7 @@ struct MiHoYoPassportClient {
             throw AccountSessionError.qrLoginPending(.scanned)
         }
 
-        throw AccountSessionError.apiFailure(response.message)
+        throw AccountSessionError.apiFailureResponse(retcode: response.retcode, message: response.message)
     }
 }
 
@@ -145,6 +158,16 @@ extension HoYoResponse {
     func requireData() throws -> T {
         guard retcode == 0, let data else {
             throw AccountSessionError.apiFailure(message)
+        }
+        return data
+    }
+
+    func requireDataPreservingRetcode() throws -> T {
+        guard retcode == 0 else {
+            throw AccountSessionError.apiFailureResponse(retcode: retcode, message: message)
+        }
+        guard let data else {
+            throw AccountSessionError.invalidResponse("接口成功响应缺少 data")
         }
         return data
     }

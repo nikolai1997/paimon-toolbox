@@ -49,6 +49,20 @@ final class AppearanceSettingsTests: XCTestCase {
         XCTAssertFalse(storeSource.contains("intervalNanoseconds"))
     }
 
+    func testSettingsExposeAutomaticSignInWindowPicker() throws {
+        let settingsSource = try Self.source("Support/AutoSignInSettings.swift")
+        let settingsViewSource = try Self.source("Views/SettingsView.swift")
+
+        XCTAssertTrue(settingsSource.contains("enum AutoSignInWindow"))
+        XCTAssertTrue(settingsSource.contains("windowKey"))
+        XCTAssertTrue(settingsSource.contains("08:00-12:00"))
+        XCTAssertTrue(settingsSource.contains("12:00-16:00"))
+        XCTAssertTrue(settingsSource.contains("18:00-22:00"))
+        XCTAssertTrue(settingsViewSource.contains("@AppStorage(AutoSignInSettings.windowKey)"))
+        XCTAssertTrue(settingsViewSource.contains("Picker(\"自动签到时间\""))
+        XCTAssertTrue(settingsViewSource.contains(".onChange(of: autoSignInWindowRawValue)"))
+    }
+
     func testMobileUserAgentMatchesSnapHutaoAndroidBridgeEnvironment() throws {
         let source = try Self.source("Services/HoYoRequestSigner.swift")
 

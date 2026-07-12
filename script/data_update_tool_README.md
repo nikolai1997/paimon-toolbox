@@ -4,16 +4,18 @@
 
 ## 基本用法
 
-在这个工具文件夹内运行：
+在仓库根目录运行：
 
 ```bash
-./run_data_update.command
+./script/run_data_update.command
 ```
+
+也可以在任意目录使用 `run_data_update.command` 的绝对路径调用。工具始终以 `update_remote_data.py` 所在的仓库根目录为 root，不依赖当前工作目录。
 
 等价于：
 
 ```bash
-python3 update_remote_data.py \
+python3 script/update_remote_data.py \
   --source genshin-db \
   --gacha-source snap-metadata \
   --manual-dir data/manual \
@@ -21,6 +23,8 @@ python3 update_remote_data.py \
   --public-dir data/public \
   --release-dir data/releases
 ```
+
+`--source-cache`、`--genshin-db-cache`、`--manual-dir`、`--official-announcements-json`、`--public-dir` 和 `--release-dir` 的显式相对路径也都相对仓库根目录解析。
 
 当前数据来源：
 
@@ -34,7 +38,7 @@ python3 update_remote_data.py \
 如果只想使用本地手动补丁源，可以运行：
 
 ```bash
-python3 update_remote_data.py --source official-manual --manual-dir data/manual
+python3 script/update_remote_data.py --source official-manual --manual-dir data/manual
 ```
 
 本地手动补丁源会读取：
@@ -50,7 +54,7 @@ data/manual/announcements.json
 其中公告可以额外接入官方公告原始 JSON：
 
 ```bash
-python3 update_remote_data.py --source official-manual --manual-dir data/manual --fetch-official-announcements
+python3 script/update_remote_data.py --source official-manual --manual-dir data/manual --fetch-official-announcements
 ```
 
 注意：官方公告只能提供公告/活动类公开信息，不能完整替代角色、武器、材料数据库；这些结构化资料仍需要 `data/manual/*.json` 维护。
@@ -64,14 +68,18 @@ data/releases/data-pack-YYYY.MM.DD.zip
 
 `data/public/` 适合提交到 GitHub Pages。
 
+工具会先在 `data/public/` 同文件系统的临时目录中生成并校验全部 JSON 和 `manifest.json`，通过后才替换正式目录；生成或校验失败时保留原目录。
+
 `data/releases/data-pack-YYYY.MM.DD.zip` 适合上传 GitHub Release 或网盘，给国内用户手动下载后在 App 设置页导入。
+
+ZIP 同样会先写入同目录临时文件，校验成员、内容和 manifest hash 后再替换目标 ZIP；失败时不会预先删除旧 ZIP。
 
 ## 只用已有上游缓存
 
 如果本机已有上游缓存，可跳过拉取：
 
 ```bash
-python3 update_remote_data.py \
+python3 script/update_remote_data.py \
   --source genshin-db \
   --gacha-source snap-metadata \
   --skip-fetch
@@ -80,7 +88,7 @@ python3 update_remote_data.py \
 ## 自检
 
 ```bash
-python3 update_remote_data.py --self-test
+python3 script/update_remote_data.py --self-test
 ```
 
 看到 `self-test passed` 说明转换逻辑可用。
@@ -90,7 +98,7 @@ python3 update_remote_data.py --self-test
 确认本地 git 已经配置好远程仓库后，可以运行：
 
 ```bash
-python3 update_remote_data.py \
+python3 script/update_remote_data.py \
   --source genshin-db \
   --gacha-source snap-metadata \
   --manual-dir data/manual \
@@ -98,7 +106,7 @@ python3 update_remote_data.py \
   --push
 ```
 
-注意：`--push` 会执行 `git add`、`git commit`、`git push`。
+注意：`--push` 会对 `data/public/` 执行 `git add`、`git commit`、`git push`。`data/releases/*.zip` 会继续生成在本机，用于上传 GitHub Release 或网盘，不随 `--push` 提交。如果前一次已成功 commit 但 push 失败，下次运行即使没有新 diff，也会检测并推送尚未推送的提交。存在无关的已暂存文件时仍会拒绝执行。
 
 ## 国内兜底流程
 

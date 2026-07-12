@@ -2,6 +2,25 @@ import XCTest
 @testable import PaimonToolbox
 
 final class AccountSessionStateTests: XCTestCase {
+    private static let autoSignInWindowTestKey = "account.autoSignIn.window"
+    private var previousAutoSignInWindowRawValue: Any?
+
+    override func setUp() {
+        super.setUp()
+        previousAutoSignInWindowRawValue = UserDefaults.standard.object(forKey: Self.autoSignInWindowTestKey)
+        UserDefaults.standard.removeObject(forKey: Self.autoSignInWindowTestKey)
+    }
+
+    override func tearDown() {
+        if let previousAutoSignInWindowRawValue {
+            UserDefaults.standard.set(previousAutoSignInWindowRawValue, forKey: Self.autoSignInWindowTestKey)
+        } else {
+            UserDefaults.standard.removeObject(forKey: Self.autoSignInWindowTestKey)
+        }
+        previousAutoSignInWindowRawValue = nil
+        super.tearDown()
+    }
+
     func testMetadataMapsToSignedInStatus() {
         let account = MiHoYoAccount(
             accountID: "10001",
@@ -86,6 +105,28 @@ final class AccountSessionStateTests: XCTestCase {
         }
     }
 
+    func testValidateClaimResultRejectsEmptyOrUnknownResponse() {
+        let empty = SignInResultPayload(success: nil, riskCode: nil, gt: nil, challenge: nil)
+        let unknown = SignInResultPayload(code: "pending", success: nil, riskCode: nil, gt: nil, challenge: nil)
+
+        for payload in [empty, unknown] {
+            XCTAssertThrowsError(try LocalAccountSessionService.validateClaimResult(payload)) { error in
+                guard case AccountSessionError.invalidResponse = error else {
+                    return XCTFail("Expected invalidResponse, got \(error)")
+                }
+            }
+        }
+    }
+
+    func testValidateClaimResultAcceptsExplicitSuccess() {
+        XCTAssertNoThrow(try LocalAccountSessionService.validateClaimResult(
+            SignInResultPayload(success: 0, riskCode: nil, gt: nil, challenge: nil)
+        ))
+        XCTAssertNoThrow(try LocalAccountSessionService.validateClaimResult(
+            SignInResultPayload(code: "ok", success: nil, riskCode: nil, gt: nil, challenge: nil)
+        ))
+    }
+
     func testDefaultAccountStoresReportInitializationFailureInsteadOfUsingEphemeralStorage() throws {
         let sourceURL = URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()
@@ -98,6 +139,18 @@ final class AccountSessionStateTests: XCTestCase {
         XCTAssertTrue(source.contains("UnavailableAccountSecretStore"))
         XCTAssertFalse(source.contains("return EphemeralAccountMetadataStore()"))
         XCTAssertFalse(source.contains("return EphemeralAccountSecretStore()"))
+    }
+
+    func testAccountSessionErrorKeepsStructuredAPIRetcode() throws {
+        let sourceURL = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .appendingPathComponent("Services/AccountSessionError.swift")
+        let source = try String(contentsOf: sourceURL, encoding: .utf8)
+
+        XCTAssertTrue(source.contains("case apiFailureResponse(retcode: Int, message: String)"))
+        XCTAssertTrue(source.contains("var apiRetcode: Int?"))
     }
 
     @MainActor
@@ -113,7 +166,11 @@ final class AccountSessionStateTests: XCTestCase {
         accountService.claimError = AccountSessionError.requiresVerification(payload)
         accountService.webVerificationContext = webContext
         let autoSignInStore = MockAutoSignInStore(isEnabled: true)
-        let store = AppStore(accountService: accountService, autoSignInStore: autoSignInStore)
+        let store = AppStore(
+            accountService: accountService,
+            autoSignInStore: autoSignInStore,
+            signInRiskConfirmationDelayNanoseconds: 0
+        )
         store.accountStatus = Self.signedInStatus(isTodaySigned: false)
 
         await store.claimDailyReward()
@@ -145,7 +202,7 @@ final class AccountSessionStateTests: XCTestCase {
     func testClaimResignRewardRefreshesStatusAndResignInfo() async {
         let accountService = MockAccountSessionService()
         accountService.claimResignRewardResult = Self.signedInStatus(isTodaySigned: false)
-        accountService.resignInfoResult = Self.resignInfo(canResign: false)
+        accountService.resignInfoResult = Self.resignInfo(canResign: false, signed: true)
         let store = AppStore(accountService: accountService)
 
         await store.claimResignReward()
@@ -154,6 +211,19 @@ final class AccountSessionStateTests: XCTestCase {
         XCTAssertEqual(accountService.loadResignInfoCallCount, 1)
         XCTAssertEqual(store.successMessage, "补签完成")
         XCTAssertFalse(store.accountResignInfo?.canResign == true)
+    }
+
+    @MainActor
+    func testClaimResignRewardDoesNotCompleteUntilRefreshedInfoConfirmsSigned() async {
+        let accountService = MockAccountSessionService()
+        accountService.claimResignRewardResult = Self.signedInStatus(isTodaySigned: false)
+        accountService.resignInfoResult = Self.resignInfo(canResign: false, signed: false)
+        let store = AppStore(accountService: accountService)
+
+        await store.claimResignReward()
+
+        XCTAssertNil(store.successMessage)
+        XCTAssertTrue(store.errorMessage?.contains("补签状态未确认成功") == true)
     }
 
     @MainActor
@@ -236,7 +306,7 @@ final class AccountSessionStateTests: XCTestCase {
             now.addingTimeInterval(-60),
             accountID: "10001",
             uid: "100000001",
-            serverDay: "cn_gf01:2026-09-04"
+            serverDay: Self.scheduledAttemptIdentifier("cn_gf01:2026-09-04")
         )
         let tokenRefreshStore = MockAccountTokenRefreshStore()
         let store = AppStore(
@@ -268,7 +338,7 @@ final class AccountSessionStateTests: XCTestCase {
             now.addingTimeInterval(-60),
             accountID: "10001",
             uid: "100000001",
-            serverDay: "cn_gf01:2026-09-05"
+            serverDay: Self.scheduledAttemptIdentifier("cn_gf01:2026-09-05")
         )
         let tokenRefreshStore = MockAccountTokenRefreshStore()
         let store = AppStore(
@@ -303,7 +373,7 @@ final class AccountSessionStateTests: XCTestCase {
         let scheduled = autoSignInStore.scheduledAttemptDate(
             accountID: "10001",
             uid: "100000001",
-            serverDay: "cn_gf01:2026-09-05"
+            serverDay: Self.scheduledAttemptIdentifier("cn_gf01:2026-09-05")
         )
         XCTAssertNotNil(scheduled)
         guard let scheduledDate = scheduled else { return }
@@ -322,7 +392,7 @@ final class AccountSessionStateTests: XCTestCase {
             now.addingTimeInterval(30 * 60),
             accountID: "10001",
             uid: "100000001",
-            serverDay: "cn_gf01:2026-09-05"
+            serverDay: Self.scheduledAttemptIdentifier("cn_gf01:2026-09-05")
         )
         let store = AppStore(accountService: accountService, autoSignInStore: autoSignInStore)
         store.accountStatus = Self.signedInStatus(isTodaySigned: false)
@@ -349,7 +419,7 @@ final class AccountSessionStateTests: XCTestCase {
             now.addingTimeInterval(-60),
             accountID: "10001",
             uid: "100000001",
-            serverDay: "cn_gf01:2026-09-05"
+            serverDay: Self.scheduledAttemptIdentifier("cn_gf01:2026-09-05")
         )
         let tokenRefreshStore = MockAccountTokenRefreshStore()
         tokenRefreshStore.setLastRefreshDate(now.addingTimeInterval(-10 * 60), accountID: "10001")
@@ -367,6 +437,80 @@ final class AccountSessionStateTests: XCTestCase {
         XCTAssertEqual(accountService.claimDailyRewardCallCount, 1)
         XCTAssertEqual(store.successMessage, "自动签到完成")
         XCTAssertEqual(autoSignInStore.completedDay(accountID: "10001", uid: "100000001"), "cn_gf01:2026-09-05")
+    }
+
+    @MainActor
+    func testAutomaticSignInTreatsRiskResponseAsSuccessWhenStatusRefreshShowsSigned() async {
+        let payload = SignInResultPayload(success: 0, riskCode: -5003, gt: nil, challenge: nil)
+        let accountService = MockAccountSessionService()
+        accountService.refreshLoginTokensResult = Self.signedInStatus(isTodaySigned: false)
+        accountService.refreshSignInStatusResults = [
+            .success(Self.signedInStatus(isTodaySigned: false)),
+            .success(Self.signedInStatus(isTodaySigned: true))
+        ]
+        accountService.claimError = AccountSessionError.requiresVerification(payload)
+        let autoSignInStore = MockAutoSignInStore(isEnabled: true)
+        let now = Self.cnDate(year: 2026, month: 9, day: 5, hour: 10)
+        autoSignInStore.setScheduledAttemptDate(
+            now.addingTimeInterval(-60),
+            accountID: "10001",
+            uid: "100000001",
+            serverDay: Self.scheduledAttemptIdentifier("cn_gf01:2026-09-05")
+        )
+        let store = AppStore(accountService: accountService, autoSignInStore: autoSignInStore)
+        store.accountStatus = Self.signedInStatus(isTodaySigned: false)
+
+        await store.runAutomaticSignInCheck(now: now)
+
+        XCTAssertEqual(accountService.refreshSignInStatusCallCount, 2)
+        XCTAssertEqual(accountService.claimDailyRewardCallCount, 1)
+        XCTAssertEqual(store.accountStatus.signInSummary?.isTodaySigned, true)
+        XCTAssertNil(store.accountVerification)
+        XCTAssertNil(store.errorMessage)
+        XCTAssertEqual(store.successMessage, "自动签到完成")
+        XCTAssertNil(autoSignInStore.lastFailureDate(accountID: "10001", uid: "100000001"))
+        XCTAssertEqual(autoSignInStore.completedDay(accountID: "10001", uid: "100000001"), "cn_gf01:2026-09-05")
+    }
+
+    @MainActor
+    func testAutomaticSignInWaitsBeforeShowingVerificationWhenRiskStatusIsDelayed() async {
+        let payload = SignInResultPayload(success: 0, riskCode: -5003, gt: nil, challenge: nil)
+        let accountService = MockAccountSessionService()
+        accountService.refreshLoginTokensResult = Self.signedInStatus(isTodaySigned: false)
+        accountService.refreshSignInStatusResults = [
+            .success(Self.signedInStatus(isTodaySigned: false)),
+            .success(Self.signedInStatus(isTodaySigned: false)),
+            .success(Self.signedInStatus(isTodaySigned: true))
+        ]
+        accountService.claimError = AccountSessionError.requiresVerification(payload)
+        let autoSignInStore = MockAutoSignInStore(isEnabled: true)
+        let now = Self.cnDate(year: 2026, month: 9, day: 5, hour: 10)
+        autoSignInStore.setScheduledAttemptDate(
+            now.addingTimeInterval(-60),
+            accountID: "10001",
+            uid: "100000001",
+            serverDay: Self.scheduledAttemptIdentifier("cn_gf01:2026-09-05")
+        )
+        let sleepRecorder = SleepCallRecorder()
+        let store = AppStore(
+            accountService: accountService,
+            autoSignInStore: autoSignInStore,
+            signInRiskConfirmationDelayNanoseconds: 99,
+            sleep: { nanoseconds in
+                await sleepRecorder.append(nanoseconds)
+            }
+        )
+        store.accountStatus = Self.signedInStatus(isTodaySigned: false)
+
+        await store.runAutomaticSignInCheck(now: now)
+
+        let sleepCalls = await sleepRecorder.calls
+        XCTAssertEqual(accountService.refreshSignInStatusCallCount, 3)
+        XCTAssertEqual(sleepCalls, [99])
+        XCTAssertEqual(store.accountStatus.signInSummary?.isTodaySigned, true)
+        XCTAssertNil(store.accountVerification)
+        XCTAssertNil(store.errorMessage)
+        XCTAssertEqual(store.successMessage, "自动签到完成")
     }
 
     @MainActor
@@ -402,6 +546,109 @@ final class AccountSessionStateTests: XCTestCase {
     }
 
     @MainActor
+    func testManualSignInDoesNotCompleteWhenClaimRefreshRemainsUnsigned() async {
+        let accountService = MockAccountSessionService()
+        accountService.refreshSignInStatusResult = Self.signedInStatus(isTodaySigned: false)
+        accountService.claimDailyRewardResult = Self.signedInStatus(isTodaySigned: false)
+        let autoSignInStore = MockAutoSignInStore(isEnabled: true)
+        let store = AppStore(accountService: accountService, autoSignInStore: autoSignInStore)
+        store.accountStatus = Self.signedInStatus(isTodaySigned: false)
+        let now = Self.cnDate(year: 2026, month: 9, day: 5, hour: 10)
+
+        await store.claimDailyReward(now: now)
+
+        XCTAssertNil(store.successMessage)
+        XCTAssertTrue(store.errorMessage?.contains("签到状态未确认成功") == true)
+        XCTAssertNil(autoSignInStore.completedDay(accountID: "10001", uid: "100000001"))
+    }
+
+    @MainActor
+    func testAutomaticSignInDoesNotCompleteWhenClaimRefreshRemainsUnsigned() async {
+        let accountService = MockAccountSessionService()
+        accountService.refreshLoginTokensResult = Self.signedInStatus(isTodaySigned: false)
+        accountService.refreshSignInStatusResult = Self.signedInStatus(isTodaySigned: false)
+        accountService.claimDailyRewardResult = Self.signedInStatus(isTodaySigned: false)
+        let autoSignInStore = MockAutoSignInStore(isEnabled: true)
+        let now = Self.cnDate(year: 2026, month: 9, day: 5, hour: 10)
+        autoSignInStore.setScheduledAttemptDate(
+            now.addingTimeInterval(-60),
+            accountID: "10001",
+            uid: "100000001",
+            serverDay: Self.scheduledAttemptIdentifier("cn_gf01:2026-09-05")
+        )
+        let store = AppStore(accountService: accountService, autoSignInStore: autoSignInStore)
+        store.accountStatus = Self.signedInStatus(isTodaySigned: false)
+
+        await store.runAutomaticSignInCheck(now: now)
+
+        XCTAssertNil(store.successMessage)
+        XCTAssertTrue(store.errorMessage?.contains("签到状态未确认成功") == true)
+        XCTAssertNil(autoSignInStore.completedDay(accountID: "10001", uid: "100000001"))
+    }
+
+    @MainActor
+    func testManualSignInTreatsRiskResponseAsSuccessWhenStatusRefreshShowsSigned() async {
+        let payload = SignInResultPayload(success: 0, riskCode: -5003, gt: nil, challenge: nil)
+        let accountService = MockAccountSessionService()
+        accountService.refreshSignInStatusResults = [
+            .success(Self.signedInStatus(isTodaySigned: false)),
+            .success(Self.signedInStatus(isTodaySigned: true))
+        ]
+        accountService.claimError = AccountSessionError.requiresVerification(payload)
+        let autoSignInStore = MockAutoSignInStore(isEnabled: true)
+        let store = AppStore(accountService: accountService, autoSignInStore: autoSignInStore)
+        store.accountStatus = Self.signedInStatus(isTodaySigned: false)
+        let now = Self.cnDate(year: 2026, month: 9, day: 5, hour: 10)
+
+        await store.claimDailyReward(now: now)
+
+        XCTAssertEqual(accountService.refreshSignInStatusCallCount, 2)
+        XCTAssertEqual(accountService.claimDailyRewardCallCount, 1)
+        XCTAssertEqual(store.accountStatus.signInSummary?.isTodaySigned, true)
+        XCTAssertNil(store.accountVerification)
+        XCTAssertNil(store.errorMessage)
+        XCTAssertEqual(store.successMessage, "签到完成")
+        XCTAssertNil(autoSignInStore.lastFailureDate(accountID: "10001", uid: "100000001"))
+        XCTAssertEqual(autoSignInStore.completedDay(accountID: "10001", uid: "100000001"), "cn_gf01:2026-09-05")
+    }
+
+    @MainActor
+    func testManualSignInWaitsBeforeShowingVerificationWhenRiskStatusIsDelayed() async {
+        let payload = SignInResultPayload(success: 0, riskCode: -5003, gt: nil, challenge: nil)
+        let accountService = MockAccountSessionService()
+        accountService.refreshSignInStatusResults = [
+            .success(Self.signedInStatus(isTodaySigned: false)),
+            .success(Self.signedInStatus(isTodaySigned: false)),
+            .success(Self.signedInStatus(isTodaySigned: true))
+        ]
+        accountService.claimError = AccountSessionError.requiresVerification(payload)
+        let autoSignInStore = MockAutoSignInStore(isEnabled: true)
+        let sleepRecorder = SleepCallRecorder()
+        let store = AppStore(
+            accountService: accountService,
+            autoSignInStore: autoSignInStore,
+            signInRiskConfirmationDelayNanoseconds: 42,
+            sleep: { nanoseconds in
+                await sleepRecorder.append(nanoseconds)
+            }
+        )
+        store.accountStatus = Self.signedInStatus(isTodaySigned: false)
+        let now = Self.cnDate(year: 2026, month: 9, day: 5, hour: 10)
+
+        await store.claimDailyReward(now: now)
+
+        let sleepCalls = await sleepRecorder.calls
+        XCTAssertEqual(accountService.refreshSignInStatusCallCount, 3)
+        XCTAssertEqual(sleepCalls, [42])
+        XCTAssertEqual(store.accountStatus.signInSummary?.isTodaySigned, true)
+        XCTAssertNil(store.accountVerification)
+        XCTAssertNil(store.errorMessage)
+        XCTAssertEqual(store.successMessage, "签到完成")
+        XCTAssertNil(autoSignInStore.lastFailureDate(accountID: "10001", uid: "100000001"))
+        XCTAssertEqual(autoSignInStore.completedDay(accountID: "10001", uid: "100000001"), "cn_gf01:2026-09-05")
+    }
+
+    @MainActor
     func testManualSignInSkipsClaimDuringFailureCooldown() async {
         let accountService = MockAccountSessionService()
         let autoSignInStore = MockAutoSignInStore(isEnabled: true)
@@ -427,13 +674,17 @@ final class AccountSessionStateTests: XCTestCase {
         accountService.refreshSignInStatusResult = Self.signedInStatus(isTodaySigned: false)
         accountService.claimError = AccountSessionError.requiresVerification(payload)
         let autoSignInStore = MockAutoSignInStore(isEnabled: true)
-        let store = AppStore(accountService: accountService, autoSignInStore: autoSignInStore)
+        let store = AppStore(
+            accountService: accountService,
+            autoSignInStore: autoSignInStore,
+            signInRiskConfirmationDelayNanoseconds: 0
+        )
         store.accountStatus = Self.signedInStatus(isTodaySigned: false)
         let now = Date(timeIntervalSince1970: 1_788_480_000)
 
         await store.claimDailyReward(now: now)
 
-        XCTAssertEqual(accountService.refreshSignInStatusCallCount, 1)
+        XCTAssertEqual(accountService.refreshSignInStatusCallCount, 3)
         XCTAssertEqual(accountService.claimDailyRewardCallCount, 1)
         XCTAssertEqual(autoSignInStore.lastFailureDate(accountID: "10001", uid: "100000001"), now)
         XCTAssertNotNil(store.accountVerification)
@@ -458,6 +709,25 @@ final class AccountSessionStateTests: XCTestCase {
         XCTAssertEqual(store.accountStatus.signInSummary?.isTodaySigned, true)
         XCTAssertEqual(tokenRefreshStore.lastRefreshDate(accountID: "10001"), Date(timeIntervalSince1970: 1_788_480_000))
         XCTAssertEqual(store.successMessage, "签到状态已刷新")
+    }
+
+    @MainActor
+    func testRefreshSignInStatusUsesStructuredExpiredRetcodeWithoutLegacyMessage() async {
+        let accountService = MockAccountSessionService()
+        accountService.refreshSignInStatusResults = [
+            .failure(AccountSessionError.apiFailureResponse(retcode: -100, message: "session rejected")),
+            .success(Self.signedInStatus(isTodaySigned: true))
+        ]
+        accountService.refreshLoginTokensResult = Self.signedInStatus(isTodaySigned: false)
+        let tokenRefreshStore = MockAccountTokenRefreshStore()
+        let store = AppStore(accountService: accountService, tokenRefreshStore: tokenRefreshStore)
+        store.accountStatus = Self.signedInStatus(isTodaySigned: false)
+
+        await store.refreshSignInStatus(now: Date(timeIntervalSince1970: 1_788_480_000))
+
+        XCTAssertEqual(accountService.refreshSignInStatusCallCount, 2)
+        XCTAssertEqual(accountService.refreshLoginTokensCallCount, 1)
+        XCTAssertEqual(store.accountStatus.signInSummary?.isTodaySigned, true)
     }
 
     @MainActor
@@ -518,12 +788,15 @@ final class AccountSessionStateTests: XCTestCase {
             now.addingTimeInterval(-60),
             accountID: "10001",
             uid: "100000001",
-            serverDay: "cn_gf01:2026-09-04"
+            serverDay: Self.scheduledAttemptIdentifier("cn_gf01:2026-09-04")
         )
         let store = AppStore(accountService: accountService, autoSignInStore: autoSignInStore)
+        let sessionID = UUID()
+        store.qrLoginSessionID = sessionID
         store.confirmedQrLoginResult = result
+        store.confirmedQrLoginSessionID = sessionID
 
-        await store.finishConfirmedQrLogin(now: now)
+        await store.finishConfirmedQrLogin(sessionID: sessionID, now: now)
 
         XCTAssertEqual(accountService.completeQrLoginResultCallCount, 1)
         XCTAssertEqual(accountService.claimDailyRewardCallCount, 1)
@@ -553,6 +826,99 @@ final class AccountSessionStateTests: XCTestCase {
     }
 
     @MainActor
+    func testCanceledQrLoginIgnoresLateConfirmedQueryResult() async throws {
+        let confirmed = QrLoginResultPayload(
+            status: "Confirmed",
+            tokens: [QrLoginToken(tokenType: 1, token: "stoken-value")],
+            userInfo: QrLoginUserInfo(aid: "10001", mid: "mid-value", nickname: "旅行者")
+        )
+        let queryStarted = expectation(description: "QR query started")
+        let deferredQuery = DeferredQrLoginQuery()
+        let accountService = MockAccountSessionService()
+        accountService.startQrLoginResult = QrLoginSession(
+            qrURL: URL(string: "https://example.com/qr")!,
+            ticket: "ticket-1"
+        )
+        accountService.queryQrLoginHandler = { _ in
+            queryStarted.fulfill()
+            return await deferredQuery.wait()
+        }
+        let store = AppStore(accountService: accountService)
+        await store.startQrLogin()
+        let sessionID = try XCTUnwrap(store.qrLoginSessionID)
+
+        let queryTask = Task {
+            await store.queryQrLogin(ticket: "ticket-1", sessionID: sessionID)
+        }
+        await fulfillment(of: [queryStarted], timeout: 1)
+        store.cancelQrLogin(sessionID: sessionID)
+        await deferredQuery.resume(with: confirmed)
+        await queryTask.value
+
+        XCTAssertNil(store.qrLoginSession)
+        XCTAssertNil(store.qrLoginSessionID)
+        XCTAssertNil(store.confirmedQrLoginResult)
+        XCTAssertNil(store.confirmedQrLoginSessionID)
+        XCTAssertEqual(store.qrLoginState, .canceled)
+        XCTAssertEqual(accountService.completeQrLoginResultCallCount, 0)
+    }
+
+    @MainActor
+    func testRefreshLoginTokensKeepsOldSecretsWhenCandidateSummaryFails() async throws {
+        let accountID = "10001"
+        let oldSecrets = AccountSecrets(
+            stuid: accountID,
+            stoken: "stoken-value",
+            mid: "mid-value",
+            cookieToken: "old-cookie",
+            ltoken: "old-ltoken"
+        )
+        let metadataStore = MockMetadataStore(metadata: AccountMetadata(
+            account: MiHoYoAccount(accountID: accountID, mid: "mid-value", nickname: "旅行者"),
+            selectedRole: GenshinRole(uid: "100000001", region: "cn_gf01", nickname: "空", level: 60, isSelected: true),
+            lastSummary: nil
+        ))
+        let secretStore = RecordingSecretStore(accountID: accountID, secrets: oldSecrets)
+        AccountSessionURLProtocol.requestHandler = { request in
+            let path = request.url?.path() ?? ""
+            let body: String
+            let statusCode: Int
+            switch path {
+            case let value where value.hasSuffix("/getLTokenBySToken"):
+                statusCode = 200
+                body = #"{"retcode":0,"message":"OK","data":{"ltoken":"new-ltoken"}}"#
+            case let value where value.hasSuffix("/getCookieAccountInfoBySToken"):
+                statusCode = 200
+                body = #"{"retcode":0,"message":"OK","data":{"uid":"10001","cookie_token":"new-cookie"}}"#
+            default:
+                statusCode = 500
+                body = #"{"message":"summary unavailable"}"#
+            }
+            return (HTTPURLResponse(url: request.url!, statusCode: statusCode, httpVersion: nil, headerFields: nil)!, Data(body.utf8))
+        }
+        defer { AccountSessionURLProtocol.requestHandler = nil }
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [AccountSessionURLProtocol.self]
+        let httpClient = HoYoHTTPClient(session: URLSession(configuration: configuration))
+        let service = LocalAccountSessionService(
+            metadataStore: metadataStore,
+            secretStore: secretStore,
+            passportClient: MiHoYoPassportClient(httpClient: httpClient),
+            signInClient: GenshinSignInClient(httpClient: httpClient)
+        )
+
+        do {
+            _ = try await service.refreshLoginTokens()
+            XCTFail("Expected candidate summary validation to fail")
+        } catch {
+            XCTAssertTrue(error.localizedDescription.contains("HTTP 500"))
+        }
+
+        XCTAssertEqual(try secretStore.load(accountID: accountID), oldSecrets)
+        XCTAssertEqual(secretStore.saveCallCount, 0)
+    }
+
+    @MainActor
     func testFinishConfirmedQrLoginFailureDoesNotMarkQrCodeFailed() async {
         let result = QrLoginResultPayload(
             status: "Confirmed",
@@ -562,10 +928,13 @@ final class AccountSessionStateTests: XCTestCase {
         let accountService = MockAccountSessionService()
         accountService.completeError = AccountSessionError.apiFailure("登录状态失效，请重新登录")
         let store = AppStore(accountService: accountService)
+        let sessionID = UUID()
+        store.qrLoginSessionID = sessionID
         store.confirmedQrLoginResult = result
+        store.confirmedQrLoginSessionID = sessionID
         store.qrLoginState = .confirmed
 
-        await store.finishConfirmedQrLogin()
+        await store.finishConfirmedQrLogin(sessionID: sessionID)
 
         XCTAssertEqual(store.qrLoginState, .confirmed)
         XCTAssertEqual(store.errorMessage, "登录已确认，但同步账号数据失败：接口返回错误：登录状态失效，请重新登录")
@@ -581,12 +950,69 @@ final class AccountSessionStateTests: XCTestCase {
         let accountService = MockAccountSessionService()
         accountService.completeError = AccountSessionError.stepFailed("获取 CookieToken", "接口返回错误：登录状态失效，请重新登录")
         let store = AppStore(accountService: accountService)
+        let sessionID = UUID()
+        store.qrLoginSessionID = sessionID
         store.confirmedQrLoginResult = result
+        store.confirmedQrLoginSessionID = sessionID
         store.qrLoginState = .confirmed
 
-        await store.finishConfirmedQrLogin()
+        await store.finishConfirmedQrLogin(sessionID: sessionID)
 
         XCTAssertEqual(store.errorMessage, "登录已确认，但同步账号数据失败：获取 CookieToken失败：接口返回错误：登录状态失效，请重新登录")
+    }
+
+    @MainActor
+    func testConfirmedQrLoginSyncCanRetryWithoutCreatingANewQRCode() async {
+        let result = QrLoginResultPayload(
+            status: "Confirmed",
+            tokens: [QrLoginToken(tokenType: 1, token: "stoken-value")],
+            userInfo: QrLoginUserInfo(aid: "10001", mid: "mid-value", nickname: "旅行者")
+        )
+        let accountService = MockAccountSessionService()
+        accountService.completeError = AccountSessionError.apiFailure("temporary failure")
+        let store = AppStore(accountService: accountService)
+        let sessionID = UUID()
+        store.qrLoginSessionID = sessionID
+        store.confirmedQrLoginResult = result
+        store.confirmedQrLoginSessionID = sessionID
+        store.qrLoginState = .confirmed
+
+        await store.finishConfirmedQrLogin(sessionID: sessionID)
+
+        XCTAssertTrue(store.canRetryConfirmedQrLoginSync)
+        XCTAssertNotNil(store.confirmedQrLoginResult)
+
+        accountService.completeError = nil
+        accountService.completeQrLoginResult = Self.signedInStatus(isTodaySigned: false)
+        await store.retryConfirmedQrLoginSync()
+
+        XCTAssertEqual(accountService.completeQrLoginResultCallCount, 2)
+        XCTAssertNil(store.confirmedQrLoginResult)
+        XCTAssertTrue(store.accountStatus.isSignedIn)
+        XCTAssertFalse(store.canRetryConfirmedQrLoginSync)
+    }
+
+    @MainActor
+    func testConfirmedQrLoginRetrySurvivesUnrelatedGlobalMessageChanges() async {
+        let result = QrLoginResultPayload(
+            status: "Confirmed",
+            tokens: [QrLoginToken(tokenType: 1, token: "stoken-value")],
+            userInfo: QrLoginUserInfo(aid: "10001", mid: "mid-value", nickname: "旅行者")
+        )
+        let accountService = MockAccountSessionService()
+        accountService.completeError = AccountSessionError.apiFailure("temporary failure")
+        let store = AppStore(accountService: accountService)
+        let sessionID = UUID()
+        store.qrLoginSessionID = sessionID
+        store.confirmedQrLoginResult = result
+        store.confirmedQrLoginSessionID = sessionID
+        store.qrLoginState = .confirmed
+
+        await store.finishConfirmedQrLogin(sessionID: sessionID)
+        store.errorMessage = "另一个功能的错误"
+
+        XCTAssertNotNil(store.qrLoginSyncError)
+        XCTAssertTrue(store.canRetryConfirmedQrLoginSync)
     }
 
     @MainActor
@@ -599,10 +1025,13 @@ final class AccountSessionStateTests: XCTestCase {
         let accountService = MockAccountSessionService()
         accountService.completeError = CancellationError()
         let store = AppStore(accountService: accountService)
+        let sessionID = UUID()
+        store.qrLoginSessionID = sessionID
         store.confirmedQrLoginResult = result
+        store.confirmedQrLoginSessionID = sessionID
         store.qrLoginState = .confirmed
 
-        await store.finishConfirmedQrLogin()
+        await store.finishConfirmedQrLogin(sessionID: sessionID)
 
         XCTAssertEqual(store.qrLoginState, .confirmed)
         XCTAssertNotNil(store.confirmedQrLoginResult)
@@ -644,6 +1073,13 @@ final class AccountSessionStateTests: XCTestCase {
         cnCalendar.date(from: DateComponents(year: year, month: month, day: day, hour: hour, minute: minute))!
     }
 
+    private static func scheduledAttemptIdentifier(
+        _ serverDay: String,
+        window: AutoSignInWindow = .morning
+    ) -> String {
+        AutoSignInSettings.scheduledAttemptIdentifier(serverDay: serverDay, window: window)
+    }
+
     private static func signedInStatus(isTodaySigned: Bool) -> LocalAccountStatus {
         LocalAccountStatus(
             isSignedIn: true,
@@ -656,7 +1092,7 @@ final class AccountSessionStateTests: XCTestCase {
         )
     }
 
-    private static func resignInfo(canResign: Bool) -> SignInResignInfoPayload {
+    private static func resignInfo(canResign: Bool, signed: Bool = false) -> SignInResignInfoPayload {
         SignInResignInfoPayload(
             resignCountDaily: canResign ? 0 : 1,
             resignCountMonthly: canResign ? 1 : 3,
@@ -666,7 +1102,7 @@ final class AccountSessionStateTests: XCTestCase {
             coinCount: canResign ? 5 : 0,
             coinCost: 1,
             rule: "rule",
-            signed: false,
+            signed: signed,
             signDays: 7,
             cost: 0,
             monthQualityCount: 0,
@@ -701,6 +1137,7 @@ private final class MockMetadataStore: AccountMetadataStoring {
 private final class MockAccountSessionService: AccountSessionServicing {
     var startQrLoginResult: QrLoginSession?
     var queryQrLoginResult: QrLoginResultPayload?
+    var queryQrLoginHandler: ((String) async throws -> QrLoginResultPayload)?
     var completeQrLoginResult: LocalAccountStatus = .signedOut
     var refreshSignInStatusResult: LocalAccountStatus = .signedOut
     var refreshLoginTokensResult: LocalAccountStatus?
@@ -736,6 +1173,9 @@ private final class MockAccountSessionService: AccountSessionServicing {
     }
 
     func queryQrLoginResult(ticket: String) async throws -> QrLoginResultPayload {
+        if let queryQrLoginHandler {
+            return try await queryQrLoginHandler(ticket)
+        }
         if let completeError { throw completeError }
         guard let queryQrLoginResult else {
             throw AccountSessionError.invalidResponse("missing queryQrLoginResult")
@@ -806,6 +1246,89 @@ private final class MockAccountSessionService: AccountSessionServicing {
     func signOut() throws -> LocalAccountStatus {
         if let signOutError { throw signOutError }
         return signOutResult
+    }
+}
+
+private actor DeferredQrLoginQuery {
+    private var continuation: CheckedContinuation<QrLoginResultPayload, Never>?
+    private var bufferedResult: QrLoginResultPayload?
+
+    func wait() async -> QrLoginResultPayload {
+        if let bufferedResult {
+            self.bufferedResult = nil
+            return bufferedResult
+        }
+        return await withCheckedContinuation { continuation in
+            self.continuation = continuation
+        }
+    }
+
+    func resume(with result: QrLoginResultPayload) {
+        if let continuation {
+            self.continuation = nil
+            continuation.resume(returning: result)
+        } else {
+            bufferedResult = result
+        }
+    }
+}
+
+private final class RecordingSecretStore: AccountSecretStoring {
+    private var secretsByAccountID: [String: AccountSecrets]
+    private(set) var saveCallCount = 0
+
+    init(accountID: String, secrets: AccountSecrets) {
+        secretsByAccountID = [accountID: secrets]
+    }
+
+    func load(accountID: String) throws -> AccountSecrets? {
+        secretsByAccountID[accountID]
+    }
+
+    func save(_ secrets: AccountSecrets, accountID: String) throws {
+        saveCallCount += 1
+        secretsByAccountID[accountID] = secrets
+    }
+
+    func delete(accountID: String) throws {
+        secretsByAccountID.removeValue(forKey: accountID)
+    }
+}
+
+private final class AccountSessionURLProtocol: URLProtocol {
+    nonisolated(unsafe) static var requestHandler: ((URLRequest) throws -> (HTTPURLResponse, Data))?
+
+    override class func canInit(with request: URLRequest) -> Bool { true }
+
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
+
+    override func startLoading() {
+        guard let requestHandler = Self.requestHandler else {
+            client?.urlProtocol(self, didFailWithError: URLError(.badServerResponse))
+            return
+        }
+        do {
+            let (response, data) = try requestHandler(request)
+            client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+            client?.urlProtocol(self, didLoad: data)
+            client?.urlProtocolDidFinishLoading(self)
+        } catch {
+            client?.urlProtocol(self, didFailWithError: error)
+        }
+    }
+
+    override func stopLoading() {}
+}
+
+private actor SleepCallRecorder {
+    private var recordedCalls: [UInt64] = []
+
+    var calls: [UInt64] {
+        recordedCalls
+    }
+
+    func append(_ nanoseconds: UInt64) {
+        recordedCalls.append(nanoseconds)
     }
 }
 

@@ -10,7 +10,7 @@ extension WidgetSnapshot {
     ) -> WidgetSnapshot {
         WidgetSnapshot(
             generatedAt: generatedAt,
-            signIn: WidgetSignInSnapshot(status: accountStatus),
+            signIn: WidgetSignInSnapshot(status: accountStatus, generatedAt: generatedAt),
             gacha: WidgetGachaSnapshot(records: gachaRecords, summary: gachaSummary),
             planner: WidgetPlannerSnapshot(plans: plans)
         )
@@ -18,12 +18,17 @@ extension WidgetSnapshot {
 }
 
 extension WidgetSignInSnapshot {
-    init(status: LocalAccountStatus) {
+    init(status: LocalAccountStatus, generatedAt: Date) {
         guard status.isSignedIn else {
             self = .signedOut
             return
         }
-        let isSigned = status.signInSummary?.isTodaySigned == true
+        let offset = Self.serverTimeZoneOffsetSeconds(for: status.selectedRole?.region)
+        let serverDate = status.signInSummary?.serverDate ?? status.lastCheckInDate.map {
+            Self.serverDateKey(for: $0, offset: offset)
+        }
+        let generatedServerDate = Self.serverDateKey(for: generatedAt, offset: offset)
+        let isSigned = status.signInSummary?.isTodaySigned == true && serverDate == generatedServerDate
         self.init(
             isSignedIn: true,
             nickname: status.nickname ?? status.selectedRole?.nickname,
@@ -32,8 +37,30 @@ extension WidgetSignInSnapshot {
             totalSignDay: status.signInSummary?.totalSignDay ?? 0,
             statusText: isSigned ? "已签到" : "待签到",
             actionTitle: isSigned ? "查看账号" : "去签到",
-            message: status.sessionMessage
+            message: status.sessionMessage,
+            serverDate: serverDate,
+            serverTimeZoneSecondsFromGMT: offset
         )
+    }
+
+    private static func serverDateKey(for date: Date, offset: Int) -> String {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(secondsFromGMT: offset) ?? .current
+        let components = calendar.dateComponents([.year, .month, .day], from: date)
+        return String(
+            format: "%04d-%02d-%02d",
+            components.year ?? 0,
+            components.month ?? 0,
+            components.day ?? 0
+        )
+    }
+
+    private static func serverTimeZoneOffsetSeconds(for region: String?) -> Int {
+        switch region {
+        case "os_usa": -5 * 60 * 60
+        case "os_euro": 1 * 60 * 60
+        default: 8 * 60 * 60
+        }
     }
 }
 
@@ -47,7 +74,8 @@ extension WidgetGachaSnapshot {
             totalPulls: summary.totalPulls,
             fiveStarCount: summary.fiveStarCount,
             fourStarCount: summary.fourStarCount,
-            pitySinceLastFiveStar: summary.pitySinceLastFiveStar,
+            activityPity: summary.activityPity,
+            standardPity: summary.standardPity,
             lastFiveStarName: newestFiveStar?.name ?? "暂无五星记录",
             lastFiveStarDate: newestFiveStar?.time,
             characterPulls: records.filter { $0.banner == .character || $0.banner == .characterEvent2 }.count,

@@ -33,16 +33,26 @@ struct BundledMetadataService: MetadataServicing {
     }
 
     func loadMetadata() async throws -> MetadataBundle {
-        let cacheURL = try metadataCacheURL ?? AppPaths.metadataCacheURL
-        if FileManager.default.fileExists(atPath: cacheURL.path()) {
-            return try await decodeMetadataFile(at: cacheURL)
+        let legacyCacheURL = try metadataCacheURL ?? AppPaths.metadataCacheURL
+        var cacheURL = DataGenerationStore.activeURL(for: legacyCacheURL)
+        while FileManager.default.fileExists(atPath: cacheURL.path()) {
+            do {
+                return try await decodeMetadataFile(at: cacheURL)
+            } catch {
+                if try DataGenerationStore.quarantineActiveGeneration(for: legacyCacheURL) {
+                    cacheURL = DataGenerationStore.activeURL(for: legacyCacheURL)
+                } else {
+                    try quarantineCorruptCache(at: cacheURL)
+                    break
+                }
+            }
         }
 
         for fallbackURL in metadataFallbackURLs where FileManager.default.fileExists(atPath: fallbackURL.path()) {
             guard let metadata = try? await decodeMetadataFile(at: fallbackURL) else {
                 continue
             }
-            try migrateMetadataCache(from: fallbackURL, to: cacheURL)
+            try migrateMetadataCache(from: fallbackURL, to: legacyCacheURL)
             return metadata
         }
 
@@ -56,7 +66,6 @@ struct BundledMetadataService: MetadataServicing {
         let data = try await downloadData(from: url)
         let metadata = try await decodeMetadataData(data)
         try await refreshPublicDataFiles(relativeTo: url, metadataData: data)
-        try data.write(to: try cacheURL(), options: .atomic)
         return metadata
     }
 
@@ -75,6 +84,7 @@ struct BundledMetadataService: MetadataServicing {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         let manifest = try decoder.decode(RemoteDataManifest.self, from: manifestData)
+        try validate(manifest: manifest)
 
         for file in manifest.files {
             try validate(file: file, in: packageRoot)
@@ -87,8 +97,7 @@ struct BundledMetadataService: MetadataServicing {
         let metadataURL = packageRoot.appending(path: metadataFile.path)
         let metadataData = try Data(contentsOf: metadataURL)
         let metadata = try await decodeMetadataData(metadataData)
-        try metadataData.write(to: try cacheURL(), options: .atomic)
-        try cachePublicDataFiles(from: packageRoot, manifest: manifest)
+        try commitDataGeneration(metadataData: metadataData, publicSourceDirectory: packageRoot, manifest: manifest)
         return metadata
     }
 
@@ -124,20 +133,6 @@ struct BundledMetadataService: MetadataServicing {
         try copyReplacingItem(at: sourceURL, to: destinationURL)
     }
 
-    private func cachePublicDataFiles(from packageRoot: URL, manifest: RemoteDataManifest) throws {
-        let destination = try publicDataCacheURL()
-        try FileManager.default.createDirectory(at: destination, withIntermediateDirectories: true)
-
-        for file in manifest.files where file.kind != .metadata {
-            guard !file.path.contains("/") else {
-                continue
-            }
-            let sourceURL = packageRoot.appending(path: file.path)
-            let destinationURL = destination.appending(path: file.path)
-            try copyReplacingItem(at: sourceURL, to: destinationURL)
-        }
-    }
-
     private func refreshPublicDataFiles(relativeTo metadataURL: URL, metadataData: Data) async throws {
         let baseURL = metadataURL.deletingLastPathComponent()
         let manifestURL = baseURL.appending(path: "manifest.json")
@@ -145,11 +140,13 @@ struct BundledMetadataService: MetadataServicing {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         let manifest = try decoder.decode(RemoteDataManifest.self, from: manifestData)
+        try validate(manifest: manifest)
 
-        if let metadataFile = manifest.files.first(where: { $0.kind == .metadata }) {
-            guard sha256Hex(metadataData).caseInsensitiveCompare(metadataFile.sha256) == .orderedSame else {
-                throw MetadataPackageImportError.hashMismatch(metadataFile.path)
-            }
+        guard let metadataFile = manifest.files.first(where: { $0.kind == .metadata }) else {
+            throw MetadataPackageImportError.missingKind(.metadata)
+        }
+        guard sha256Hex(metadataData).caseInsensitiveCompare(metadataFile.sha256) == .orderedSame else {
+            throw MetadataPackageImportError.hashMismatch(metadataFile.path)
         }
 
         let stagingDirectory = FileManager.default.temporaryDirectory
@@ -170,18 +167,61 @@ struct BundledMetadataService: MetadataServicing {
             try data.write(to: stagingURL, options: .atomic)
         }
 
-        try commitPublicDataFiles(from: stagingDirectory, manifest: manifest)
+        try commitDataGeneration(metadataData: metadataData, publicSourceDirectory: stagingDirectory, manifest: manifest)
     }
 
-    private func commitPublicDataFiles(from stagingDirectory: URL, manifest: RemoteDataManifest) throws {
-        let destination = try publicDataCacheURL()
-        try FileManager.default.createDirectory(at: destination, withIntermediateDirectories: true)
+    private func commitDataGeneration(
+        metadataData: Data,
+        publicSourceDirectory: URL,
+        manifest: RemoteDataManifest
+    ) throws {
+        let metadataDestination = try cacheURL()
+        let publicDestination = try publicDataCacheURL()
+        if FileManager.default.fileExists(atPath: publicDestination.path()) {
+            let values = try publicDestination.resourceValues(forKeys: [.isDirectoryKey])
+            guard values.isDirectory == true else {
+                throw MetadataPackageImportError.invalidDestination(publicDestination.path())
+            }
+        }
 
+        var publicFiles: [String: Data] = [:]
         for file in manifest.files where file.kind != .metadata {
             try validateFlatPath(file.path)
-            let sourceURL = stagingDirectory.appending(path: file.path)
-            let destinationURL = destination.appending(path: file.path)
-            try copyReplacingItem(at: sourceURL, to: destinationURL)
+            let sourceURL = publicSourceDirectory.appending(path: file.path)
+            let data = try Data(contentsOf: sourceURL)
+            try validateJSONData(data, path: file.path)
+            publicFiles[file.path] = data
+        }
+        try DataGenerationStore.publish(
+            metadataData: metadataData,
+            publicFiles: publicFiles,
+            metadataDestination: metadataDestination,
+            publicDestination: publicDestination
+        )
+    }
+
+    private func validateJSONData(_ data: Data, path: String) throws {
+        do {
+            _ = try JSONSerialization.jsonObject(with: data)
+        } catch {
+            throw MetadataPackageImportError.invalidJSON(path)
+        }
+    }
+
+    private func quarantineCorruptCache(at url: URL) throws {
+        let timestamp = Int(Date().timeIntervalSince1970)
+        var quarantineURL = url.appendingPathExtension("corrupt-\(timestamp)")
+        if FileManager.default.fileExists(atPath: quarantineURL.path()) {
+            quarantineURL = url.appendingPathExtension("corrupt-\(timestamp)-\(UUID().uuidString)")
+        }
+        try FileManager.default.moveItem(at: url, to: quarantineURL)
+    }
+
+    private func removeIfPresent(_ url: URL) throws {
+        do {
+            try FileManager.default.removeItem(at: url)
+        } catch {
+            guard isMissingFileError(error) else { throw error }
         }
     }
 
@@ -278,6 +318,45 @@ struct BundledMetadataService: MetadataServicing {
         }
     }
 
+    private func validate(manifest: RemoteDataManifest, now: Date = Date()) throws {
+        guard manifest.schemaVersion == RemoteDataManifest.currentSchemaVersion else {
+            throw MetadataPackageImportError.unsupportedSchemaVersion(manifest.schemaVersion)
+        }
+        guard manifest.generatedAt <= now.addingTimeInterval(24 * 60 * 60) else {
+            throw MetadataPackageImportError.futureTimestamp
+        }
+
+        var kinds: Set<RemoteDataFileKind> = []
+        var paths: Set<String> = []
+        for file in manifest.files {
+            guard kinds.insert(file.kind).inserted else {
+                throw MetadataPackageImportError.duplicateKind(file.kind)
+            }
+            guard paths.insert(file.path).inserted else {
+                throw MetadataPackageImportError.duplicatePath(file.path)
+            }
+            guard file.path == file.kind.canonicalPath else {
+                throw MetadataPackageImportError.unexpectedPath(kind: file.kind, path: file.path)
+            }
+            guard isValidSHA256(file.sha256) else {
+                throw MetadataPackageImportError.invalidHash(file.path)
+            }
+        }
+
+        guard kinds.contains(.metadata) else {
+            throw MetadataPackageImportError.missingKind(.metadata)
+        }
+        for kind in RemoteDataFileKind.requiredPublicKinds where !kinds.contains(kind) {
+            throw MetadataPackageImportError.missingKind(kind)
+        }
+    }
+
+    private func isValidSHA256(_ value: String) -> Bool {
+        value.utf8.count == 64 && value.utf8.allSatisfy { byte in
+            (48...57).contains(byte) || (65...70).contains(byte) || (97...102).contains(byte)
+        }
+    }
+
     private func sha256Hex(_ data: Data) -> String {
         SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
     }
@@ -300,6 +379,15 @@ enum MetadataPackageImportError: Error, Equatable, LocalizedError {
     case missingFile(String)
     case hashMismatch(String)
     case unsafePath(String)
+    case invalidJSON(String)
+    case invalidDestination(String)
+    case futureTimestamp
+    case unsupportedSchemaVersion(Int)
+    case missingKind(RemoteDataFileKind)
+    case duplicateKind(RemoteDataFileKind)
+    case duplicatePath(String)
+    case unexpectedPath(kind: RemoteDataFileKind, path: String)
+    case invalidHash(String)
 
     var errorDescription: String? {
         switch self {
@@ -311,6 +399,24 @@ enum MetadataPackageImportError: Error, Equatable, LocalizedError {
             "数据包校验失败：\(path)"
         case .unsafePath(let path):
             "数据包包含不安全路径：\(path)"
+        case .invalidJSON(let path):
+            "数据包 JSON 格式无效：\(path)"
+        case .invalidDestination(let path):
+            "数据缓存目录无效：\(path)"
+        case .futureTimestamp:
+            "数据包生成时间异常，已拒绝导入"
+        case .unsupportedSchemaVersion(let version):
+            "数据包版本不受支持：\(version)"
+        case .missingKind(let kind):
+            "数据包缺少必需文件：\(kind.canonicalPath)"
+        case .duplicateKind(let kind):
+            "数据包文件类型重复：\(kind.rawValue)"
+        case .duplicatePath(let path):
+            "数据包文件路径重复：\(path)"
+        case .unexpectedPath(let kind, let path):
+            "数据包文件路径无效：\(kind.rawValue) 应为 \(kind.canonicalPath)，实际为 \(path)"
+        case .invalidHash(let path):
+            "数据包 SHA-256 格式无效：\(path)"
         }
     }
 }

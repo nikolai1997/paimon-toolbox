@@ -2,6 +2,56 @@ import XCTest
 @testable import PaimonToolbox
 
 final class WidgetSnapshotTests: XCTestCase {
+    func testSignedTodayExpiresWhenServerDateChanges() {
+        let snapshot = WidgetSignInSnapshot(
+            isSignedIn: true,
+            nickname: "旅行者",
+            uid: "100000001",
+            isTodaySigned: true,
+            totalSignDay: 10,
+            statusText: "已签到",
+            actionTitle: "查看账号",
+            message: nil,
+            serverDate: "2026-07-10",
+            serverTimeZoneSecondsFromGMT: 8 * 60 * 60
+        )
+
+        XCTAssertTrue(snapshot.isSignedToday(at: Self.date(year: 2026, month: 7, day: 10, hour: 23)))
+        XCTAssertFalse(snapshot.isSignedToday(at: Self.date(year: 2026, month: 7, day: 11, hour: 0)))
+        XCTAssertFalse(snapshot.normalized(at: Self.date(year: 2026, month: 7, day: 11, hour: 0)).isTodaySigned)
+    }
+
+    func testSnapshotDoesNotRelabelPersistedPreviousDaySummaryAsToday() {
+        let account = LocalAccountStatus(
+            isSignedIn: true,
+            nickname: "旅行者",
+            accountID: "10001",
+            selectedRole: GenshinRole(uid: "100000001", region: "cn_gf01", nickname: "荧", level: 60, isSelected: true),
+            signInSummary: SignInSummary(
+                uid: "100000001",
+                month: 7,
+                totalSignDay: 10,
+                isTodaySigned: true,
+                rewards: [],
+                serverDate: "2026-07-10"
+            ),
+            sessionMessage: nil,
+            lastCheckInDate: nil
+        )
+
+        let snapshot = WidgetSnapshot.make(
+            accountStatus: account,
+            gachaRecords: [],
+            gachaSummary: .make(from: []),
+            plans: [],
+            generatedAt: Self.date(year: 2026, month: 7, day: 11, hour: 8)
+        )
+
+        XCTAssertEqual(snapshot.signIn.serverDate, "2026-07-10")
+        XCTAssertFalse(snapshot.signIn.isTodaySigned)
+        XCTAssertEqual(snapshot.signIn.statusText, "待签到")
+    }
+
     func testSnapshotMapsSignInGachaAndPlannerData() {
         let account = LocalAccountStatus(
             isSignedIn: true,
@@ -52,7 +102,8 @@ final class WidgetSnapshotTests: XCTestCase {
         XCTAssertEqual(snapshot.gacha.totalPulls, 4)
         XCTAssertEqual(snapshot.gacha.fiveStarCount, 1)
         XCTAssertEqual(snapshot.gacha.fourStarCount, 1)
-        XCTAssertEqual(snapshot.gacha.pitySinceLastFiveStar, 2)
+        XCTAssertEqual(snapshot.gacha.activityPity, 0)
+        XCTAssertEqual(snapshot.gacha.standardPity, 1)
         XCTAssertEqual(snapshot.gacha.lastFiveStarName, "神里绫华")
         XCTAssertEqual(snapshot.gacha.lastFiveStarDate, date(day: 2))
         XCTAssertEqual(snapshot.gacha.characterPulls, 2)
@@ -77,7 +128,8 @@ final class WidgetSnapshotTests: XCTestCase {
         XCTAssertEqual(snapshot.signIn.statusText, "未登录")
         XCTAssertEqual(snapshot.signIn.actionTitle, "去登录")
         XCTAssertEqual(snapshot.gacha.lastFiveStarName, "暂无五星记录")
-        XCTAssertEqual(snapshot.gacha.pitySinceLastFiveStar, 0)
+        XCTAssertEqual(snapshot.gacha.activityPity, 0)
+        XCTAssertEqual(snapshot.gacha.standardPity, 0)
         XCTAssertTrue(snapshot.planner.rows.isEmpty)
     }
 
@@ -101,18 +153,43 @@ final class WidgetSnapshotTests: XCTestCase {
         XCTAssertEqual(snapshot.gacha.standardPulls, 0)
     }
 
+    func testSnapshotKeepsActivityAndStandardPityIndependent() {
+        let records = [
+            record(id: "1", day: 1, banner: .character, name: "活动五星", itemType: "角色", rarity: 5),
+            record(id: "2", day: 2, banner: .characterEvent2, name: "活动三星", itemType: "武器", rarity: 3),
+            record(id: "3", day: 3, banner: .character, name: "活动四星", itemType: "角色", rarity: 4),
+            record(id: "4", day: 4, banner: .standard, name: "常驻五星", itemType: "角色", rarity: 5),
+            record(id: "5", day: 5, banner: .standard, name: "常驻三星", itemType: "武器", rarity: 3)
+        ]
+
+        let snapshot = WidgetSnapshot.make(
+            accountStatus: .signedOut,
+            gachaRecords: records,
+            gachaSummary: GachaSummary.make(from: records),
+            plans: [],
+            generatedAt: date(day: 25)
+        )
+
+        XCTAssertEqual(snapshot.gacha.activityPity, 2)
+        XCTAssertEqual(snapshot.gacha.standardPity, 1)
+    }
+
     private func record(id: String, day: Int, banner: BannerKind, name: String, itemType: String, rarity: Int) -> GachaRecord {
         GachaRecord(id: id, time: Self.date(day: day), banner: banner, name: name, itemType: itemType, rarity: rarity)
     }
 
     private static func date(day: Int) -> Date {
+        date(year: 2026, month: 6, day: day, hour: 12)
+    }
+
+    private static func date(year: Int, month: Int, day: Int, hour: Int) -> Date {
         var components = DateComponents()
         components.calendar = Calendar(identifier: .gregorian)
         components.timeZone = TimeZone(secondsFromGMT: 8 * 3600)
-        components.year = 2026
-        components.month = 6
+        components.year = year
+        components.month = month
         components.day = day
-        components.hour = 12
+        components.hour = hour
         return components.date!
     }
 

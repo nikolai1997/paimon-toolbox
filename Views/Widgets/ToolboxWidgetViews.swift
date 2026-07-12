@@ -35,19 +35,10 @@ private struct WidgetStableForeground: ViewModifier {
     }
 }
 
-private struct WidgetReadableForeground: ViewModifier {
-    var opacity: Double
-
-    func body(content: Content) -> some View {
-        content
-            .foregroundStyle(Color.white.opacity(opacity))
-            .widgetAccentable(false)
-    }
-}
-
 private struct WidgetFullColorTintBackground: ViewModifier {
     var tint: Color
     var cornerRadius: CGFloat
+    var fullColorOpacity: Double
 
     @Environment(\.widgetRenderingMode) private var renderingMode
 
@@ -55,7 +46,7 @@ private struct WidgetFullColorTintBackground: ViewModifier {
         content
             .background {
                 RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                    .fill(renderingMode == .fullColor ? tint.opacity(0.24) : Color.black.opacity(0.12))
+                    .fill(renderingMode == .fullColor ? tint.opacity(fullColorOpacity) : Color.black.opacity(0.12))
             }
     }
 }
@@ -65,16 +56,8 @@ extension View {
         modifier(WidgetStableForeground(fullColor: .primary, fallbackOpacity: 0.96))
     }
 
-    fileprivate func widgetStableSecondary() -> some View {
-        modifier(WidgetStableForeground(fullColor: .secondary, fallbackOpacity: 0.82))
-    }
-
-    fileprivate func widgetReadablePrimary() -> some View {
-        modifier(WidgetReadableForeground(opacity: 0.96))
-    }
-
-    fileprivate func widgetReadableSecondary() -> some View {
-        modifier(WidgetReadableForeground(opacity: 0.78))
+    fileprivate func widgetStableSecondary(fallbackOpacity: Double = 0.82) -> some View {
+        modifier(WidgetStableForeground(fullColor: .secondary, fallbackOpacity: fallbackOpacity))
     }
 
     fileprivate func widgetNativePrimary() -> some View {
@@ -89,8 +72,8 @@ extension View {
         modifier(WidgetSemanticForeground(fullColor: fullColor, fallbackOpacity: fallbackOpacity))
     }
 
-    fileprivate func widgetTintBackground(_ tint: Color, cornerRadius: CGFloat) -> some View {
-        modifier(WidgetFullColorTintBackground(tint: tint, cornerRadius: cornerRadius))
+    fileprivate func widgetTintBackground(_ tint: Color, cornerRadius: CGFloat, fullColorOpacity: Double = 0.24) -> some View {
+        modifier(WidgetFullColorTintBackground(tint: tint, cornerRadius: cornerRadius, fullColorOpacity: fullColorOpacity))
     }
 }
 
@@ -124,18 +107,13 @@ struct SmallSignInWidgetView: View {
                 Spacer(minLength: 0)
 
                 HStack(spacing: 4) {
-                    Image(systemName: "arrow.clockwise")
-                        .widgetAccentedSymbol()
-                        .font(.system(size: 11, weight: .regular, design: .default))
-                        .widgetNativeSecondary()
-
                     Text(signIn.isTodaySigned ? "已签到" : "待签到")
                         .font(.system(size: 11, weight: .regular, design: .default))
                         .lineLimit(1)
                         .minimumScaleFactor(0.75)
                         .widgetNativeSecondary()
                 }
-                .accessibilityLabel("刷新")
+                .accessibilityLabel(signIn.isTodaySigned ? "今日已签到" : "今日待签到")
             }
 
             Spacer(minLength: 0)
@@ -203,27 +181,14 @@ struct MediumGachaWidgetView: View {
                 }
 
                 Spacer(minLength: 0)
-
-                HStack(spacing: 4) {
-                    Image(systemName: "arrow.clockwise")
-                        .widgetAccentedSymbol()
-                        .font(.system(size: 11, weight: .regular, design: .default))
-                        .widgetNativeSecondary()
-
-                    Text("刷新")
-                        .font(.system(size: 11, weight: .regular, design: .default))
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.72)
-                        .widgetNativeSecondary()
-                }
             }
 
             Spacer(minLength: 0)
 
-            HStack(spacing: 8) {
+            HStack(spacing: 6) {
                 CompactWidgetMetric(title: "总抽数", value: "\(gacha.totalPulls)", systemImage: "tray.full", tint: .blue)
-                CompactWidgetMetric(title: "当前垫数", value: "\(gacha.pitySinceLastFiveStar)", systemImage: "clock.arrow.circlepath", tint: .orange)
-                CompactWidgetMetric(title: "五星", value: "\(gacha.fiveStarCount)", systemImage: "star", tint: .purple)
+                CompactWidgetMetric(title: "活动垫数", value: "\(gacha.activityPity)", systemImage: "person.crop.circle.badge.clock", tint: .orange)
+                CompactWidgetMetric(title: "常驻垫数", value: "\(gacha.standardPity)", systemImage: "clock", tint: .green)
             }
         }
         .padding(16)
@@ -249,7 +214,7 @@ struct LargeToolboxWidgetView: View {
                 LargeWidgetSummaryCard(
                     title: "祈愿记录",
                     value: "\(snapshot.gacha.totalPulls) 抽",
-                    detail: "垫数 \(snapshot.gacha.pitySinceLastFiveStar) · 五星 \(snapshot.gacha.fiveStarCount)",
+                    detail: "活动 \(snapshot.gacha.activityPity) · 常驻 \(snapshot.gacha.standardPity)",
                     systemImage: "sparkles",
                     tint: .purple
                 )
@@ -260,20 +225,20 @@ struct LargeToolboxWidgetView: View {
                     Image(systemName: "checklist")
                         .widgetAccentedSymbol()
                         .font(.headline.weight(.medium))
-                        .widgetReadablePrimary()
+                        .widgetStablePrimary()
 
                     Text("今日养成")
                         .font(.headline.weight(.regular))
                         .lineLimit(1)
                         .minimumScaleFactor(0.78)
-                        .widgetReadablePrimary()
+                        .widgetStablePrimary()
                 }
 
                 if snapshot.planner.rows.isEmpty {
                     Text("暂无待完成养成材料")
                         .font(.subheadline)
                         .lineLimit(1)
-                        .widgetReadableSecondary()
+                        .widgetStableSecondary(fallbackOpacity: 0.78)
                 } else {
                     ForEach(snapshot.planner.rows.prefix(2)) { row in
                         PlannerWidgetRow(row: row)
@@ -281,7 +246,7 @@ struct LargeToolboxWidgetView: View {
                 }
             }
             .padding(12)
-            .widgetTintBackground(.blue, cornerRadius: 18)
+            .widgetTintBackground(.blue, cornerRadius: 18, fullColorOpacity: 0.42)
 
             Spacer(minLength: 0)
 
@@ -290,33 +255,20 @@ struct LargeToolboxWidgetView: View {
                     Image(systemName: "arrow.up.right.circle.fill")
                         .widgetAccentedSymbol()
                         .font(.headline.weight(.medium))
-                        .widgetReadablePrimary()
+                        .widgetStablePrimary()
 
                     Text("打开工具箱")
                         .font(.headline.weight(.regular))
                         .lineLimit(1)
                         .minimumScaleFactor(0.72)
-                        .widgetReadablePrimary()
+                        .widgetStablePrimary()
                 }
 
                 Spacer(minLength: 0)
-
-                HStack(spacing: 6) {
-                    Image(systemName: "arrow.clockwise")
-                        .widgetAccentedSymbol()
-                        .font(.headline.weight(.medium))
-                        .widgetReadablePrimary()
-
-                    Text("刷新")
-                        .font(.headline.weight(.regular))
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.72)
-                        .widgetReadablePrimary()
-                }
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 10)
-            .widgetTintBackground(.blue, cornerRadius: 18)
+            .widgetTintBackground(.blue, cornerRadius: 18, fullColorOpacity: 0.42)
         }
         .padding(18)
         .frame(width: 338, height: 354, alignment: .topLeading)
@@ -376,28 +328,28 @@ private struct LargeWidgetSummaryCard: View {
             Image(systemName: systemImage)
                 .widgetAccentedSymbol()
                 .font(.system(size: 24, weight: .semibold))
-                .widgetReadablePrimary()
+                .widgetStablePrimary()
 
             Text(title)
                 .font(.caption.weight(.medium))
                 .lineLimit(1)
-                .widgetReadableSecondary()
+                .widgetStableSecondary(fallbackOpacity: 0.78)
 
             Text(value)
                 .font(.title3.weight(.medium))
                 .lineLimit(1)
                 .minimumScaleFactor(0.72)
-                .widgetReadablePrimary()
+                .widgetStablePrimary()
 
             Text(detail)
                 .font(.caption)
                 .lineLimit(1)
                 .minimumScaleFactor(0.72)
-                .widgetReadableSecondary()
+                .widgetStableSecondary(fallbackOpacity: 0.78)
         }
         .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .widgetTintBackground(tint, cornerRadius: 18)
+        .widgetTintBackground(tint, cornerRadius: 18, fullColorOpacity: 0.42)
     }
 }
 

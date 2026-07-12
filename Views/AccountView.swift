@@ -60,9 +60,9 @@ struct AccountView: View {
         } message: {
             Text(resignConfirmationMessage)
         }
-        .onChange(of: store.confirmedQrLoginResult != nil) { _, hasConfirmedResult in
-            guard hasConfirmedResult else { return }
-            Task { await store.finishConfirmedQrLogin() }
+        .onChange(of: store.confirmedQrLoginSessionID) { _, sessionID in
+            guard let sessionID else { return }
+            Task { await store.finishConfirmedQrLogin(sessionID: sessionID) }
         }
     }
 
@@ -106,7 +106,18 @@ struct AccountView: View {
                             .foregroundStyle(.secondary)
                             .fixedSize(horizontal: false, vertical: true)
                     }
+
                 }
+            }
+
+            if store.canRetryConfirmedQrLoginSync {
+                Button {
+                    Task { await store.retryConfirmedQrLoginSync() }
+                } label: {
+                    Label("重试同步", systemImage: "arrow.triangle.2.circlepath")
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(store.isAccountBusy)
             }
         }
     }
@@ -426,7 +437,12 @@ struct AccountView: View {
                         Button {
                             isPresentingVerificationSheet = false
                             Task {
-                                await store.claimDailyReward()
+                                switch verification.purpose {
+                                case .dailySignIn:
+                                    await store.claimDailyReward()
+                                case .resign:
+                                    await store.claimResignReward()
+                                }
                             }
                         } label: {
                             Label("我已完成，重试签到", systemImage: "arrow.clockwise")

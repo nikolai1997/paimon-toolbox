@@ -20,4 +20,8 @@ final class SelfCheckTests: XCTestCase {
         XCTAssertGreaterThan(bundle.weapons.count, 200)
         XCTAssertGreaterThan(bundle.materials.count, 800)
     }
+
+    func testBundledPublicDataPassesManifestAndDecodeChecks() throws {
+        try SelfCheck.verifyBundledPublicData()
+    }
 }

@@ -2,6 +2,66 @@ import XCTest
 @testable import PaimonToolbox
 
 final class GachaAnalysisTests: XCTestCase {
+    func testSummarySeparatesSharedActivityPityFromStandardPity() {
+        let records = [
+            Self.record(id: "1", day: 1, banner: .character, name: "活动三星", itemType: "武器", rarity: 3),
+            Self.record(id: "2", day: 2, banner: .characterEvent2, name: "活动五星", itemType: "角色", rarity: 5),
+            Self.record(id: "3", day: 3, banner: .character, name: "活动三星 2", itemType: "武器", rarity: 3),
+            Self.record(id: "4", day: 4, banner: .characterEvent2, name: "活动四星", itemType: "角色", rarity: 4),
+            Self.record(id: "5", day: 5, banner: .standard, name: "常驻五星", itemType: "角色", rarity: 5),
+            Self.record(id: "6", day: 6, banner: .standard, name: "常驻三星", itemType: "武器", rarity: 3)
+        ]
+
+        let summary = GachaSummary.make(from: records)
+
+        XCTAssertEqual(summary.activityPity, 2)
+        XCTAssertEqual(summary.standardPity, 1)
+    }
+
+    func testCharacterEventTypesSharePityAndFiveStarIntervals() {
+        let records = [
+            Self.record(id: "1", day: 1, banner: .character, name: "活动三星", itemType: "武器", rarity: 3),
+            Self.record(id: "2", day: 2, banner: .characterEvent2, name: "活动五星 A", itemType: "角色", rarity: 5),
+            Self.record(id: "3", day: 3, banner: .character, name: "活动三星 2", itemType: "武器", rarity: 3),
+            Self.record(id: "4", day: 4, banner: .characterEvent2, name: "活动五星 B", itemType: "角色", rarity: 5),
+            Self.record(id: "5", day: 5, banner: .character, name: "活动三星 3", itemType: "武器", rarity: 3)
+        ]
+
+        let analysis = GachaAnalysis.make(from: records)
+        let character = analysis.bannerStats.first { $0.banner == .character }
+
+        XCTAssertEqual(character?.currentPity, 1)
+        XCTAssertEqual(character?.fiveStarCount, 2)
+        XCTAssertEqual(character?.averageFiveStarPity, 2)
+        XCTAssertFalse(analysis.bannerStats.contains { $0.banner == .characterEvent2 })
+        XCTAssertEqual(analysis.recentFiveStars.map(\.pullsSincePreviousFiveStar), [2, 2])
+    }
+
+    func testAverageFiveStarPityIsWeightedByHitsInsteadOfBannerAverages() {
+        var records = [
+            Self.record(id: "1", day: 1, banner: .character, name: "活动三星", itemType: "武器", rarity: 3),
+            Self.record(id: "2", day: 2, banner: .character, name: "活动五星 A", itemType: "角色", rarity: 5),
+            Self.record(id: "3", day: 3, banner: .character, name: "活动三星 2", itemType: "武器", rarity: 3),
+            Self.record(id: "4", day: 4, banner: .character, name: "活动五星 B", itemType: "角色", rarity: 5)
+        ]
+        records.append(contentsOf: (5 ... 11).map { day in
+            Self.record(id: "w-\(day)", day: day, banner: .weapon, name: "武器三星", itemType: "武器", rarity: 3)
+        })
+        records.append(Self.record(id: "w-12", day: 12, banner: .weapon, name: "武器五星", itemType: "武器", rarity: 5))
+
+        XCTAssertEqual(GachaAnalysis.make(from: records).averageFiveStarPityText, "4 抽")
+    }
+
+    func testCanonicalSortUsesNumericIDDescendingForSameSecond() {
+        let date = Date(timeIntervalSince1970: 100)
+        let records = [
+            GachaRecord(id: "9", time: date, banner: .character, name: "9", itemType: "武器", rarity: 3),
+            GachaRecord(id: "10", time: date, banner: .character, name: "10", itemType: "武器", rarity: 3)
+        ]
+
+        XCTAssertEqual(GachaRecord.sortedNewestFirst(records).map(\.id), ["10", "9"])
+    }
+
     func testRarityAndBannerBreakdownCountsRecords() {
         let records = [
             Self.record(id: "1", day: 1, banner: .character, name: "冷刃", itemType: "武器", rarity: 3),

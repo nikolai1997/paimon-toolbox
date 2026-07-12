@@ -6,10 +6,14 @@ final class RemoteMetadataRefreshTests: XCTestCase {
     override func setUp() {
         super.setUp()
         UserDefaults.standard.removeObject(forKey: RemoteDataSettings.lastAutoRefreshAttemptKey)
+        UserDefaults.standard.removeObject(forKey: RemoteDataSettings.lastAutoRefreshSuccessKey)
+        UserDefaults.standard.removeObject(forKey: RemoteDataSettings.lastAutoRefreshFailureKey)
     }
 
     override func tearDown() {
         UserDefaults.standard.removeObject(forKey: RemoteDataSettings.lastAutoRefreshAttemptKey)
+        UserDefaults.standard.removeObject(forKey: RemoteDataSettings.lastAutoRefreshSuccessKey)
+        UserDefaults.standard.removeObject(forKey: RemoteDataSettings.lastAutoRefreshFailureKey)
         super.tearDown()
     }
 
@@ -37,6 +41,21 @@ final class RemoteMetadataRefreshTests: XCTestCase {
         XCTAssertNil(store.errorMessage)
         XCTAssertEqual(overviewService.loadCount, 2)
         XCTAssertEqual(store.overviewData.gachaEvents.first?.name, "新卡池")
+    }
+
+    func testLoadAttemptsRemoteSelfHealWhenLocalMetadataLoadFails() async {
+        let service = MockMetadataService(local: makeMetadata(version: "local"), remote: makeMetadata(version: "remote"))
+        service.loadError = CocoaError(.fileReadCorruptFile)
+        let store = makeStore(metadataService: service)
+
+        await store.load(
+            remoteMetadataURLString: "https://example.com/metadata.json",
+            offlinePackageURLString: "",
+            autoRefreshRemoteMetadata: true
+        )
+
+        XCTAssertEqual(service.refreshCallCount, 1)
+        XCTAssertEqual(store.metadata?.version, "remote")
     }
 
     func testAutomaticRemoteRefreshRunsAtMostOncePerDay() async {
@@ -68,6 +87,42 @@ final class RemoteMetadataRefreshTests: XCTestCase {
         )
 
         XCTAssertEqual(service.refreshCallCount, 2)
+    }
+
+    func testAutomaticRemoteRefreshRetriesAfterShortFailureCooldown() async {
+        let local = makeMetadata(version: "local")
+        let remote = makeMetadata(version: "remote")
+        let service = MockMetadataService(local: local, remote: remote)
+        service.refreshError = MetadataRefreshError.badStatus(503)
+        let store = makeStore(metadataService: service)
+        let firstLaunch = Date(timeIntervalSince1970: 1_788_480_000)
+
+        await store.load(
+            remoteMetadataURLString: "https://example.com/metadata.json",
+            offlinePackageURLString: "",
+            autoRefreshRemoteMetadata: true,
+            now: firstLaunch
+        )
+        await store.load(
+            remoteMetadataURLString: "https://example.com/metadata.json",
+            offlinePackageURLString: "",
+            autoRefreshRemoteMetadata: true,
+            now: firstLaunch.addingTimeInterval(60)
+        )
+
+        XCTAssertEqual(service.refreshCallCount, 1)
+
+        service.refreshError = nil
+        await store.load(
+            remoteMetadataURLString: "https://example.com/metadata.json",
+            offlinePackageURLString: "",
+            autoRefreshRemoteMetadata: true,
+            now: firstLaunch.addingTimeInterval(15 * 60 + 1)
+        )
+
+        XCTAssertEqual(service.refreshCallCount, 2)
+        XCTAssertEqual(store.metadata, remote)
+        XCTAssertEqual(store.successMessage, "资料库已自动从 GitHub 更新")
     }
 
     func testImportingOfflinePackageReloadsOverviewDataFromPublicCache() async {
@@ -156,6 +211,7 @@ private final class MockMetadataService: MetadataServicing {
     let local: MetadataBundle
     let remote: MetadataBundle
     var refreshedURL: URL?
+    var loadError: Error?
     var refreshError: Error?
     private(set) var refreshCallCount = 0
 
@@ -165,7 +221,10 @@ private final class MockMetadataService: MetadataServicing {
     }
 
     func loadMetadata() async throws -> MetadataBundle {
-        local
+        if let loadError {
+            throw loadError
+        }
+        return local
     }
 
     func refreshMetadata(from url: URL) async throws -> MetadataBundle {

@@ -10,13 +10,31 @@ final class AppStore {
     var selectedSection: AppSection = .overview
     var metadata: MetadataBundle?
     var gachaRecords: [GachaRecord] = []
-    var gachaSummary = GachaSummary(totalPulls: 0, fiveStarCount: 0, fourStarCount: 0, pitySinceLastFiveStar: 0)
+    var selectedGachaUID: String?
+    var gachaSummary = GachaSummary(totalPulls: 0, fiveStarCount: 0, fourStarCount: 0, activityPity: 0, standardPity: 0)
     var plans: [CultivationPlan] = []
     var overviewData: OverviewData = .empty
-    var accountStatus: LocalAccountStatus = .signedOut
+    var accountStatus: LocalAccountStatus = .signedOut {
+        didSet {
+            if let uid = accountStatus.selectedRole?.uid, !uid.isEmpty {
+                selectedGachaUID = uid
+            } else if oldValue.isSignedIn,
+                      let uid = oldValue.selectedRole?.uid,
+                      !uid.isEmpty {
+                selectedGachaUID = uid
+            }
+            if oldValue.isSignedIn != accountStatus.isSignedIn
+                || oldValue.selectedRole?.uid != accountStatus.selectedRole?.uid {
+                refreshGachaSummary()
+            }
+        }
+    }
     var qrLoginSession: QrLoginSession?
+    var qrLoginSessionID: UUID?
     var qrLoginState: QrLoginPollingState = .idle
     var confirmedQrLoginResult: QrLoginResultPayload?
+    var confirmedQrLoginSessionID: UUID?
+    var qrLoginSyncError: String?
     var accountVerification: AccountVerificationState?
     var accountResignInfo: SignInResignInfoPayload?
     var isAccountBusy = false
@@ -25,6 +43,48 @@ final class AppStore {
     var successMessage: String?
     var metadataSourceDescription: String = "内置基础数据"
     var widgetSnapshot: WidgetSnapshot = .empty
+
+    var canRetryConfirmedQrLoginSync: Bool {
+        confirmedQrLoginResult != nil
+            && qrLoginState == .confirmed
+            && qrLoginSyncError != nil
+    }
+
+    var availableGachaUIDs: [String] {
+        Set(gachaRecords.compactMap(\.uid).filter { !$0.isEmpty }).sorted()
+    }
+
+    var hasUnassignedGachaRecords: Bool {
+        gachaRecords.contains { $0.uid == nil || $0.uid?.isEmpty == true }
+    }
+
+    var activeGachaUID: String? {
+        if accountStatus.isSignedIn,
+           let uid = accountStatus.selectedRole?.uid,
+           !uid.isEmpty {
+            return uid
+        }
+        if let selectedGachaUID, availableGachaUIDs.contains(selectedGachaUID) {
+            return selectedGachaUID
+        }
+        if selectedGachaUID == nil, hasUnassignedGachaRecords {
+            return nil
+        }
+        return availableGachaUIDs.first
+    }
+
+    var activeGachaRecords: [GachaRecord] {
+        if accountStatus.isSignedIn,
+           let uid = accountStatus.selectedRole?.uid,
+           !uid.isEmpty {
+            return GachaRecord.sortedNewestFirst(gachaRecords.filter { $0.uid == uid })
+        }
+
+        if let activeGachaUID {
+            return GachaRecord.sortedNewestFirst(gachaRecords.filter { $0.uid == activeGachaUID })
+        }
+        return GachaRecord.sortedNewestFirst(gachaRecords.filter { $0.uid == nil || $0.uid?.isEmpty == true })
+    }
 
     @ObservationIgnored private var automaticSignInWakeTask: Task<Void, Never>?
     @ObservationIgnored private var automaticSignInWakeDate: Date?
@@ -38,6 +98,8 @@ final class AppStore {
     private let tokenRefreshStore: AccountTokenRefreshStoring
     private let widgetSnapshotStore: WidgetSnapshotStoring
     private let widgetTimelineReloader: WidgetTimelineReloading
+    private let signInRiskConfirmationDelayNanoseconds: UInt64
+    private let sleep: @Sendable (UInt64) async -> Void
 
     init(
         metadataService: MetadataServicing = BundledMetadataService(),
@@ -48,7 +110,11 @@ final class AppStore {
         autoSignInStore: AutoSignInStoring = UserDefaultsAutoSignInStore(),
         tokenRefreshStore: AccountTokenRefreshStoring = UserDefaultsAccountTokenRefreshStore(),
         widgetSnapshotStore: WidgetSnapshotStoring? = nil,
-        widgetTimelineReloader: WidgetTimelineReloading = WidgetTimelineReloader()
+        widgetTimelineReloader: WidgetTimelineReloading = WidgetTimelineReloader(),
+        signInRiskConfirmationDelayNanoseconds: UInt64 = AutoSignInSettings.riskStatusConfirmationDelayNanoseconds,
+        sleep: @escaping @Sendable (UInt64) async -> Void = { nanoseconds in
+            try? await Task.sleep(nanoseconds: nanoseconds)
+        }
     ) {
         self.metadataService = metadataService
         self.overviewDataService = overviewDataService
@@ -59,6 +125,8 @@ final class AppStore {
         self.tokenRefreshStore = tokenRefreshStore
         self.widgetSnapshotStore = widgetSnapshotStore ?? Self.makeWidgetSnapshotStore()
         self.widgetTimelineReloader = widgetTimelineReloader
+        self.signInRiskConfirmationDelayNanoseconds = signInRiskConfirmationDelayNanoseconds
+        self.sleep = sleep
         self.widgetSnapshot = (try? self.widgetSnapshotStore.load()) ?? .empty
     }
 
@@ -79,6 +147,13 @@ final class AppStore {
                 await refreshWidgetSnapshotFromWidget()
             }
         }
+    }
+
+    func selectGachaUID(_ uid: String?) {
+        guard uid == nil || availableGachaUIDs.contains(uid!) else { return }
+        selectedGachaUID = uid
+        refreshGachaSummary()
+        publishWidgetSnapshot()
     }
 
     func load(
@@ -108,7 +183,8 @@ final class AppStore {
 
         do {
             gachaRecords = try await gachaService.loadRecords()
-            gachaSummary = gachaService.summary(for: gachaRecords)
+            normalizeGachaUIDSelection()
+            refreshGachaSummary()
         } catch {
             gachaRecords = []
             gachaSummary = gachaService.summary(for: [])
@@ -123,6 +199,7 @@ final class AppStore {
         }
 
         accountStatus = accountService.loadStatus()
+        refreshGachaSummary()
         if accountStatus.isSignedIn {
             try? await refreshLoginTokensIfNeeded(now: now)
             accountResignInfo = try? await accountService.loadResignInfo()
@@ -130,14 +207,12 @@ final class AppStore {
             accountResignInfo = nil
         }
 
-        if metadata != nil {
-            await refreshRemoteMetadataIfNeeded(
-                urlString: remoteMetadataURLString,
-                offlinePackageURLString: offlinePackageURLString,
-                isEnabled: autoRefreshRemoteMetadata,
-                now: now
-            )
-        }
+        await refreshRemoteMetadataIfNeeded(
+            urlString: remoteMetadataURLString,
+            offlinePackageURLString: offlinePackageURLString,
+            isEnabled: autoRefreshRemoteMetadata,
+            now: now
+        )
 
         if errorMessage == nil, !loadErrors.isEmpty {
             errorMessage = loadErrors.joined(separator: "；")
@@ -187,7 +262,8 @@ final class AppStore {
     func importGachaRecords(from url: URL) async {
         do {
             gachaRecords = try await gachaService.importRecords(from: url, into: gachaRecords)
-            gachaSummary = gachaService.summary(for: gachaRecords)
+            normalizeGachaUIDSelection()
+            refreshGachaSummary()
             successMessage = "已导入并合并 \(gachaRecords.count) 条祈愿记录"
             errorMessage = nil
             publishWidgetSnapshot()
@@ -199,7 +275,8 @@ final class AppStore {
     func reloadLocalGachaRecords() async {
         do {
             gachaRecords = try await gachaService.loadRecords()
-            gachaSummary = gachaService.summary(for: gachaRecords)
+            normalizeGachaUIDSelection()
+            refreshGachaSummary()
             successMessage = gachaRecords.isEmpty ? nil : "已读取本机 \(gachaRecords.count) 条祈愿记录"
             errorMessage = nil
             publishWidgetSnapshot()
@@ -213,8 +290,8 @@ final class AppStore {
 
     func exportGachaRecords(to url: URL) async {
         do {
-            try await gachaService.exportRecords(gachaRecords, to: url)
-            successMessage = "已导出 UIGF 文件"
+            try await gachaService.exportRecords(activeGachaRecords, to: url)
+            successMessage = "已导出当前账号 UIGF 文件"
             errorMessage = nil
         } catch {
             errorMessage = "导出失败：\(error.localizedDescription)"
@@ -226,11 +303,18 @@ final class AppStore {
         defer { isAccountBusy = false }
 
         do {
-            let remoteRecords = try await accountService.loadGachaRecords()
+            let loadedRecords = try await accountService.loadGachaRecords()
+            let selectedUID = accountStatus.selectedRole?.uid
+            let remoteRecords = loadedRecords.map { record in
+                var ownedRecord = record
+                ownedRecord.uid = selectedUID ?? ownedRecord.uid
+                return ownedRecord
+            }
             let merged = GachaLogDocument.mergedRecords(existing: gachaRecords, imported: remoteRecords)
             try await gachaService.replaceRecords(merged)
             gachaRecords = merged
-            gachaSummary = gachaService.summary(for: merged)
+            normalizeGachaUIDSelection()
+            refreshGachaSummary()
             successMessage = "已从账号更新 \(remoteRecords.count) 条祈愿记录，当前共 \(merged.count) 条"
             errorMessage = nil
             publishWidgetSnapshot()
@@ -241,22 +325,24 @@ final class AppStore {
     }
 
     func updateRequirement(planID: CultivationPlan.ID, requirementID: MaterialRequirement.ID, owned: Int) async {
-        guard let planIndex = plans.firstIndex(where: { $0.id == planID }),
-              let requirementIndex = plans[planIndex].requirements.firstIndex(where: { $0.id == requirementID }) else {
+        var candidate = plans
+        guard let planIndex = candidate.firstIndex(where: { $0.id == planID }),
+              let requirementIndex = candidate[planIndex].requirements.firstIndex(where: { $0.id == requirementID }) else {
             return
         }
-        plans[planIndex].requirements[requirementIndex].owned = max(owned, 0)
-        await savePlans(message: "养成计划已保存")
+        candidate[planIndex].requirements[requirementIndex].owned = max(owned, 0)
+        await commitPlans(candidate, message: "养成计划已保存")
     }
 
     func deletePlans(at offsets: IndexSet) async {
-        plans.remove(atOffsets: offsets)
-        await savePlans(message: "养成计划已删除")
+        var candidate = plans
+        candidate.remove(atOffsets: offsets)
+        await commitPlans(candidate, message: "养成计划已删除")
     }
 
     func deletePlan(id: CultivationPlan.ID) async {
-        plans.removeAll { $0.id == id }
-        await savePlans(message: "养成计划已删除")
+        let candidate = plans.filter { $0.id != id }
+        await commitPlans(candidate, message: "养成计划已删除")
     }
 
     func createCharacterPlan(
@@ -295,8 +381,7 @@ final class AppStore {
                 elementalBurstTargetLevel: elementalBurstTargetLevel
             )
         )
-        plans.insert(plan, at: 0)
-        await savePlans(message: "已创建 \(character.name) 的养成计划")
+        await commitPlans([plan] + plans, message: "已创建 \(character.name) 的养成计划")
     }
 
     func createWeaponPlan(
@@ -304,6 +389,15 @@ final class AppStore {
         currentLevel: Int = 1,
         targetLevel: Int = 90
     ) async {
+        let result = CultivationCalculator.weaponRequirements(
+            stages: weapon.ascensionStages,
+            levelRange: CultivationLevelRange(current: currentLevel, target: targetLevel)
+        )
+        guard case .exact(let totals) = result else {
+            successMessage = nil
+            errorMessage = "当前资料缺少完整武器突破数量，暂时无法创建精确计划"
+            return
+        }
         let plan = CultivationPlan(
             id: UUID(),
             targetName: weapon.name,
@@ -311,13 +405,9 @@ final class AppStore {
             targetIconURL: weapon.iconURL,
             currentLevel: currentLevel,
             targetLevel: targetLevel,
-            requirements: materialRequirements(
-                from: weapon.materials,
-                suggestedRequired: [5, 23, 27]
-            )
+            requirements: CultivationCalculator.materialRequirements(from: totals)
         )
-        plans.insert(plan, at: 0)
-        await savePlans(message: "已创建 \(weapon.name) 的养成计划")
+        await commitPlans([plan] + plans, message: "已创建 \(weapon.name) 的养成计划")
     }
 
     private func characterRequirements(
@@ -349,34 +439,56 @@ final class AppStore {
     }
 
     func startQrLogin() async {
+        let sessionID = UUID()
+        qrLoginSession = nil
+        qrLoginSessionID = sessionID
+        confirmedQrLoginResult = nil
+        confirmedQrLoginSessionID = nil
+        qrLoginSyncError = nil
+        qrLoginState = .idle
         isAccountBusy = true
         defer { isAccountBusy = false }
 
         do {
-            qrLoginSession = try await accountService.startQrLogin()
+            let session = try await accountService.startQrLogin()
+            guard qrLoginSessionID == sessionID else { return }
+            qrLoginSession = session
             qrLoginState = .waiting
             confirmedQrLoginResult = nil
+            qrLoginSyncError = nil
             accountVerification = nil
             accountResignInfo = nil
             successMessage = nil
             errorMessage = nil
         } catch {
+            guard qrLoginSessionID == sessionID else { return }
             qrLoginSession = nil
+            qrLoginSessionID = nil
             qrLoginState = .failed(error.localizedDescription)
             confirmedQrLoginResult = nil
+            confirmedQrLoginSessionID = nil
+            qrLoginSyncError = nil
             errorMessage = "生成登录二维码失败：\(error.localizedDescription)"
         }
     }
 
-    func queryQrLogin(ticket: String) async {
+    func queryQrLogin(ticket: String, sessionID: UUID) async {
+        guard isActiveQrLogin(ticket: ticket, sessionID: sessionID) else { return }
         isAccountBusy = true
-        defer { isAccountBusy = false }
+        defer {
+            if qrLoginSessionID == sessionID || qrLoginSessionID == nil {
+                isAccountBusy = false
+            }
+        }
 
         do {
             let result = try await accountService.queryQrLoginResult(ticket: ticket)
+            guard isActiveQrLogin(ticket: ticket, sessionID: sessionID) else { return }
             switch result.pollingState {
             case .confirmed:
                 confirmedQrLoginResult = result
+                confirmedQrLoginSessionID = sessionID
+                qrLoginSyncError = nil
                 qrLoginSession = nil
                 qrLoginState = .confirmed
                 accountVerification = nil
@@ -400,6 +512,7 @@ final class AppStore {
                 errorMessage = "登录失败：\(result.pollingState.localizedDescription)"
             }
         } catch let error as AccountSessionError {
+            guard isActiveQrLogin(ticket: ticket, sessionID: sessionID) else { return }
             switch error {
             case .qrLoginPending(let state):
                 qrLoginState = state
@@ -421,19 +534,40 @@ final class AppStore {
                 errorMessage = "登录失败：\(error.localizedDescription)"
             }
         } catch {
+            guard isActiveQrLogin(ticket: ticket, sessionID: sessionID) else { return }
             qrLoginState = .failed(error.localizedDescription)
             errorMessage = "登录失败：\(error.localizedDescription)"
         }
     }
 
-    func finishConfirmedQrLogin(now: Date = Date()) async {
-        guard let confirmedQrLoginResult else { return }
+    func cancelQrLogin(sessionID: UUID? = nil) {
+        if let sessionID, qrLoginSessionID != sessionID {
+            return
+        }
+        qrLoginSession = nil
+        qrLoginSessionID = nil
+        confirmedQrLoginResult = nil
+        confirmedQrLoginSessionID = nil
+        qrLoginSyncError = nil
+        qrLoginState = .canceled
+        isAccountBusy = false
+    }
+
+    func finishConfirmedQrLogin(sessionID: UUID, now: Date = Date()) async {
+        guard isActiveConfirmedQrLogin(sessionID: sessionID),
+              let confirmedQrLoginResult else { return }
         isAccountBusy = true
         defer { isAccountBusy = false }
 
         do {
-            accountStatus = try await accountService.completeQrLogin(result: confirmedQrLoginResult)
+            let completedStatus = try await accountService.completeQrLogin(result: confirmedQrLoginResult)
+            guard isActiveConfirmedQrLogin(sessionID: sessionID) else { return }
+            accountStatus = completedStatus
+            refreshGachaSummary()
             self.confirmedQrLoginResult = nil
+            confirmedQrLoginSessionID = nil
+            qrLoginSessionID = nil
+            qrLoginSyncError = nil
             qrLoginSession = nil
             qrLoginState = .confirmed
             accountVerification = nil
@@ -445,16 +579,28 @@ final class AppStore {
             await performAutoSignInIfNeeded(now: now)
             publishWidgetSnapshot()
         } catch {
+            guard isActiveConfirmedQrLogin(sessionID: sessionID) else { return }
             if error is CancellationError {
                 qrLoginState = .confirmed
+                qrLoginSyncError = "登录已确认，正在同步账号数据，请稍候。"
                 successMessage = nil
-                errorMessage = "登录已确认，正在同步账号数据，请稍候。"
+                errorMessage = qrLoginSyncError
                 return
             }
             qrLoginState = .confirmed
+            qrLoginSyncError = "登录已确认，但同步账号数据失败：\(error.localizedDescription)"
             successMessage = nil
-            errorMessage = "登录已确认，但同步账号数据失败：\(error.localizedDescription)"
+            errorMessage = qrLoginSyncError
         }
+    }
+
+    func retryConfirmedQrLoginSync(now: Date = Date()) async {
+        guard canRetryConfirmedQrLoginSync,
+              let sessionID = confirmedQrLoginSessionID else { return }
+        successMessage = "正在重新同步账号数据"
+        qrLoginSyncError = nil
+        errorMessage = nil
+        await finishConfirmedQrLogin(sessionID: sessionID, now: now)
     }
 
     func refreshSignInStatus(now: Date = Date()) async {
@@ -515,6 +661,7 @@ final class AppStore {
             accountStatus = try await accountOperationWithTokenRefreshRetry(now: now) {
                 try await accountService.claimDailyReward(verification: verification)
             }
+            try requireConfirmedDailySignIn()
             accountResignInfo = try? await accountService.loadResignInfo()
             accountVerification = nil
             markDailySignInCompletedIfPossible(now: now)
@@ -586,6 +733,7 @@ final class AppStore {
             accountStatus = try await accountOperationWithTokenRefreshRetry(now: now) {
                 try await accountService.claimDailyReward(verification: nil)
             }
+            try requireConfirmedDailySignIn()
             accountResignInfo = try? await accountService.loadResignInfo()
             accountVerification = nil
             markDailySignInCompletedIfPossible(now: now)
@@ -594,10 +742,14 @@ final class AppStore {
             errorMessage = nil
             publishWidgetSnapshot()
         } catch let error as AccountSessionError {
-            markDailySignInFailure(context, now: now)
             successMessage = nil
             switch error {
             case .requiresVerification(let payload):
+                if await markDailySignInCompletedIfStatusRefreshShowsSigned(context, now: now, successMessage: "签到完成") {
+                    publishWidgetSnapshot()
+                    return
+                }
+                markDailySignInFailure(context, now: now)
                 accountVerification = AccountVerificationState(
                     message: error.localizedDescription,
                     url: HoYoConstants.signInVerificationURL,
@@ -607,6 +759,7 @@ final class AppStore {
                 )
                 errorMessage = error.localizedDescription
             default:
+                markDailySignInFailure(context, now: now)
                 errorMessage = "签到失败：\(error.localizedDescription)"
             }
         } catch {
@@ -628,7 +781,10 @@ final class AppStore {
             accountStatus = try await accountOperationWithTokenRefreshRetry(now: now) {
                 try await accountService.claimResignReward(verification: verification)
             }
-            accountResignInfo = try? await accountService.loadResignInfo()
+            accountResignInfo = try await accountService.loadResignInfo()
+            guard accountResignInfo?.signed == true else {
+                throw AccountSessionError.invalidResponse("补签状态未确认成功")
+            }
             accountVerification = nil
             successMessage = "补签完成"
             errorMessage = nil
@@ -660,14 +816,18 @@ final class AppStore {
 
         do {
             accountStatus = try accountService.signOut()
+            qrLoginSyncError = nil
             qrLoginSession = nil
+            qrLoginSessionID = nil
+            confirmedQrLoginSessionID = nil
             qrLoginState = .idle
             accountVerification = nil
             accountResignInfo = nil
             successMessage = "已退出账号"
             errorMessage = nil
             cancelAutomaticSignInWake()
-            publishWidgetSnapshot(allowEmptySnapshot: true)
+            refreshGachaSummary()
+            publishWidgetSnapshot()
         } catch {
             accountStatus = accountService.loadStatus()
             successMessage = nil
@@ -724,16 +884,20 @@ final class AppStore {
             accountStatus = try await accountOperationWithTokenRefreshRetry(now: now) {
                 try await accountService.claimDailyReward(verification: nil)
             }
+            try requireConfirmedDailySignIn()
             accountVerification = nil
             markDailySignInCompletedIfPossible(now: now)
             clearDailySignInFailureIfPossible(now: now)
             successMessage = "自动签到完成"
             errorMessage = nil
         } catch let error as AccountSessionError {
-            markDailySignInFailure(context, now: now)
             successMessage = nil
             switch error {
             case .requiresVerification(let payload):
+                if await markDailySignInCompletedIfStatusRefreshShowsSigned(context, now: now, successMessage: "自动签到完成") {
+                    return
+                }
+                markDailySignInFailure(context, now: now)
                 accountVerification = AccountVerificationState(
                     message: error.localizedDescription,
                     url: HoYoConstants.signInVerificationURL,
@@ -743,6 +907,7 @@ final class AppStore {
                 )
                 errorMessage = "自动签到需要安全验证：\(error.localizedDescription)"
             default:
+                markDailySignInFailure(context, now: now)
                 errorMessage = "自动签到失败：\(error.localizedDescription)"
             }
         } catch {
@@ -752,7 +917,7 @@ final class AppStore {
         }
     }
 
-    private func accountOperationWithTokenRefreshRetry<T>(
+    private func accountOperationWithTokenRefreshRetry<T: Sendable>(
         now: Date,
         operation: () async throws -> T
     ) async throws -> T {
@@ -793,6 +958,11 @@ final class AppStore {
             return false
         }
 
+        if let accountError = error as? AccountSessionError,
+           accountError.indicatesExpiredSession {
+            return true
+        }
+
         let message = error.localizedDescription.lowercased()
         return message.contains("登录状态失效")
             || message.contains("重新登录")
@@ -801,6 +971,22 @@ final class AppStore {
             || message.contains("token")
             || message.contains("stoken")
             || message.contains("ltoken")
+    }
+
+    private func requireConfirmedDailySignIn() throws {
+        guard accountStatus.signInSummary?.isTodaySigned == true else {
+            throw AccountSessionError.invalidResponse("签到状态未确认成功")
+        }
+    }
+
+    private func isActiveQrLogin(ticket: String, sessionID: UUID) -> Bool {
+        qrLoginSessionID == sessionID && qrLoginSession?.ticket == ticket
+    }
+
+    private func isActiveConfirmedQrLogin(sessionID: UUID) -> Bool {
+        qrLoginSessionID == sessionID
+            && confirmedQrLoginSessionID == sessionID
+            && confirmedQrLoginResult != nil
     }
 
     private struct DailySignInContext {
@@ -850,20 +1036,29 @@ final class AppStore {
     }
 
     private func scheduledDailySignInDate(for context: DailySignInContext) -> Date {
+        let window = AutoSignInSettings.selectedWindow
+        let scheduleIdentifier = AutoSignInSettings.scheduledAttemptIdentifier(
+            serverDay: context.serverDay,
+            window: window
+        )
         if let scheduledDate = autoSignInStore.scheduledAttemptDate(
             accountID: context.accountID,
             uid: context.uid,
-            serverDay: context.serverDay
+            serverDay: scheduleIdentifier
         ) {
             return scheduledDate
         }
 
-        let scheduledDate = Self.randomMorningSignInDate(serverDateKey: context.serverDateKey, region: context.region)
+        let scheduledDate = Self.randomSignInDate(
+            serverDateKey: context.serverDateKey,
+            region: context.region,
+            window: window
+        )
         autoSignInStore.setScheduledAttemptDate(
             scheduledDate,
             accountID: context.accountID,
             uid: context.uid,
-            serverDay: context.serverDay
+            serverDay: scheduleIdentifier
         )
         return scheduledDate
     }
@@ -951,6 +1146,47 @@ final class AppStore {
         clearDailySignInFailure(context)
     }
 
+    private func markDailySignInCompletedIfStatusRefreshShowsSigned(
+        _ context: DailySignInContext,
+        now: Date,
+        successMessage: String
+    ) async -> Bool {
+        let attempts = max(1, AutoSignInSettings.riskStatusConfirmationAttempts)
+        for attempt in 0..<attempts {
+            if attempt > 0, signInRiskConfirmationDelayNanoseconds > 0 {
+                await sleep(signInRiskConfirmationDelayNanoseconds)
+            }
+
+            if await refreshStatusShowsDailySignInCompleted(now: now) {
+                accountVerification = nil
+                markDailySignInCompleted(context)
+                clearDailySignInFailure(context)
+                self.successMessage = successMessage
+                errorMessage = nil
+                return true
+            }
+        }
+
+        return false
+    }
+
+    private func refreshStatusShowsDailySignInCompleted(now: Date) async -> Bool {
+        do {
+            accountStatus = try await accountOperationWithTokenRefreshRetry(now: now) {
+                try await accountService.refreshSignInStatus()
+            }
+        } catch {
+            return false
+        }
+
+        guard accountStatus.signInSummary?.isTodaySigned == true else {
+            return false
+        }
+
+        accountResignInfo = try? await accountService.loadResignInfo()
+        return true
+    }
+
     private static func makeWidgetSnapshotStore() -> WidgetSnapshotStoring {
         do {
             return try LocalWidgetSnapshotStore()
@@ -959,17 +1195,14 @@ final class AppStore {
         }
     }
 
-    private func publishWidgetSnapshot(generatedAt: Date = Date(), allowEmptySnapshot: Bool = false) {
-        var snapshot = WidgetSnapshot.make(
+    private func publishWidgetSnapshot(generatedAt: Date = Date()) {
+        let snapshot = WidgetSnapshot.make(
             accountStatus: accountStatus,
-            gachaRecords: gachaRecords,
+            gachaRecords: activeGachaRecords,
             gachaSummary: gachaSummary,
             plans: plans,
             generatedAt: generatedAt
         )
-        if !allowEmptySnapshot, !snapshot.hasDisplayableContent, widgetSnapshot.hasDisplayableContent {
-            snapshot = widgetSnapshot
-        }
         widgetSnapshot = snapshot
 
         do {
@@ -1013,7 +1246,11 @@ final class AppStore {
         return autoSignInDateKey(for: nextDate, calendar: calendar)
     }
 
-    private static func randomMorningSignInDate(serverDateKey: String, region: String) -> Date {
+    private static func randomSignInDate(
+        serverDateKey: String,
+        region: String,
+        window: AutoSignInWindow
+    ) -> Date {
         let parts = serverDateKey.split(separator: "-").compactMap { Int($0) }
         guard parts.count == 3 else {
             return Date()
@@ -1023,7 +1260,7 @@ final class AppStore {
         components.year = parts[0]
         components.month = parts[1]
         components.day = parts[2]
-        components.hour = AutoSignInSettings.morningWindowStartHour
+        components.hour = window.startHour
         components.minute = 0
         components.second = 0
 
@@ -1033,7 +1270,7 @@ final class AppStore {
 
         let windowSeconds = max(
             1,
-            (AutoSignInSettings.morningWindowEndHour - AutoSignInSettings.morningWindowStartHour) * 60 * 60
+            (window.endHour - window.startHour) * 60 * 60
         )
         return start.addingTimeInterval(TimeInterval(Int.random(in: 0..<windowSeconds)))
     }
@@ -1060,15 +1297,36 @@ final class AppStore {
         return UInt64(seconds * 1_000_000_000)
     }
 
-    private func savePlans(message: String) async {
+    private func commitPlans(_ candidate: [CultivationPlan], message: String) async {
         do {
-            try await plannerService.savePlans(plans)
+            try await plannerService.savePlans(candidate)
+            plans = candidate
             successMessage = message
             errorMessage = nil
             publishWidgetSnapshot()
         } catch {
             errorMessage = "保存养成计划失败：\(error.localizedDescription)"
         }
+    }
+
+    private func refreshGachaSummary() {
+        gachaSummary = gachaService.summary(for: activeGachaRecords)
+    }
+
+    private func normalizeGachaUIDSelection() {
+        if accountStatus.isSignedIn,
+           let uid = accountStatus.selectedRole?.uid,
+           !uid.isEmpty {
+            selectedGachaUID = uid
+            return
+        }
+        if let selectedGachaUID, availableGachaUIDs.contains(selectedGachaUID) {
+            return
+        }
+        if selectedGachaUID == nil, hasUnassignedGachaRecords {
+            return
+        }
+        selectedGachaUID = availableGachaUIDs.first
     }
 
     private func materialRequirements(from materialNames: [String], suggestedRequired: [Int]) -> [MaterialRequirement] {
@@ -1097,15 +1355,15 @@ final class AppStore {
             return
         }
 
-        RemoteDataSettings.markAutoRefreshAttempt(at: now)
-
         do {
             metadata = try await metadataService.refreshMetadata(from: url)
             try await reloadOverviewData()
+            RemoteDataSettings.markAutoRefreshSucceeded(at: now)
             metadataSourceDescription = url.absoluteString
             successMessage = "资料库已自动从 GitHub 更新"
             errorMessage = nil
         } catch {
+            RemoteDataSettings.markAutoRefreshFailed(at: now)
             successMessage = nil
             let offlineHint = offlinePackageURLString.trimmingCharacters(in: .whitespacesAndNewlines)
             if offlineHint.isEmpty {

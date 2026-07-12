@@ -1,6 +1,12 @@
 import XCTest
 
 final class WidgetExtensionSourceTests: XCTestCase {
+    func testWidgetTimelineNormalizesServerDatedSignInState() throws {
+        let source = try source("Widgets/PaimonToolboxWidgets.swift")
+
+        XCTAssertTrue(source.contains(".normalized(at: date)"))
+    }
+
     private var repositoryRoot: URL {
         URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()
@@ -143,6 +149,35 @@ final class WidgetExtensionSourceTests: XCTestCase {
         XCTAssertFalse(script.contains("data source provider, default: snap-metadata"))
     }
 
+    func testPackageManifestExcludesLocalPromoAssetFoldersFromSwiftPMTarget() throws {
+        let manifest = try source("Package.swift")
+        let gitignore = try source(".gitignore")
+
+        XCTAssertTrue(manifest.contains("\"promo_assets\""))
+        XCTAssertTrue(manifest.contains("\"promo_frames\""))
+        XCTAssertTrue(gitignore.contains("/promo_assets/"))
+        XCTAssertTrue(gitignore.contains("/promo_frames/"))
+    }
+
+    func testAppDeclaresUtilitiesCategoryForReleasePackaging() throws {
+        let infoPlist = try source("App/Info.plist")
+        let projectGenerator = try source("script/generate_xcode_project.py")
+
+        XCTAssertTrue(infoPlist.contains("<key>LSApplicationCategoryType</key>"))
+        XCTAssertTrue(infoPlist.contains("<string>public.app-category.utilities</string>"))
+        XCTAssertTrue(projectGenerator.contains("<key>LSApplicationCategoryType</key>"))
+        XCTAssertTrue(projectGenerator.contains("<string>public.app-category.utilities</string>"))
+    }
+
+    func testDataUpdatePushDoesNotCommitIgnoredOfflineZip() throws {
+        let script = try source("script/update_remote_data.py")
+        let gitignore = try source(".gitignore")
+
+        XCTAssertTrue(gitignore.contains("/data/releases/*.zip"))
+        XCTAssertTrue(script.contains("commit_and_push([public_dir], args.commit_message, repository=root)"))
+        XCTAssertFalse(script.contains("commit_and_push([public_dir, zip_path], args.commit_message)"))
+    }
+
     func testInstallScriptRegistersInstalledWidgetExtension() throws {
         let installScript = try source("script/install_app.sh")
 
@@ -150,12 +185,15 @@ final class WidgetExtensionSourceTests: XCTestCase {
         XCTAssertTrue(installScript.contains("INSTALL_DIR=\"${1:-/Applications}\""))
         XCTAssertTrue(installScript.contains("LaunchServices.framework"))
         XCTAssertTrue(installScript.contains("pluginkit -a"))
+        XCTAssertFalse(installScript.contains("pluginkit -a \"$CURRENT_EXTENSION\" >/dev/null 2>&1 || true"))
         XCTAssertTrue(installScript.contains("PaimonToolboxWidgetsExtension.appex"))
         XCTAssertTrue(installScript.contains("pluginkit -m -AD -v -i"))
-        XCTAssertTrue(installScript.contains("registered_widget_paths"))
-        XCTAssertTrue(installScript.contains("awk -F '\\t'"))
-        XCTAssertTrue(installScript.contains("pkill -x \"$APP_NAME\""))
-        XCTAssertTrue(installScript.contains("pkill -x \"$EXTENSION_NAME\""))
+        XCTAssertTrue(installScript.contains("verify_widget_registration"))
+        XCTAssertTrue(installScript.contains("expected_path=\"$(canonical_path \"$extension_path\")\""))
+        XCTAssertTrue(installScript.contains("stop_process \"$APP_NAME\""))
+        XCTAssertTrue(installScript.contains("stop_process \"$EXTENSION_NAME\""))
+        XCTAssertTrue(installScript.contains("stop_process \"$LEGACY_APP_NAME\""))
+        XCTAssertTrue(installScript.contains("stop_process \"$LEGACY_EXTENSION_NAME\""))
     }
 
     func testBuildRunScriptDoesNotLeaveDebugWidgetRegistered() throws {
@@ -163,6 +201,20 @@ final class WidgetExtensionSourceTests: XCTestCase {
 
         XCTAssertTrue(runScript.contains("unregister_debug_widget"))
         XCTAssertTrue(runScript.contains("pluginkit -r \"$EXTENSION_BUNDLE\""))
+    }
+
+    func testVerifyModeChecksRealEmbeddedWidgetWithoutUnregisteringIt() throws {
+        let runScript = try source("script/build_and_run.sh")
+        let verifyStart = try XCTUnwrap(runScript.range(of: "--verify|verify)"))
+        let verifyEnd = try XCTUnwrap(runScript.range(of: ";;", range: verifyStart.upperBound..<runScript.endIndex))
+        let verifyBlock = String(runScript[verifyStart.lowerBound..<verifyEnd.upperBound])
+
+        XCTAssertFalse(verifyBlock.contains("unregister_debug_widget"))
+        XCTAssertTrue(verifyBlock.contains("$APP_BINARY\" --self-check"))
+        XCTAssertTrue(verifyBlock.contains("codesign --verify --deep --strict \"$APP_BUNDLE\""))
+        XCTAssertTrue(verifyBlock.contains("codesign --verify --strict \"$EXTENSION_BUNDLE\""))
+        XCTAssertTrue(verifyBlock.contains("CFBundleIdentifier"))
+        XCTAssertTrue(verifyBlock.contains("pluginkit -m -AD -v -i \"$WIDGET_BUNDLE_ID\""))
     }
 
     private func source(_ relativePath: String) throws -> String {

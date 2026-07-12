@@ -90,11 +90,26 @@ case "$MODE" in
     /usr/bin/log stream --info --style compact --predicate "subsystem == \"$BUNDLE_ID\""
     ;;
   --verify|verify)
+    [[ -x "$APP_BINARY" ]]
+    [[ -d "$EXTENSION_BUNDLE" ]]
+    [[ "$(plutil -extract CFBundleIdentifier raw "$APP_BUNDLE/Contents/Info.plist")" == "$BUNDLE_ID" ]]
+    [[ "$(plutil -extract CFBundleIdentifier raw "$EXTENSION_BUNDLE/Contents/Info.plist")" == "$WIDGET_BUNDLE_ID" ]]
+    "$APP_BINARY" --self-check
+    codesign --verify --deep --strict "$APP_BUNDLE"
+    codesign --verify --strict "$EXTENSION_BUNDLE"
+    pluginkit -a "$EXTENSION_BUNDLE" >/dev/null
     open_app
     sleep 2
-    unregister_debug_widget
     pgrep -x "$APP_NAME" >/dev/null
+    PLUGIN_EXTENSION_PATH="$(cd "$(dirname "$EXTENSION_BUNDLE")" && pwd -P)/$(basename "$EXTENSION_BUNDLE")"
+    PLUGIN_OUTPUT="$(pluginkit -m -AD -v -i "$WIDGET_BUNDLE_ID" 2>&1)"
+    if [[ "$PLUGIN_OUTPUT" == *"(no matches)"* || "$PLUGIN_OUTPUT" != *"$PLUGIN_EXTENSION_PATH"* ]]; then
+      echo "$PLUGIN_OUTPUT" >&2
+      echo "Widget extension was not discovered by PlugInKit." >&2
+      exit 1
+    fi
     echo "$APP_NAME launched"
+    echo "$PLUGIN_OUTPUT"
     echo "$APP_BUNDLE"
     ;;
   *)

@@ -41,6 +41,12 @@ struct PlannerView: View {
                     .padding(.horizontal, 24)
             }
 
+            if let error = store.errorMessage {
+                Label(error, systemImage: "exclamationmark.triangle")
+                    .foregroundStyle(.orange)
+                    .padding(.horizontal, 24)
+            }
+
             switch displayMode {
             case .plans:
                 if store.plans.isEmpty {

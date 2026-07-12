@@ -24,6 +24,7 @@ struct GachaLogPagePayload: Decodable, Equatable {
 
 struct GachaLogRemoteItem: Decodable, Equatable {
     var id: String
+    var itemID: String?
     var time: String
     var name: String
     var itemType: String
@@ -32,6 +33,7 @@ struct GachaLogRemoteItem: Decodable, Equatable {
 
     enum CodingKeys: String, CodingKey {
         case id
+        case itemID = "item_id"
         case time
         case name
         case itemType = "item_type"
@@ -44,6 +46,7 @@ struct GachaLogRemoteItem: Decodable, Equatable {
             return nil
         }
         return GachaRecord(
+            itemID: itemID,
             id: id,
             time: date,
             banner: BannerKind(gachaLogType: gachaType),

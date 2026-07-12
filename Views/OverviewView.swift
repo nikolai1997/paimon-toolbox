@@ -12,7 +12,7 @@ struct OverviewView: View {
     }
 
     private var gachaAnalysis: GachaAnalysis {
-        GachaAnalysis.make(from: store.gachaRecords)
+        GachaAnalysis.make(from: store.activeGachaRecords)
     }
 
     private var characterRerunTimers: [RerunTimerEntry] {
@@ -79,7 +79,8 @@ struct OverviewView: View {
     private var overviewMetrics: some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: 14)], spacing: 14) {
             GlassMetricCard(title: "祈愿记录", value: "\(store.gachaSummary.totalPulls) 抽", systemImage: "sparkles", tint: .orange)
-            GlassMetricCard(title: "当前垫数", value: "\(store.gachaSummary.pitySinceLastFiveStar) 抽", systemImage: "timer", tint: .blue)
+            GlassMetricCard(title: "活动池垫数", value: "\(store.gachaSummary.activityPity) 抽", systemImage: "person.crop.circle.badge.clock", tint: .blue)
+            GlassMetricCard(title: "常驻池垫数", value: "\(store.gachaSummary.standardPity) 抽", systemImage: "clock", tint: .green)
             GlassMetricCard(title: "五星", value: "\(store.gachaSummary.fiveStarCount) 个", systemImage: "star", tint: .yellow)
             GlassMetricCard(title: "养成计划", value: "\(store.plans.count)", systemImage: "checklist", tint: .green)
             GlassMetricCard(title: "签到", value: signInMetricValue, systemImage: "checkmark.seal", tint: .mint)
@@ -406,7 +407,8 @@ private struct GachaSummaryPanel: View {
             } else {
                 VStack(alignment: .leading, spacing: 14) {
                     HStack(spacing: 18) {
-                        OverviewInlineMetric(title: "当前垫数", value: "\(summary.pitySinceLastFiveStar) 抽")
+                        OverviewInlineMetric(title: "活动池垫数", value: "\(summary.activityPity) 抽")
+                        OverviewInlineMetric(title: "常驻池垫数", value: "\(summary.standardPity) 抽")
                         OverviewInlineMetric(title: "五星出率", value: analysis.fiveStarRateText)
                         OverviewInlineMetric(title: "平均间隔", value: averageFiveStarPityText)
                     }

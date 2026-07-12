@@ -42,6 +42,124 @@ struct AnnouncementItem: Codable, Identifiable, Equatable {
         case endsAt
         case typeLabel
     }
+
+    private enum OfficialCodingKeys: String, CodingKey {
+        case contentURL
+        case startTime
+        case endTime
+        case type
+    }
+
+    init(
+        id: String,
+        title: String,
+        subtitle: String?,
+        url: URL?,
+        bannerURL: URL?,
+        startsAt: Date?,
+        endsAt: Date?,
+        typeLabel: String?
+    ) {
+        self.id = id
+        self.title = title
+        self.subtitle = subtitle
+        self.url = url
+        self.bannerURL = bannerURL
+        self.startsAt = startsAt
+        self.endsAt = endsAt
+        self.typeLabel = typeLabel
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let officialContainer = try decoder.container(keyedBy: OfficialCodingKeys.self)
+
+        id = try container.decode(String.self, forKey: .id)
+        title = try container.decode(String.self, forKey: .title)
+        subtitle = try container.decodeIfPresent(String.self, forKey: .subtitle)
+        url = Self.decodeOptionalURL(from: container, keys: [.url])
+            ?? Self.decodeOptionalURL(from: officialContainer, keys: [.contentURL])
+        bannerURL = Self.decodeOptionalURL(from: container, keys: [.bannerURL])
+        startsAt = Self.decodeOptionalDate(from: container, keys: [.startsAt])
+            ?? Self.decodeOptionalDate(from: officialContainer, keys: [.startTime])
+        endsAt = Self.decodeOptionalDate(from: container, keys: [.endsAt])
+            ?? Self.decodeOptionalDate(from: officialContainer, keys: [.endTime])
+        typeLabel = Self.decodeOptionalString(from: container, keys: [.typeLabel])
+            ?? Self.decodeOptionalString(from: officialContainer, keys: [.type])
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(title, forKey: .title)
+        try container.encodeIfPresent(subtitle, forKey: .subtitle)
+        try container.encodeIfPresent(url, forKey: .url)
+        try container.encodeIfPresent(bannerURL, forKey: .bannerURL)
+        try container.encodeIfPresent(startsAt, forKey: .startsAt)
+        try container.encodeIfPresent(endsAt, forKey: .endsAt)
+        try container.encodeIfPresent(typeLabel, forKey: .typeLabel)
+    }
+
+    private static func decodeOptionalURL<Key: CodingKey>(
+        from container: KeyedDecodingContainer<Key>,
+        keys: [Key]
+    ) -> URL? {
+        for key in keys {
+            guard let rawValue = try? container.decode(String.self, forKey: key) else {
+                continue
+            }
+            let value = rawValue.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !value.isEmpty,
+                  let url = URL(string: value),
+                  let scheme = url.scheme?.lowercased(),
+                  scheme == "http" || scheme == "https",
+                  let host = url.host,
+                  !host.isEmpty else {
+                continue
+            }
+            return url
+        }
+        return nil
+    }
+
+    private static func decodeOptionalString<Key: CodingKey>(
+        from container: KeyedDecodingContainer<Key>,
+        keys: [Key]
+    ) -> String? {
+        for key in keys {
+            guard let rawValue = try? container.decode(String.self, forKey: key) else {
+                continue
+            }
+            let value = rawValue.trimmingCharacters(in: .whitespacesAndNewlines)
+            if !value.isEmpty {
+                return value
+            }
+        }
+        return nil
+    }
+
+    private static func decodeOptionalDate<Key: CodingKey>(
+        from container: KeyedDecodingContainer<Key>,
+        keys: [Key]
+    ) -> Date? {
+        for key in keys {
+            if let date = try? container.decode(Date.self, forKey: key) {
+                return date
+            }
+            guard let value = try? container.decode(String.self, forKey: key) else {
+                continue
+            }
+            let formatter = DateFormatter()
+            formatter.calendar = Calendar(identifier: .gregorian)
+            formatter.locale = Locale(identifier: "en_US_POSIX")
+            formatter.timeZone = TimeZone(identifier: "Asia/Shanghai")
+            formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            if let date = formatter.date(from: value) {
+                return date
+            }
+        }
+        return nil
+    }
 }
 
 struct GachaEventInfo: Codable, Identifiable, Equatable {
@@ -110,6 +228,11 @@ struct RerunTimerEntry: Equatable, Identifiable {
 }
 
 enum OverviewSummary {
+    private struct ActiveGachaIdentity: Hashable {
+        var type: Int
+        var name: String
+    }
+
     private static let standardCharacterIDs: Set<Int> = [
         10000003, // 琴
         10000016, // 迪卢克
@@ -122,14 +245,29 @@ enum OverviewSummary {
     ]
 
     static func activeGachaEvents(from events: [GachaEventInfo], now: Date = Date()) -> [GachaEventInfo] {
-        events
-            .filter { $0.from <= now && now <= $0.to }
-            .sorted { lhs, rhs in
-                if lhs.type != rhs.type {
-                    return lhs.type < rhs.type
-                }
-                return lhs.from < rhs.from
+        var uniqueEvents: [ActiveGachaIdentity: GachaEventInfo] = [:]
+
+        for event in events where event.from <= now && now <= event.to {
+            let identity = ActiveGachaIdentity(type: event.type, name: event.name)
+            if let existing = uniqueEvents[identity],
+               gachaEventCompleteness(existing) >= gachaEventCompleteness(event) {
+                continue
             }
+            uniqueEvents[identity] = event
+        }
+
+        return uniqueEvents.values.sorted { lhs, rhs in
+            if lhs.type != rhs.type {
+                return lhs.type < rhs.type
+            }
+            return lhs.from < rhs.from
+        }
+    }
+
+    private static func gachaEventCompleteness(_ event: GachaEventInfo) -> Int {
+        (event.upOrangeList.isEmpty ? 0 : 1)
+            + (event.upPurpleList.isEmpty ? 0 : 1)
+            + (event.bannerURL == nil ? 0 : 1)
     }
 
     static func characterRerunTimers(

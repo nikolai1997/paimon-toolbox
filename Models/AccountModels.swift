@@ -216,6 +216,7 @@ struct SignInSummary: Codable, Equatable {
     var totalSignDay: Int
     var isTodaySigned: Bool
     var rewards: [SignInReward]
+    var serverDate: String? = nil
 }
 
 struct SignInResignInfoPayload: Codable, Equatable {

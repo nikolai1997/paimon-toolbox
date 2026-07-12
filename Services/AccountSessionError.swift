@@ -4,6 +4,7 @@ enum AccountSessionError: Error, LocalizedError, Equatable {
     case networkFailure(String? = nil)
     case localStorageUnavailable(String)
     case apiFailure(String)
+    case apiFailureResponse(retcode: Int, message: String)
     case invalidResponse(String)
     case missingAccount
     case missingRole
@@ -21,6 +22,8 @@ enum AccountSessionError: Error, LocalizedError, Equatable {
         case .localStorageUnavailable(let message):
             return "本地账号存储不可用：\(message)"
         case .apiFailure(let message):
+            return "接口返回错误：\(message)"
+        case .apiFailureResponse(_, let message):
             return "接口返回错误：\(message)"
         case .invalidResponse(let message):
             return "响应内容无效：\(message)"
@@ -61,6 +64,18 @@ enum AccountSessionError: Error, LocalizedError, Equatable {
         case .stepFailed(let step, let message):
             return "\(step)失败：\(message)"
         }
+    }
+
+    var apiRetcode: Int? {
+        guard case .apiFailureResponse(let retcode, _) = self else {
+            return nil
+        }
+        return retcode
+    }
+
+    var indicatesExpiredSession: Bool {
+        guard let apiRetcode else { return false }
+        return [-100, -101].contains(apiRetcode)
     }
 }
 

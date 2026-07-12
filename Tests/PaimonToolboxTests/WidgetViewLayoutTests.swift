@@ -36,7 +36,8 @@ final class WidgetViewLayoutTests: XCTestCase {
         XCTAssertTrue(source.contains("WidgetStableForeground"))
         XCTAssertTrue(source.contains("Color.white.opacity(fallbackOpacity)"))
         XCTAssertTrue(source.contains("fallbackOpacity: 0.96"))
-        XCTAssertTrue(source.contains("fallbackOpacity: 0.82"))
+        XCTAssertTrue(source.contains("fallbackOpacity: Double = 0.82"))
+        XCTAssertTrue(source.contains("fallbackOpacity: 0.78"))
     }
 
     func testDesktopWidgetViewsAvoidSystemLabelInDesktopRenderingModes() throws {
@@ -53,9 +54,10 @@ final class WidgetViewLayoutTests: XCTestCase {
     func testDesktopWidgetCriticalContentUsesReadableForegroundInsteadOfSemanticTint() throws {
         let source = try Self.source("Views/Widgets/ToolboxWidgetViews.swift")
 
-        XCTAssertTrue(source.contains("WidgetReadableForeground"))
-        XCTAssertTrue(source.contains("widgetReadablePrimary"))
-        XCTAssertTrue(source.contains("Color.white.opacity(opacity)"))
+        XCTAssertFalse(source.contains("WidgetReadableForeground"))
+        XCTAssertFalse(source.contains("widgetReadablePrimary"))
+        XCTAssertTrue(source.contains("WidgetStableForeground"))
+        XCTAssertTrue(source.contains("widgetStablePrimary"))
         XCTAssertFalse(source.contains(".widgetSemanticForeground(tint"))
         XCTAssertFalse(source.contains("Text(\"打开工具箱\")\n                        .font(.headline.weight(.regular))\n                        .lineLimit(1)\n                        .minimumScaleFactor(0.72)\n                        .widgetSemanticForeground(.blue)"))
         XCTAssertFalse(source.contains("Text(\"今日养成\")\n                        .font(.headline.weight(.regular))\n                        .lineLimit(1)\n                        .minimumScaleFactor(0.78)\n                        .widgetSemanticForeground(.blue)"))
@@ -88,9 +90,21 @@ final class WidgetViewLayoutTests: XCTestCase {
         XCTAssertTrue(source.contains("tint: .purple"))
         XCTAssertTrue(source.contains("tint: snapshot.signIn.isTodaySigned ? .green : .orange"))
         XCTAssertTrue(source.contains(".widgetTintBackground(tint"))
-        XCTAssertTrue(source.contains("tint.opacity(0.24)"))
+        XCTAssertTrue(source.contains("fullColorOpacity: Double = 0.24"))
+        XCTAssertTrue(source.contains("tint.opacity(fullColorOpacity)"))
         XCTAssertTrue(source.contains("Color.black.opacity(0.12)"))
         XCTAssertTrue(source.contains("renderingMode == .fullColor"))
+    }
+
+    func testLargeWidgetFocusUsesStrongerTintWithoutChangingNonFocusFallback() throws {
+        let source = try Self.source("Views/Widgets/ToolboxWidgetViews.swift")
+
+        XCTAssertTrue(source.contains("fullColorOpacity: Double = 0.24"))
+        XCTAssertTrue(source.contains("tint.opacity(fullColorOpacity)"))
+        XCTAssertTrue(source.contains("Color.black.opacity(0.12)"))
+        XCTAssertEqual(source.components(separatedBy: "fullColorOpacity: 0.42").count - 1, 3)
+        XCTAssertTrue(source.contains(".widgetTintBackground(tint, cornerRadius: 18, fullColorOpacity: 0.42)"))
+        XCTAssertTrue(source.contains(".widgetTintBackground(.blue, cornerRadius: 18, fullColorOpacity: 0.42)"))
     }
 
     func testWidgetConfigurationAllowsSystemPlaceholderRenderingModes() throws {
@@ -170,19 +184,19 @@ final class WidgetViewLayoutTests: XCTestCase {
         XCTAssertFalse(viewSource.contains("Link(destination:"))
     }
 
-    func testWidgetViewsExposeManualRefreshEntry() throws {
+    func testWidgetViewsDoNotPresentStaticRefreshTextAsAnInteractiveControl() throws {
         let viewSource = try Self.source("Views/Widgets/ToolboxWidgetViews.swift")
         let extensionSource = try Self.source("Widgets/PaimonToolboxWidgets.swift")
 
-        XCTAssertTrue(viewSource.contains("arrow.clockwise"))
-        XCTAssertTrue(viewSource.contains("刷新"))
+        XCTAssertFalse(viewSource.contains("arrow.clockwise"))
+        XCTAssertFalse(viewSource.contains("Text(\"刷新\")"))
         XCTAssertTrue(extensionSource.contains("paimontoolbox://widget/refresh"))
     }
 
     func testMediumWidgetUsesCompactHorizontalMetrics() throws {
         let source = try Self.source("Views/Widgets/ToolboxWidgetViews.swift")
 
-        XCTAssertTrue(source.contains("HStack(spacing: 8)"))
+        XCTAssertTrue(source.contains("HStack(spacing: 6)"))
         XCTAssertTrue(source.contains("CompactWidgetMetric"))
         XCTAssertFalse(source.contains("VStack(spacing: 10) {\n                WidgetMetricPill"))
     }

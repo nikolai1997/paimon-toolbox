@@ -52,7 +52,8 @@ struct GenshinSignInClient {
             month: rewardHome.month,
             totalSignDay: info.totalSignDay,
             isTodaySigned: info.isSign,
-            rewards: rewardHome.rewards(totalSignDay: info.totalSignDay)
+            rewards: rewardHome.rewards(totalSignDay: info.totalSignDay),
+            serverDate: info.today
         )
     }
 

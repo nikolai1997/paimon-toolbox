@@ -1,5 +1,57 @@
 import Foundation
 
+enum AutoSignInWindow: String, CaseIterable, Identifiable {
+    case morning
+    case afternoon
+    case evening
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .morning:
+            return "上午"
+        case .afternoon:
+            return "中午"
+        case .evening:
+            return "晚上"
+        }
+    }
+
+    var timeRangeText: String {
+        switch self {
+        case .morning:
+            return "08:00-12:00"
+        case .afternoon:
+            return "12:00-16:00"
+        case .evening:
+            return "18:00-22:00"
+        }
+    }
+
+    var startHour: Int {
+        switch self {
+        case .morning:
+            return 8
+        case .afternoon:
+            return 12
+        case .evening:
+            return 18
+        }
+    }
+
+    var endHour: Int {
+        switch self {
+        case .morning:
+            return 12
+        case .afternoon:
+            return 16
+        case .evening:
+            return 22
+        }
+    }
+}
+
 protocol AutoSignInStoring: AnyObject {
     var isEnabled: Bool { get }
     func completedDay(accountID: String, uid: String) -> String?
@@ -12,6 +64,7 @@ protocol AutoSignInStoring: AnyObject {
 
 enum AutoSignInSettings {
     static let enabledKey = "account.autoSignIn.enabled"
+    static let windowKey = "account.autoSignIn.window"
     static let completedDayPrefix = "account.autoSignIn.completedDay"
     static let lastFailurePrefix = "account.autoSignIn.lastFailure"
     static let scheduledAttemptPrefix = "account.autoSignIn.scheduledAttempt"
@@ -19,11 +72,25 @@ enum AutoSignInSettings {
     static let deferredWakeInterval: TimeInterval = 30 * 60
     static let minimumWakeInterval: TimeInterval = 60
     static let failureCooldown: TimeInterval = 10 * 60
-    static let morningWindowStartHour = 8
-    static let morningWindowEndHour = 12
+    static let riskStatusConfirmationAttempts = 2
+    static let riskStatusConfirmationDelayNanoseconds: UInt64 = 1_500_000_000
+    static let defaultWindow = AutoSignInWindow.morning
+    static let morningWindowStartHour = AutoSignInWindow.morning.startHour
+    static let morningWindowEndHour = AutoSignInWindow.morning.endHour
 
     static var isEnabled: Bool {
         UserDefaults.standard.bool(forKey: enabledKey)
+    }
+
+    static var selectedWindow: AutoSignInWindow {
+        AutoSignInWindow(rawValue: UserDefaults.standard.string(forKey: windowKey) ?? "") ?? defaultWindow
+    }
+
+    static func scheduledAttemptIdentifier(
+        serverDay: String,
+        window: AutoSignInWindow = selectedWindow
+    ) -> String {
+        "\(serverDay).\(window.rawValue)"
     }
 }
 

@@ -1,3 +1,4 @@
+import CryptoKit
 import Foundation
 
 enum SelfCheck {
@@ -14,9 +15,60 @@ enum SelfCheck {
 
     private static func run() throws {
         try verifyMetadata()
+        try verifyBundledPublicData()
         try verifyGacha()
         try verifyUIGF()
         verifyPlanner()
+    }
+
+    static func verifyBundledPublicData() throws {
+        if let publicDirectory = Bundle.module.url(forResource: "public", withExtension: nil) {
+            try verifyPublicData(at: publicDirectory, allowedExtraJSONNames: [])
+            return
+        }
+        guard let manifestURL = Bundle.module.url(forResource: "manifest", withExtension: "json") else {
+            throw SelfCheckError.missingResource("public")
+        }
+        let resourceDirectory = manifestURL.deletingLastPathComponent()
+        try verifyPublicData(at: resourceDirectory, allowedExtraJSONNames: ["metadata.sample.json"])
+    }
+
+    private static func verifyPublicData(at directory: URL, allowedExtraJSONNames: Set<String>) throws {
+        let expectedNames = Set(RemoteDataFileKind.allCases.map(\.canonicalPath) + ["manifest.json"])
+        let members = try FileManager.default.contentsOfDirectory(
+            at: directory,
+            includingPropertiesForKeys: [.isRegularFileKey],
+            options: [.skipsHiddenFiles]
+        )
+        let jsonMembers = members.filter { $0.pathExtension.lowercased() == "json" }
+        let actualJSONNames = Set(jsonMembers.map(\.lastPathComponent))
+        try require(actualJSONNames == expectedNames.union(allowedExtraJSONNames), "public data members mismatch")
+        try require(jsonMembers.allSatisfy { (try? $0.resourceValues(forKeys: [.isRegularFileKey]).isRegularFile) == true }, "public data contains a non-file member")
+
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        let manifestURL = directory.appending(path: "manifest.json")
+        let manifest = try decoder.decode(RemoteDataManifest.self, from: Data(contentsOf: manifestURL))
+        try require(manifest.schemaVersion == RemoteDataManifest.currentSchemaVersion, "public manifest schema mismatch")
+        try require(manifest.files.count == RemoteDataFileKind.allCases.count, "public manifest file count mismatch")
+
+        var seenKinds: Set<RemoteDataFileKind> = []
+        for file in manifest.files {
+            try require(file.path == file.kind.canonicalPath, "public manifest path mismatch")
+            try require(seenKinds.insert(file.kind).inserted, "public manifest kind duplicated")
+            let data = try Data(contentsOf: directory.appending(path: file.path))
+            let digest = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+            try require(digest.caseInsensitiveCompare(file.sha256) == .orderedSame, "public manifest hash mismatch")
+        }
+        try require(seenKinds == Set(RemoteDataFileKind.allCases), "public manifest kinds mismatch")
+
+        _ = try decoder.decode(MetadataBundle.self, from: Data(contentsOf: directory.appending(path: "metadata.json")))
+        _ = try decoder.decode(RemoteLatestInfo.self, from: Data(contentsOf: directory.appending(path: "latest.json")))
+        _ = try decoder.decode(AnnouncementFeed.self, from: Data(contentsOf: directory.appending(path: "announcements.json")))
+        _ = try decoder.decode([GachaEventInfo].self, from: Data(contentsOf: directory.appending(path: "gacha-events.json")))
+        for name in ["characters.json", "weapons.json", "materials.json", "config.json"] {
+            _ = try JSONSerialization.jsonObject(with: Data(contentsOf: directory.appending(path: name)))
+        }
     }
 
     private static func verifyMetadata() throws {
@@ -59,7 +111,7 @@ enum SelfCheck {
             "lang": "zh-cn",
             "export_time": "2026-06-24 12:00:00",
             "export_timestamp": 1782273600,
-            "uigf_version": "v4.0"
+            "uigf_version": "v3.0"
           },
           "list": [
             {
