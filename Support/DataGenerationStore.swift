@@ -15,7 +15,7 @@ enum DataGenerationStore {
         }
         let candidate = generationRoot(for: generationID, under: root)
             .appending(path: legacyDestination.lastPathComponent)
-        return FileManager.default.fileExists(atPath: candidate.path()) ? candidate : legacyDestination
+        return FileManager.default.fileExists(atPath: candidate.path) ? candidate : legacyDestination
     }
 
     static func publish(
@@ -28,7 +28,7 @@ enum DataGenerationStore {
         let metadataRoot = metadataDestination.deletingLastPathComponent().standardizedFileURL
         let publicRoot = publicDestination.deletingLastPathComponent().standardizedFileURL
         guard metadataRoot == publicRoot else {
-            throw MetadataPackageImportError.invalidDestination(publicDestination.path())
+            throw MetadataPackageImportError.invalidDestination(publicDestination.path)
         }
 
         let newGenerationID = UUID().uuidString.lowercased()
@@ -39,7 +39,7 @@ enum DataGenerationStore {
         let currentPointerURL = metadataRoot.appending(path: currentPointerName)
         let previousPointerURL = metadataRoot.appending(path: previousPointerName)
         let previousCurrentID = generationID(at: currentPointerURL).flatMap { candidate in
-            FileManager.default.fileExists(atPath: generationRoot(for: candidate, under: metadataRoot).path())
+            FileManager.default.fileExists(atPath: generationRoot(for: candidate, under: metadataRoot).path)
                 ? candidate
                 : nil
         }
@@ -79,14 +79,14 @@ enum DataGenerationStore {
 
         let currentRoot = generationRoot(for: currentID, under: root)
         let activeDestination = currentRoot.appending(path: legacyDestination.lastPathComponent)
-        guard FileManager.default.fileExists(atPath: activeDestination.path()) else {
+        guard FileManager.default.fileExists(atPath: activeDestination.path) else {
             return false
         }
 
         let previousPointerURL = root.appending(path: previousPointerName)
         let previousID = generationID(at: previousPointerURL).flatMap { candidate -> String? in
             guard candidate != currentID,
-                  FileManager.default.fileExists(atPath: generationRoot(for: candidate, under: root).path()) else {
+                  FileManager.default.fileExists(atPath: generationRoot(for: candidate, under: root).path) else {
                 return nil
             }
             return candidate
@@ -129,7 +129,7 @@ enum DataGenerationStore {
     }
 
     private static func cleanupGenerations(in generationsRoot: URL, keeping generationIDs: [String]) throws {
-        guard FileManager.default.fileExists(atPath: generationsRoot.path()) else {
+        guard FileManager.default.fileExists(atPath: generationsRoot.path) else {
             return
         }
         let retained = Set(generationIDs)

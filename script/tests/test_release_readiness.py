@@ -104,6 +104,16 @@ class ReleaseReadinessTests(unittest.TestCase):
 
         package_script = (ROOT / "script/package_dmg.sh").read_text(encoding="utf-8")
         self.assertIn('--validate-public-dir "$ROOT_DIR/data/public"', package_script)
+        self.assertIn('strip_release_symbols "$APP_BINARY"', package_script)
+        self.assertIn('strip_release_symbols "$EXTENSION_BINARY"', package_script)
+        self.assertLess(
+            package_script.index('strip_release_symbols "$APP_BINARY"'),
+            package_script.index('"$APP_BINARY" --self-check'),
+        )
+        self.assertLess(
+            package_script.index('strip_release_symbols "$EXTENSION_BINARY"'),
+            package_script.index("\nsign_app_bundle\n"),
+        )
 
     def test_swift_package_excludes_release_only_metadata(self):
         package = (ROOT / "Package.swift").read_text(encoding="utf-8")

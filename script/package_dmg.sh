@@ -20,6 +20,7 @@ RELEASE_DIR="$WORK_DIR/release"
 APP_BUNDLE="$RELEASE_DIR/$APP_NAME.app"
 EXTENSION_BUNDLE="$APP_BUNDLE/Contents/PlugIns/$EXTENSION_NAME.appex"
 APP_BINARY="$APP_BUNDLE/Contents/MacOS/$APP_NAME"
+EXTENSION_BINARY="$EXTENSION_BUNDLE/Contents/MacOS/$EXTENSION_NAME"
 APP_ENTITLEMENTS="$ROOT_DIR/Entitlements/$APP_NAME.entitlements"
 EXTENSION_ENTITLEMENTS="$ROOT_DIR/Entitlements/$EXTENSION_NAME.entitlements"
 CODESIGN_IDENTITY="${CODESIGN_IDENTITY:--}"
@@ -43,6 +44,13 @@ clean_bundle_metadata() {
     -exec xattr -d com.apple.FinderInfo {} \; \
     -exec xattr -d 'com.apple.fileprovider.fpfs#P' {} \; \
     2>/dev/null || true
+}
+
+strip_release_symbols() {
+  local binary="$1"
+  if [[ -f "$binary" ]]; then
+    /usr/bin/strip -S "$binary"
+  fi
 }
 
 sign_app_bundle() {
@@ -79,6 +87,8 @@ TMP_DMG_PATH="$(mktemp "$DIST_DIR/.${APP_NAME}-${VERSION}.XXXXXX.dmg")"
 rm -f "$TMP_DMG_PATH"
 ditto --noextattr --noqtn "$DERIVED_DATA/Build/Products/Release/$APP_NAME.app" "$APP_BUNDLE"
 
+strip_release_symbols "$APP_BINARY"
+strip_release_symbols "$EXTENSION_BINARY"
 "$APP_BINARY" --self-check
 sign_app_bundle
 

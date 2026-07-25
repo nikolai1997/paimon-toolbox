@@ -28,7 +28,7 @@ struct LocalGachaLogService: GachaLogServicing {
         var didReadMigratableFile = false
         var firstDecodeError: Error?
 
-        for url in candidateRecordURLs(primaryURL: primaryURL) where FileManager.default.fileExists(atPath: url.path()) {
+        for url in candidateRecordURLs(primaryURL: primaryURL) where FileManager.default.fileExists(atPath: url.path) {
             do {
                 let records = try await Self.decodeRecords(at: url)
                 merged = GachaLogDocument.mergedRecords(existing: merged, imported: records)
@@ -113,13 +113,13 @@ struct LocalGachaLogService: GachaLogServicing {
     private func candidateRecordURLs(primaryURL: URL) -> [URL] {
         var seen = Set<String>()
         return ([primaryURL] + legacyRecordURLs).filter { url in
-            let key = url.standardizedFileURL.path()
+            let key = url.standardizedFileURL.path
             return seen.insert(key).inserted
         }
     }
 
     private static func isSameFile(_ lhs: URL, _ rhs: URL) -> Bool {
-        lhs.standardizedFileURL.path() == rhs.standardizedFileURL.path()
+        lhs.standardizedFileURL.path == rhs.standardizedFileURL.path
     }
 
     private static func defaultLegacyRecordURLs() -> [URL] {
@@ -212,7 +212,7 @@ struct LocalGachaLogService: GachaLogServicing {
 
         var seen = Set<String>()
         return homes.filter { home in
-            let key = home.standardizedFileURL.path()
+            let key = home.standardizedFileURL.path
             return seen.insert(key).inserted
         }
     }

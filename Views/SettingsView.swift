@@ -58,10 +58,10 @@ struct SettingsView: View {
                         .foregroundStyle(.secondary)
                     Button {
                         Task {
-                            await store.refreshMetadata(from: RemoteDataSettings.githubMetadataURLString)
+                            await store.manuallyRefreshRemoteData()
                         }
                     } label: {
-                        Label("刷新资料库缓存", systemImage: "arrow.down.doc")
+                        Label("立即更新数据", systemImage: "arrow.down.doc")
                     }
                 }
 

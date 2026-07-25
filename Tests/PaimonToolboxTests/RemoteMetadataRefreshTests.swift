@@ -125,6 +125,45 @@ final class RemoteMetadataRefreshTests: XCTestCase {
         XCTAssertEqual(store.successMessage, "资料库已自动从 GitHub 更新")
     }
 
+    func testRunningAppRefreshCheckReloadsOverviewAfterRemoteDataChanges() async {
+        let local = makeMetadata(version: "local")
+        let remote = makeMetadata(version: "remote")
+        let service = MockMetadataService(local: local, remote: remote)
+        let overviewService = MockOverviewDataService(
+            results: [makeOverviewData(eventName: "本期卡池")]
+        )
+        let store = makeStore(metadataService: service, overviewDataService: overviewService)
+
+        await store.refreshRemoteDataIfNeeded(
+            remoteMetadataURLString: "https://example.com/metadata.json",
+            offlinePackageURLString: "",
+            isEnabled: true,
+            now: Date(timeIntervalSince1970: 1_788_480_000)
+        )
+
+        XCTAssertEqual(service.refreshCallCount, 1)
+        XCTAssertEqual(store.metadata, remote)
+        XCTAssertEqual(store.overviewData.gachaEvents.first?.name, "本期卡池")
+    }
+
+    func testManualRefreshBypassesDailyAutomaticRefreshLimit() async {
+        let local = makeMetadata(version: "local")
+        let remote = makeMetadata(version: "remote")
+        let service = MockMetadataService(local: local, remote: remote)
+        let overviewService = MockOverviewDataService(
+            results: [makeOverviewData(eventName: "手动更新卡池")]
+        )
+        let store = makeStore(metadataService: service, overviewDataService: overviewService)
+        UserDefaults.standard.set(Date(), forKey: RemoteDataSettings.lastAutoRefreshSuccessKey)
+
+        await store.manuallyRefreshRemoteData()
+
+        XCTAssertEqual(service.refreshCallCount, 1)
+        XCTAssertEqual(store.metadata, remote)
+        XCTAssertEqual(store.overviewData.gachaEvents.first?.name, "手动更新卡池")
+        XCTAssertEqual(store.successMessage, "数据已更新")
+    }
+
     func testImportingOfflinePackageReloadsOverviewDataFromPublicCache() async {
         let local = makeMetadata(version: "local")
         let remote = makeMetadata(version: "remote")

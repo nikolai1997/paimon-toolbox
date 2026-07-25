@@ -3,6 +3,36 @@ import XCTest
 
 @MainActor
 final class OverviewDataServiceTests: XCTestCase {
+    func testLoadsPublishedGenerationFromPathContainingSpacesAndChineseCharacters() async throws {
+        let root = try makeTemporaryDirectory()
+            .appending(path: "Application Support", directoryHint: .isDirectory)
+            .appending(path: "派蒙工具箱", directoryHint: .isDirectory)
+        try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+        let metadataURL = root.appending(path: "metadata-cache.json")
+        let publicDataURL = root.appending(path: "public-data", directoryHint: .isDirectory)
+        try DataGenerationStore.publish(
+            metadataData: Data("{}".utf8),
+            publicFiles: [
+                "latest.json": validLatestData,
+                "announcements.json": announcementData(title: "新代公告"),
+                "gacha-events.json": gachaEventsData(eventName: "新代卡池")
+            ],
+            metadataDestination: metadataURL,
+            publicDestination: publicDataURL
+        )
+
+        let activeURL = DataGenerationStore.activeURL(for: publicDataURL)
+        XCTAssertNotEqual(activeURL.standardizedFileURL, publicDataURL.standardizedFileURL)
+
+        let data = try await LocalOverviewDataService(
+            publicDataDirectory: publicDataURL,
+            fallbackPublicDataDirectories: []
+        ).loadOverviewData()
+
+        XCTAssertEqual(data.gachaEvents.map(\.name), ["新代卡池"])
+        XCTAssertEqual(data.announcements.map(\.title), ["新代公告"])
+    }
+
     func testInvalidAnnouncementURLsDoNotDiscardOverviewData() async throws {
         let directory = try makeTemporaryDirectory()
         try writePublicData(

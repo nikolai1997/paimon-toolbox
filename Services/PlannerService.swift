@@ -16,11 +16,11 @@ struct LocalPlannerService: PlannerServicing {
     }
 
     func loadPlans() async throws -> [CultivationPlan] {
-        if let local = try? plannerFileURL(), FileManager.default.fileExists(atPath: local.path()) {
+        if let local = try? plannerFileURL(), FileManager.default.fileExists(atPath: local.path) {
             return try await Self.decodePlans(at: local)
         }
 
-        for legacyURL in legacyPlanURLs where FileManager.default.fileExists(atPath: legacyURL.path()) {
+        for legacyURL in legacyPlanURLs where FileManager.default.fileExists(atPath: legacyURL.path) {
             guard let plans = try? await Self.decodePlans(at: legacyURL) else {
                 continue
             }

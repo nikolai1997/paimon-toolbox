@@ -4,6 +4,7 @@ import SwiftUI
 struct PaimonToolboxApp: App {
     @State private var store: AppStore
     @AppStorage(AppAppearanceSettings.themeKey) private var appThemeRawValue = AppTheme.system.rawValue
+    @Environment(\.scenePhase) private var scenePhase
 
     private var appTheme: AppTheme {
         AppTheme(rawValue: appThemeRawValue) ?? .system
@@ -24,6 +25,13 @@ struct PaimonToolboxApp: App {
                 .task {
                     await store.load()
                     await store.startAutomaticSignInMonitor()
+                    store.startRemoteDataRefreshMonitor()
+                }
+                .onChange(of: scenePhase) { _, newPhase in
+                    guard newPhase == .active else { return }
+                    Task {
+                        await store.refreshRemoteDataIfNeeded()
+                    }
                 }
                 .onOpenURL { url in
                     store.routeDeepLink(url)

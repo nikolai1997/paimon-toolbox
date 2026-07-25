@@ -88,6 +88,7 @@ final class AppStore {
 
     @ObservationIgnored private var automaticSignInWakeTask: Task<Void, Never>?
     @ObservationIgnored private var automaticSignInWakeDate: Date?
+    @ObservationIgnored private var remoteDataRefreshMonitorTask: Task<Void, Never>?
 
     private let metadataService: MetadataServicing
     private let overviewDataService: OverviewDataServicing
@@ -222,6 +223,48 @@ final class AppStore {
         publishWidgetSnapshot(generatedAt: now)
     }
 
+    func refreshRemoteDataIfNeeded(
+        remoteMetadataURLString: String = RemoteDataSettings.githubMetadataURLString,
+        offlinePackageURLString: String = RemoteDataSettings.offlinePackageURLString,
+        isEnabled: Bool = RemoteDataSettings.isAutoRefreshEnabled,
+        now: Date = Date()
+    ) async {
+        await refreshRemoteMetadataIfNeeded(
+            urlString: remoteMetadataURLString,
+            offlinePackageURLString: offlinePackageURLString,
+            isEnabled: isEnabled,
+            now: now
+        )
+    }
+
+    func manuallyRefreshRemoteData() async {
+        await refreshMetadata(from: RemoteDataSettings.githubMetadataURLString)
+    }
+
+    func startRemoteDataRefreshMonitor() {
+        guard remoteDataRefreshMonitorTask == nil else {
+            return
+        }
+
+        remoteDataRefreshMonitorTask = Task { [weak self] in
+            while !Task.isCancelled {
+                guard let self else { return }
+                await self.refreshRemoteDataIfNeeded()
+
+                do {
+                    try await Task.sleep(nanoseconds: 15 * 60 * 1_000_000_000)
+                } catch {
+                    return
+                }
+            }
+        }
+    }
+
+    func stopRemoteDataRefreshMonitor() {
+        remoteDataRefreshMonitorTask?.cancel()
+        remoteDataRefreshMonitorTask = nil
+    }
+
     func refreshMetadata(from urlString: String) async {
         guard let url = URL(string: urlString), !urlString.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             errorMessage = MetadataRefreshError.invalidURL.localizedDescription
@@ -232,7 +275,7 @@ final class AppStore {
             metadata = try await metadataService.refreshMetadata(from: url)
             try await reloadOverviewData()
             metadataSourceDescription = url.absoluteString
-            successMessage = "资料库已从静态资源更新"
+            successMessage = "数据已更新"
             errorMessage = nil
         } catch {
             errorMessage = "资料库更新失败：\(error.localizedDescription)"

@@ -6,7 +6,10 @@ final class PlannerServiceTests: XCTestCase {
     func testNewPlannerStoreStartsEmptyInsteadOfSamplePlan() async throws {
         let directory = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString, directoryHint: .isDirectory)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        let service = LocalPlannerService(plansURL: directory.appending(path: "plans.json"))
+        let service = LocalPlannerService(
+            plansURL: directory.appending(path: "plans.json"),
+            legacyPlanURLs: []
+        )
 
         let plans = try await service.loadPlans()
 
@@ -42,7 +45,7 @@ final class PlannerServiceTests: XCTestCase {
         let loaded = try await service.loadPlans()
 
         XCTAssertEqual(loaded, saved)
-        XCTAssertTrue(FileManager.default.fileExists(atPath: primaryURL.path()))
+        XCTAssertTrue(FileManager.default.fileExists(atPath: primaryURL.path))
     }
 
     func testAppStoreCreatesCharacterPlanFromMetadataMaterials() async {

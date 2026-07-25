@@ -20,7 +20,7 @@ final class RemoteDataPackageImporterTests: XCTestCase {
         let imported = try await service.importMetadataPackage(from: packageURL)
 
         XCTAssertEqual(imported, metadata)
-        XCTAssertTrue(FileManager.default.fileExists(atPath: DataGenerationStore.activeURL(for: cacheURL).path()))
+        XCTAssertTrue(FileManager.default.fileExists(atPath: DataGenerationStore.activeURL(for: cacheURL).path))
         let cached = try await service.loadMetadata()
         XCTAssertEqual(cached, metadata)
     }
@@ -158,7 +158,7 @@ final class RemoteDataPackageImporterTests: XCTestCase {
             _ = try await service.refreshMetadata(from: URL(string: "https://example.com/data/metadata.json")!)
             XCTFail("Expected non-canonical online metadata path to be rejected")
         } catch {
-            XCTAssertFalse(FileManager.default.fileExists(atPath: DataGenerationStore.activeURL(for: cacheURL).path()))
+            XCTAssertFalse(FileManager.default.fileExists(atPath: DataGenerationStore.activeURL(for: cacheURL).path))
         }
     }
 
@@ -175,7 +175,7 @@ final class RemoteDataPackageImporterTests: XCTestCase {
         let loaded = try await service.loadMetadata()
 
         XCTAssertEqual(loaded, metadata)
-        XCTAssertTrue(FileManager.default.fileExists(atPath: cacheURL.path()))
+        XCTAssertTrue(FileManager.default.fileExists(atPath: cacheURL.path))
     }
 
     func testLoadMetadataQuarantinesCorruptPrimaryAndUsesValidFallback() async throws {
@@ -195,7 +195,7 @@ final class RemoteDataPackageImporterTests: XCTestCase {
 
         XCTAssertEqual(loaded, metadata)
         XCTAssertEqual(reloaded, metadata)
-        let siblings = try FileManager.default.contentsOfDirectory(atPath: directory.path())
+        let siblings = try FileManager.default.contentsOfDirectory(atPath: directory.path)
         XCTAssertTrue(siblings.contains { $0.hasPrefix("metadata-cache.json.corrupt-") })
     }
 
@@ -406,7 +406,7 @@ final class RemoteDataPackageImporterTests: XCTestCase {
         _ = try await service.importMetadataPackage(from: packageURL)
 
         let cachedEventsURL = DataGenerationStore.activeURL(for: publicDataCache).appending(path: "gacha-events.json")
-        XCTAssertTrue(FileManager.default.fileExists(atPath: cachedEventsURL.path()))
+        XCTAssertTrue(FileManager.default.fileExists(atPath: cachedEventsURL.path))
         XCTAssertEqual(try Data(contentsOf: cachedEventsURL), gachaEventsData)
     }
 
@@ -562,8 +562,8 @@ final class RemoteDataPackageImporterTests: XCTestCase {
         }
 
         XCTAssertEqual(try Data(contentsOf: publicDataCache.appending(path: "gacha-events.json")), cachedGachaEventsData)
-        XCTAssertFalse(FileManager.default.fileExists(atPath: publicDataCache.appending(path: "config.json").path()))
-        XCTAssertFalse(FileManager.default.fileExists(atPath: cacheURL.path()))
+        XCTAssertFalse(FileManager.default.fileExists(atPath: publicDataCache.appending(path: "config.json").path))
+        XCTAssertFalse(FileManager.default.fileExists(atPath: cacheURL.path))
     }
 
     func testRejectsPackageWhenManifestHashDoesNotMatch() async throws {
@@ -581,7 +581,7 @@ final class RemoteDataPackageImporterTests: XCTestCase {
             XCTFail("Expected invalid package error")
         } catch let error as MetadataPackageImportError {
             XCTAssertEqual(error, .hashMismatch("metadata.json"))
-            XCTAssertFalse(FileManager.default.fileExists(atPath: cacheURL.path()))
+            XCTAssertFalse(FileManager.default.fileExists(atPath: cacheURL.path))
         } catch {
             XCTFail("Unexpected error: \(error)")
         }
@@ -697,8 +697,8 @@ final class RemoteDataPackageImporterTests: XCTestCase {
             "--sequesterRsrc",
             "--zlibCompressionLevel",
             "9",
-            packageRoot.path(),
-            zipURL.path()
+            packageRoot.path,
+            zipURL.path
         ]
         try process.run()
         process.waitUntilExit()
@@ -806,7 +806,7 @@ final class RemoteDataPackageImporterTests: XCTestCase {
 
     private func generationDirectories(in directory: URL) throws -> [URL] {
         let generationsRoot = directory.appending(path: ".paimon-data-generations", directoryHint: .isDirectory)
-        guard FileManager.default.fileExists(atPath: generationsRoot.path()) else {
+        guard FileManager.default.fileExists(atPath: generationsRoot.path) else {
             return []
         }
         return try FileManager.default.contentsOfDirectory(

@@ -26,7 +26,7 @@ struct BundledMetadataService: MetadataServicing {
             guard let metadataCacheURL else {
                 return true
             }
-            return fallbackURL.standardizedFileURL.path() != metadataCacheURL.standardizedFileURL.path()
+            return fallbackURL.standardizedFileURL.path != metadataCacheURL.standardizedFileURL.path
         }
         self.publicDataCacheDirectory = publicDataCacheDirectory
         self.urlSession = urlSession
@@ -35,7 +35,7 @@ struct BundledMetadataService: MetadataServicing {
     func loadMetadata() async throws -> MetadataBundle {
         let legacyCacheURL = try metadataCacheURL ?? AppPaths.metadataCacheURL
         var cacheURL = DataGenerationStore.activeURL(for: legacyCacheURL)
-        while FileManager.default.fileExists(atPath: cacheURL.path()) {
+        while FileManager.default.fileExists(atPath: cacheURL.path) {
             do {
                 return try await decodeMetadataFile(at: cacheURL)
             } catch {
@@ -48,7 +48,7 @@ struct BundledMetadataService: MetadataServicing {
             }
         }
 
-        for fallbackURL in metadataFallbackURLs where FileManager.default.fileExists(atPath: fallbackURL.path()) {
+        for fallbackURL in metadataFallbackURLs where FileManager.default.fileExists(atPath: fallbackURL.path) {
             guard let metadata = try? await decodeMetadataFile(at: fallbackURL) else {
                 continue
             }
@@ -177,10 +177,10 @@ struct BundledMetadataService: MetadataServicing {
     ) throws {
         let metadataDestination = try cacheURL()
         let publicDestination = try publicDataCacheURL()
-        if FileManager.default.fileExists(atPath: publicDestination.path()) {
+        if FileManager.default.fileExists(atPath: publicDestination.path) {
             let values = try publicDestination.resourceValues(forKeys: [.isDirectoryKey])
             guard values.isDirectory == true else {
-                throw MetadataPackageImportError.invalidDestination(publicDestination.path())
+                throw MetadataPackageImportError.invalidDestination(publicDestination.path)
             }
         }
 
@@ -211,7 +211,7 @@ struct BundledMetadataService: MetadataServicing {
     private func quarantineCorruptCache(at url: URL) throws {
         let timestamp = Int(Date().timeIntervalSince1970)
         var quarantineURL = url.appendingPathExtension("corrupt-\(timestamp)")
-        if FileManager.default.fileExists(atPath: quarantineURL.path()) {
+        if FileManager.default.fileExists(atPath: quarantineURL.path) {
             quarantineURL = url.appendingPathExtension("corrupt-\(timestamp)-\(UUID().uuidString)")
         }
         try FileManager.default.moveItem(at: url, to: quarantineURL)
@@ -269,8 +269,8 @@ struct BundledMetadataService: MetadataServicing {
         process.arguments = [
             "-x",
             "-k",
-            zipURL.path(),
-            destinationURL.path()
+            zipURL.path,
+            destinationURL.path
         ]
         try process.run()
         process.waitUntilExit()
@@ -282,7 +282,7 @@ struct BundledMetadataService: MetadataServicing {
 
     private func findPackageRoot(in extractionRoot: URL) throws -> URL {
         let rootManifest = extractionRoot.appending(path: "manifest.json")
-        if FileManager.default.fileExists(atPath: rootManifest.path()) {
+        if FileManager.default.fileExists(atPath: rootManifest.path) {
             return extractionRoot
         }
 
@@ -308,7 +308,7 @@ struct BundledMetadataService: MetadataServicing {
         }
 
         let fileURL = packageRoot.appending(path: file.path)
-        guard FileManager.default.fileExists(atPath: fileURL.path()) else {
+        guard FileManager.default.fileExists(atPath: fileURL.path) else {
             throw MetadataPackageImportError.missingFile(file.path)
         }
 

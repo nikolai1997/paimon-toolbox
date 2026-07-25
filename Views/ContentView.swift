@@ -35,10 +35,7 @@ struct ContentView: View {
 
                             ContentTopBar(
                                 searchText: $store.searchText,
-                                refresh: refreshCurrentSection,
-                                openDataSource: {
-                                    store.selectedSection = .settings
-                                }
+                                refresh: refreshRemoteData
                             )
                         }
                         .padding(.horizontal, 18)
@@ -61,13 +58,9 @@ struct ContentView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
-    private func refreshCurrentSection() {
+    private func refreshRemoteData() {
         Task {
-            if store.selectedSection == .gachaLog {
-                await store.reloadLocalGachaRecords()
-            } else {
-                await store.load()
-            }
+            await store.manuallyRefreshRemoteData()
         }
     }
 
@@ -108,7 +101,6 @@ struct ContentView: View {
 private struct ContentTopBar: View {
     @Binding var searchText: String
     let refresh: () -> Void
-    let openDataSource: () -> Void
 
     var body: some View {
         HStack(spacing: 12) {
@@ -118,14 +110,7 @@ private struct ContentTopBar: View {
                         .labelStyle(.iconOnly)
                         .frame(width: 34, height: 34)
                 }
-                .delayedTooltip("按当前页面刷新相关数据。祈愿记录页会重新读取本机记录，其他页面会重新加载本机缓存、资料库、养成计划和账号状态。")
-
-                Button(action: openDataSource) {
-                    Label("数据源", systemImage: "externaldrive.badge.icloud")
-                        .labelStyle(.iconOnly)
-                        .frame(width: 34, height: 34)
-                }
-                .delayedTooltip("打开设置中的数据源管理，用于开启自动更新或导入离线资料包。")
+                .delayedTooltip("立即检查并更新资料库、当前卡池和公告。")
             }
             .buttonStyle(.plain)
             .font(.system(size: 18, weight: .semibold))

@@ -94,7 +94,7 @@ struct LocalOverviewDataService: OverviewDataServicing {
 
         func appendSource(root: URL, generationDestination: URL? = nil) {
             let standardizedRoot = root.standardizedFileURL
-            guard seenRoots.insert(standardizedRoot.path()).inserted else {
+            guard seenRoots.insert(standardizedRoot.path).inserted else {
                 return
             }
             sources.append(
