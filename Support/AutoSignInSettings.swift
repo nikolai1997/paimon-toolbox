@@ -72,8 +72,10 @@ enum AutoSignInSettings {
     static let deferredWakeInterval: TimeInterval = 30 * 60
     static let minimumWakeInterval: TimeInterval = 60
     static let failureCooldown: TimeInterval = 10 * 60
-    static let riskStatusConfirmationAttempts = 2
-    static let riskStatusConfirmationDelayNanoseconds: UInt64 = 1_500_000_000
+    // A risk response can be reported before the sign-in status propagates.
+    // Confirm once after a short pause instead of issuing a burst of reads.
+    static let riskStatusConfirmationAttempts = 1
+    static let riskStatusConfirmationDelayNanoseconds: UInt64 = 3_000_000_000
     static let defaultWindow = AutoSignInWindow.morning
     static let morningWindowStartHour = AutoSignInWindow.morning.startHour
     static let morningWindowEndHour = AutoSignInWindow.morning.endHour

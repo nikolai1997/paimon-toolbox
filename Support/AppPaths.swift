@@ -74,6 +74,12 @@ enum AppPaths {
         }
     }
 
+    static var deskDirectDevicesURL: URL {
+        get throws {
+            try appSupportDirectory.appending(path: "desk-direct-devices.json")
+        }
+    }
+
     static var plannerURL: URL {
         get throws {
             try appSupportDirectory.appending(path: "cultivation-plans.json")

@@ -15,6 +15,18 @@ final class AccountViewLayoutTests: XCTestCase {
             url: URL(string: "https://api.geetest.com/get.php")!,
             isMainFrame: true
         ))
+        XCTAssertTrue(MiHoYoVerificationPolicy.allowsNavigation(
+            url: URL(string: "https://api.geetest.com/get.php")!,
+            isMainFrame: false
+        ))
+        XCTAssertTrue(MiHoYoVerificationPolicy.allowsNavigation(
+            url: URL(string: "https://static.geevisit.com/static/js/gt.js")!,
+            isMainFrame: false
+        ))
+        XCTAssertFalse(MiHoYoVerificationPolicy.allowsNavigation(
+            url: URL(string: "https://act.mihoyo.com/bbs/event/signin")!,
+            isMainFrame: false
+        ))
         XCTAssertTrue(MiHoYoVerificationPolicy.allowsBridgeMessage(
             pageURL: URL(string: "https://act.mihoyo.com/bbs/event/signin")!,
             isMainFrame: true
@@ -133,7 +145,7 @@ final class AccountViewLayoutTests: XCTestCase {
         XCTAssertTrue(source.contains("\"miHoYo\""))
     }
 
-    func testVerificationWebViewInjectsCookiesOnlyForExactSignInHost() throws {
+    func testVerificationWebViewUsesOfficialParentDomainForRequiredFirstPartyAPIs() throws {
         let sourceURL = URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()
             .deletingLastPathComponent()
@@ -142,7 +154,7 @@ final class AccountViewLayoutTests: XCTestCase {
         let source = try String(contentsOf: sourceURL, encoding: .utf8)
 
         XCTAssertTrue(source.contains("cookieDomain(for: webContext.url)"))
-        XCTAssertFalse(source.contains("\".mihoyo.com\""))
+        XCTAssertTrue(source.contains("return \".mihoyo.com\""))
         XCTAssertFalse(source.contains("\".miyoushe.com\""))
         XCTAssertFalse(source.contains("cookieDomains(for:"))
     }
@@ -163,6 +175,19 @@ final class AccountViewLayoutTests: XCTestCase {
         XCTAssertTrue(source.contains("message.frameInfo.isMainFrame"))
     }
 
+    func testVerificationWebViewLoadsGeetestLibraryLikeSnapHutao() throws {
+        let sourceURL = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .appendingPathComponent("Views/MiHoYoVerificationWebView.swift")
+        let source = try String(contentsOf: sourceURL, encoding: .utf8)
+
+        XCTAssertTrue(source.contains("<script src=\"https://static.geetest.com/static/js/gt.0.5.2.js\"></script>"))
+        XCTAssertFalse(source.contains("URLSession.shared.data(for: request)"))
+        XCTAssertFalse(source.contains("libraryScript"))
+    }
+
     func testVerificationWebViewPrefersSignedInWebContextOverInlineGeetest() throws {
         let sourceURL = URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()
@@ -172,8 +197,20 @@ final class AccountViewLayoutTests: XCTestCase {
         let source = try String(contentsOf: sourceURL, encoding: .utf8)
 
         let contextRange = try XCTUnwrap(source.range(of: "if webContext != nil"))
-        let geetestRange = try XCTUnwrap(source.range(of: "guard let gt = payload.gt"))
+        let geetestRange = try XCTUnwrap(source.range(of: "guard let payload"))
         XCTAssertLessThan(contextRange.lowerBound, geetestRange.lowerBound)
+    }
+
+    func testVerificationUsesInlineGeetestForRiskChallenge() throws {
+        let sourceURL = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .appendingPathComponent("Views/AccountView.swift")
+        let source = try String(contentsOf: sourceURL, encoding: .utf8)
+
+        XCTAssertTrue(source.contains("if verification.purpose == .deskDailyNote, hasGeetestPayload"))
+        XCTAssertTrue(source.contains("return verification.webContext"))
     }
 
     func testClosingVerificationSheetRefreshesStatusWithoutRetryingSignIn() throws {
@@ -187,8 +224,9 @@ final class AccountViewLayoutTests: XCTestCase {
         let fallbackRange = try XCTUnwrap(source.range(of: "ContentUnavailableView(", range: closeRange.upperBound..<source.endIndex))
         let closeBlock = String(source[closeRange.lowerBound..<fallbackRange.lowerBound])
 
-        XCTAssertTrue(closeBlock.contains("await store.refreshSignInStatus()"))
+        XCTAssertTrue(closeBlock.contains("closeVerificationSheet(verification)"))
         XCTAssertFalse(closeBlock.contains("await store.claimDailyReward()"))
+        XCTAssertTrue(source.contains("await store.refreshSignInStatus()"))
     }
 
     func testAccountViewExposesConfirmedLoginSyncRetryAndPreservesResignPurpose() throws {

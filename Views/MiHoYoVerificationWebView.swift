@@ -3,10 +3,20 @@ import WebKit
 
 enum MiHoYoVerificationPolicy {
     private static let signInHost = "act.mihoyo.com"
-    private static let navigationHosts = [signInHost, "static.geetest.com", "api.geetest.com"]
+    private static let geetestHosts = [
+        "static.geetest.com",
+        "api.geetest.com",
+        "static.geevisit.com",
+        "api.geevisit.com"
+    ]
+    private static let navigationHosts = [signInHost] + geetestHosts
 
     static func allowsNavigation(url: URL, isMainFrame: Bool) -> Bool {
-        isMainFrame && isTrustedHTTPS(url, hosts: navigationHosts)
+        guard isTrustedHTTPS(url, hosts: navigationHosts) else { return false }
+        // Geetest renders the actual challenge in a trusted iframe. Keep
+        // MiHoYo pages main-frame-only, while allowing only known Geetest
+        // hosts to load subframes and challenge resources.
+        return isMainFrame || isTrustedHTTPS(url, hosts: geetestHosts)
     }
 
     static func allowsBridgeMessage(pageURL: URL?, isMainFrame: Bool) -> Bool {
@@ -16,7 +26,7 @@ enum MiHoYoVerificationPolicy {
 
     static func allowsGeetestMessage(pageURL: URL?, isMainFrame: Bool) -> Bool {
         guard isMainFrame, let pageURL else { return false }
-        return isTrustedHTTPS(pageURL, hosts: ["static.geetest.com"])
+        return isTrustedHTTPS(pageURL, hosts: geetestHosts)
     }
 
     private static func isTrustedHTTPS(_ url: URL, hosts: [String]) -> Bool {
@@ -31,7 +41,7 @@ enum MiHoYoVerificationPolicy {
 }
 
 struct MiHoYoVerificationWebView: NSViewRepresentable {
-    let payload: SignInResultPayload
+    let payload: SignInResultPayload?
     let fallbackURL: URL
     let webContext: SignInWebVerificationContext?
     let onComplete: (SignInVerificationResult) -> Void
@@ -82,15 +92,31 @@ struct MiHoYoVerificationWebView: NSViewRepresentable {
             return
         }
 
-        guard let gt = payload.gt, let challenge = payload.challenge else {
+        guard let payload,
+              let gt = payload.gt,
+              let challenge = payload.challenge else {
             loadWebFallback(in: webView)
             return
         }
 
-        webView.loadHTMLString(geetestHTML(gt: gt, challenge: challenge), baseURL: URL(string: "https://static.geetest.com"))
+        loadGeetestPage(in: webView, gt: gt, challenge: challenge)
+    }
+
+    private func loadGeetestPage(in webView: WKWebView, gt: String, challenge: String) {
+        // Geetest binds its proof to the browser context. Keep this UA equal
+        // to the one used by createVerification and verifyVerification.
+        webView.customUserAgent = HoYoConstants.userAgent
+        // Keep the Geetest bootstrap identical to Snap Hutao's WebView flow.
+        // Inlining this third-party library can terminate the surrounding
+        // script element early and leave an otherwise loaded page blank.
+        webView.loadHTMLString(
+            geetestHTML(gt: gt, challenge: challenge),
+            baseURL: URL(string: "https://static.geetest.com")
+        )
     }
 
     private func loadWebFallback(in webView: WKWebView) {
+        webView.customUserAgent = HoYoConstants.mobileUserAgent
         guard let webContext else {
             webView.load(URLRequest(url: fallbackURL))
             return
@@ -129,7 +155,12 @@ struct MiHoYoVerificationWebView: NSViewRepresentable {
         guard MiHoYoVerificationPolicy.allowsBridgeMessage(pageURL: url, isMainFrame: true) else {
             return nil
         }
-        return url.host?.lowercased()
+        // The sign-in document lives on act.mihoyo.com, but it obtains the
+        // bound role through first-party MiHoYo API subdomains. Host-only
+        // cookies make the page look logged out at that later API step. Keep
+        // this limited to the official parent domain; the WebView remains
+        // non-persistent and blocks all non-allowlisted main-frame navigation.
+        return ".mihoyo.com"
     }
 
     private func setCookies(_ cookies: [AccountWebCookie], domain: String, in webView: WKWebView, completion: @escaping () -> Void) {
@@ -160,7 +191,7 @@ struct MiHoYoVerificationWebView: NSViewRepresentable {
     }
 
     private func geetestHTML(gt: String, challenge: String) -> String {
-        """
+        return """
         <!doctype html>
         <html>
         <head>
@@ -459,6 +490,8 @@ struct MiHoYoVerificationWebView: NSViewRepresentable {
                     "ltmid_v2": webContext?.mid ?? "",
                     "cookie_token": webContext?.cookieToken ?? "",
                     "cookie_token_v2": webContext?.cookieToken ?? "",
+                    "stoken": webContext?.stoken ?? "",
+                    "stoken_v2": webContext?.stoken ?? "",
                     "ltoken": webContext?.ltoken ?? "",
                     "ltoken_v2": webContext?.ltoken ?? "",
                     "login_ticket": ""

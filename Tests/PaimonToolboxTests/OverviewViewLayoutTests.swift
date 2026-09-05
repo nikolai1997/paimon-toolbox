@@ -12,6 +12,12 @@ final class OverviewViewLayoutTests: XCTestCase {
         XCTAssertTrue(source.contains("派蒙工具箱"))
         XCTAssertTrue(source.contains("祈愿记录待同步"))
         XCTAssertTrue(source.contains("CurrentGachaEventsPanel"))
+        XCTAssertTrue(source.contains("DailyNotePanel"))
+        XCTAssertTrue(source.contains("DailyNoteMetric"))
+        XCTAssertTrue(source.contains("drop.fill"))
+        XCTAssertTrue(source.contains("checklist"))
+        XCTAssertTrue(source.contains("paperplane.fill"))
+        XCTAssertTrue(source.contains("实时便签"))
         XCTAssertFalse(source.contains("Text(\"本地优先工具箱\")"))
         XCTAssertFalse(source.contains("metric(\"祈愿记录\""))
     }

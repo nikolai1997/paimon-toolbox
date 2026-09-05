@@ -8,6 +8,7 @@ struct SettingsView: View {
     @AppStorage(AutoSignInSettings.enabledKey) private var isAutoSignInEnabled = false
     @AppStorage(AutoSignInSettings.windowKey) private var autoSignInWindowRawValue = AutoSignInSettings.defaultWindow.rawValue
     @AppStorage(AppAppearanceSettings.themeKey) private var appThemeRawValue = AppTheme.system.rawValue
+    @AppStorage(AppAppearanceSettings.dynamicLightingEnabledKey) private var isDynamicLightingEnabled = true
     @State private var isImportingDataPackage = false
 
     var body: some View {
@@ -21,6 +22,9 @@ struct SettingsView: View {
                     }
                     .pickerStyle(.segmented)
                     Text("跟随系统会使用 macOS 当前外观；白天和黑夜会固定 App 显示主题。")
+                        .foregroundStyle(.secondary)
+                    Toggle("动态光效", isOn: $isDynamicLightingEnabled)
+                    Text("开启后，鼠标悬停在玻璃模块上会出现轻微亮光。性能受限时可关闭，玻璃材质和所有功能不受影响。")
                         .foregroundStyle(.secondary)
                 }
 

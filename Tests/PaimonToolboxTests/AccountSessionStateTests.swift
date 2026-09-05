@@ -62,6 +62,7 @@ final class AccountSessionStateTests: XCTestCase {
         XCTAssertEqual(context.nickname, "派蒙")
         XCTAssertEqual(context.avatarURL?.absoluteString, "https://bbs-static.miyoushe.com/avatar/avatar123.png")
         XCTAssertEqual(context.userInfo["avatar_url"] as? String, "https://bbs-static.miyoushe.com/avatar/avatar123.png")
+        XCTAssertEqual(context.stoken, "stoken")
     }
 
     @MainActor
@@ -250,7 +251,7 @@ final class AccountSessionStateTests: XCTestCase {
     }
 
     @MainActor
-    func testLoadSkipsAutoSignInWhenSettingIsDisabled() async {
+    func testLoadRefreshesTokensButSkipsAutoSignInWhenSettingIsDisabled() async {
         let accountService = MockAccountSessionService()
         accountService.loadStatusResult = Self.signedInStatus(isTodaySigned: false)
         let autoSignInStore = MockAutoSignInStore(isEnabled: false)
@@ -260,9 +261,245 @@ final class AccountSessionStateTests: XCTestCase {
 
         await store.load(autoRefreshRemoteMetadata: false)
 
-        XCTAssertEqual(accountService.refreshLoginTokensCallCount, 0)
+        XCTAssertEqual(accountService.refreshLoginTokensCallCount, 1)
         XCTAssertEqual(accountService.claimDailyRewardCallCount, 0)
         XCTAssertNil(autoSignInStore.completedDay(accountID: "10001", uid: "100000001"))
+    }
+
+    @MainActor
+    func testLoadRefreshesDailyNoteForSignedInAccount() async {
+        let accountService = MockAccountSessionService()
+        accountService.loadStatusResult = Self.signedInStatus(isTodaySigned: true)
+        accountService.dailyNoteResult = DeskBridgeDailyNote(
+            resin: 120,
+            resinMax: 200,
+            resinRecoveryAt: Date(timeIntervalSince1970: 1_788_480_000),
+            commissionDone: 3,
+            commissionTotal: 4,
+            expeditionFinished: 2,
+            expeditionTotal: 5,
+            observedAt: Date(timeIntervalSince1970: 1_788_479_000)
+        )
+        let tokenRefreshStore = MockAccountTokenRefreshStore()
+        tokenRefreshStore.setLastRefreshDate(Date(timeIntervalSince1970: 1_788_476_400), accountID: "10001")
+        let store = AppStore(accountService: accountService, tokenRefreshStore: tokenRefreshStore)
+
+        await store.load(autoRefreshRemoteMetadata: false)
+
+        XCTAssertEqual(store.dailyNote?.resin, 120)
+        XCTAssertEqual(store.dailyNote?.commissionDone, 3)
+        XCTAssertEqual(store.dailyNote?.expeditionFinished, 2)
+        XCTAssertEqual(accountService.loadDailyNoteCallCount, 1)
+    }
+
+    @MainActor
+    func testDailyNoteResponseFromPreviousAccountIsDiscarded() async {
+        let deferred = DeferredDailyNoteResult()
+        let accountService = MockAccountSessionService()
+        accountService.dailyNoteHandler = { await deferred.wait() }
+        let store = AppStore(accountService: accountService)
+        store.accountStatus = Self.signedInStatus(isTodaySigned: true)
+
+        let refresh = Task { @MainActor in
+            await store.refreshDailyNote(force: true)
+        }
+        await deferred.waitUntilRequested()
+        store.accountStatus = LocalAccountStatus(
+            isSignedIn: true,
+            nickname: "另一个账号",
+            accountID: "20002",
+            selectedRole: GenshinRole(uid: "200000002", region: "cn_gf01", nickname: "荧", level: 60, isSelected: true)
+        )
+        await deferred.resume(
+            DeskBridgeDailyNote(
+                resin: 120,
+                resinMax: 200,
+                resinRecoveryAt: nil,
+                commissionDone: 2,
+                commissionTotal: 4,
+                expeditionFinished: 1,
+                expeditionTotal: 5,
+                observedAt: Date()
+            )
+        )
+        await refresh.value
+
+        XCTAssertNil(store.dailyNote)
+    }
+
+    @MainActor
+    func testDirectDeskSnapshotCarriesDailyNoteToESPContract() throws {
+        let store = AppStore(accountService: MockAccountSessionService())
+        store.accountStatus = Self.signedInStatus(isTodaySigned: true)
+        store.dailyNote = DeskBridgeDailyNote(
+            resin: 137,
+            resinMax: 200,
+            resinRecoveryAt: Date(timeIntervalSince1970: 1_788_480_000),
+            commissionDone: 3,
+            commissionTotal: 4,
+            expeditionFinished: 2,
+            expeditionTotal: 5,
+            observedAt: Date(timeIntervalSince1970: 1_788_479_000)
+        )
+
+        let data = try XCTUnwrap(store.directDeskSnapshotData())
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        let snapshot = try decoder.decode(DeskBridgeSnapshot.self, from: data)
+
+        XCTAssertEqual(snapshot.accountID, "10001")
+        XCTAssertEqual(snapshot.role?.uid, "100000001")
+        XCTAssertEqual(snapshot.resin, 137)
+        XCTAssertEqual(snapshot.resinMax, 200)
+        XCTAssertEqual(snapshot.commissionDone, 3)
+        XCTAssertEqual(snapshot.expeditionFinished, 2)
+        XCTAssertEqual(snapshot.status, "ready")
+    }
+
+    @MainActor
+    func testDailyNoteVerificationWorksWithoutDeskBridge() async {
+        let accountService = MockAccountSessionService()
+        accountService.loadStatusResult = Self.signedInStatus(isTodaySigned: true)
+        accountService.dailyNoteResult = DeskBridgeDailyNote(
+            resin: 160,
+            resinMax: 200,
+            resinRecoveryAt: nil,
+            commissionDone: 4,
+            commissionTotal: 4,
+            expeditionFinished: 5,
+            expeditionTotal: 5,
+            observedAt: Date(timeIntervalSince1970: 1_788_479_000)
+        )
+        let store = AppStore(accountService: accountService)
+        store.accountStatus = Self.signedInStatus(isTodaySigned: true)
+        store.accountVerification = AccountVerificationState(
+            message: "需要验证",
+            url: URL(string: "https://example.com")!,
+            payload: SignInResultPayload(
+                success: 1,
+                riskCode: 5003,
+                isRisk: true,
+                gt: "gt",
+                challenge: "geetest-challenge",
+                challengePath: "/game_record/app/genshin/api/index"
+            ),
+            purpose: .deskDailyNote
+        )
+
+        await store.completeDeskDailyNoteVerification(
+            SignInVerificationResult(challenge: "challenge", validate: "validate")
+        )
+
+        XCTAssertEqual(accountService.verifyDeskDailyNoteCallCount, 1)
+        XCTAssertEqual(accountService.lastDeskDailyNoteChallengePath, "/game_record/app/genshin/api/index")
+        XCTAssertEqual(accountService.lastDailyNoteVerificationChallenge, "server-retry-challenge")
+        XCTAssertEqual(store.dailyNote?.resin, 160)
+        XCTAssertNil(store.errorMessage)
+    }
+
+    @MainActor
+    func testManualDailyNoteRefreshHasCooldown() async {
+        let accountService = MockAccountSessionService()
+        accountService.loadStatusResult = Self.signedInStatus(isTodaySigned: true)
+        accountService.dailyNoteResult = DeskBridgeDailyNote(
+            resin: 120,
+            resinMax: 200,
+            resinRecoveryAt: nil,
+            commissionDone: 2,
+            commissionTotal: 4,
+            expeditionFinished: 1,
+            expeditionTotal: 5,
+            observedAt: Date(timeIntervalSince1970: 1_788_479_000)
+        )
+        let store = AppStore(accountService: accountService)
+        store.accountStatus = Self.signedInStatus(isTodaySigned: true)
+
+        await store.refreshDailyNote(force: true)
+        await store.refreshDailyNote(force: true)
+
+        XCTAssertEqual(accountService.loadDailyNoteCallCount, 1)
+        XCTAssertEqual(store.errorMessage, "实时便签刚刚刷新过，请稍后再试。")
+    }
+
+    @MainActor
+    func testManualDailyNoteRefreshRetriesAfterPreviousPause() async {
+        let accountService = MockAccountSessionService()
+        accountService.dailyNoteResult = nil
+        let store = AppStore(accountService: accountService)
+        store.accountStatus = Self.signedInStatus(isTodaySigned: true)
+        let firstAttempt = Date(timeIntervalSince1970: 1_788_479_000)
+
+        await store.refreshDailyNote(force: true, now: firstAttempt)
+
+        accountService.dailyNoteResult = DeskBridgeDailyNote(
+            resin: 160,
+            resinMax: 200,
+            resinRecoveryAt: nil,
+            commissionDone: 4,
+            commissionTotal: 4,
+            expeditionFinished: 5,
+            expeditionTotal: 5,
+            observedAt: firstAttempt.addingTimeInterval(61)
+        )
+        await store.refreshDailyNote(force: true, now: firstAttempt.addingTimeInterval(61))
+
+        XCTAssertEqual(accountService.loadDailyNoteCallCount, 2)
+        XCTAssertEqual(store.dailyNote?.resin, 160)
+    }
+
+    @MainActor
+    func testOrdinaryDailyNoteAPIErrorDoesNotPauseFutureRefreshes() async {
+        let accountService = MockAccountSessionService()
+        accountService.dailyNoteError = AccountSessionError.apiFailureResponse(
+            retcode: -1,
+            message: "service unavailable"
+        )
+        let store = AppStore(accountService: accountService)
+        store.accountStatus = Self.signedInStatus(isTodaySigned: true)
+        let firstAttempt = Date(timeIntervalSince1970: 1_788_479_000)
+
+        await store.refreshDailyNote(force: true, now: firstAttempt)
+
+        accountService.dailyNoteError = nil
+        accountService.dailyNoteResult = DeskBridgeDailyNote(
+            resin: 150,
+            resinMax: 200,
+            resinRecoveryAt: nil,
+            commissionDone: 3,
+            commissionTotal: 4,
+            expeditionFinished: 2,
+            expeditionTotal: 5,
+            observedAt: firstAttempt.addingTimeInterval(61)
+        )
+        await store.refreshDailyNote(force: true, now: firstAttempt.addingTimeInterval(61))
+
+        XCTAssertEqual(accountService.loadDailyNoteCallCount, 2)
+        XCTAssertEqual(store.dailyNote?.resin, 150)
+        XCTAssertEqual(store.deskDailyNoteRefreshStatus, "便签已由本机更新")
+    }
+
+    @MainActor
+    func testRefreshSignInStatusAlsoRefreshesDailyNote() async {
+        let accountService = MockAccountSessionService()
+        accountService.refreshSignInStatusResult = Self.signedInStatus(isTodaySigned: true)
+        accountService.dailyNoteResult = DeskBridgeDailyNote(
+            resin: 140,
+            resinMax: 200,
+            resinRecoveryAt: nil,
+            commissionDone: 3,
+            commissionTotal: 4,
+            expeditionFinished: 2,
+            expeditionTotal: 5,
+            observedAt: Date(timeIntervalSince1970: 1_788_479_000)
+        )
+        let store = AppStore(accountService: accountService)
+        store.accountStatus = Self.signedInStatus(isTodaySigned: true)
+
+        await store.refreshSignInStatus(now: Date(timeIntervalSince1970: 1_788_479_000))
+
+        XCTAssertEqual(accountService.refreshSignInStatusCallCount, 1)
+        XCTAssertEqual(accountService.loadDailyNoteCallCount, 1)
+        XCTAssertEqual(store.dailyNote?.resin, 140)
     }
 
     @MainActor
@@ -355,6 +592,76 @@ final class AccountSessionStateTests: XCTestCase {
         XCTAssertEqual(accountService.claimDailyRewardCallCount, 1)
         XCTAssertEqual(store.successMessage, "自动签到完成")
         XCTAssertEqual(autoSignInStore.completedDay(accountID: "10001", uid: "100000001"), "cn_gf01:2026-09-05")
+    }
+
+    @MainActor
+    func testAppActivationRunsAutomaticSignInWhenScheduledTimeHasArrived() async {
+        let accountService = MockAccountSessionService()
+        accountService.refreshLoginTokensResult = Self.signedInStatus(isTodaySigned: false)
+        accountService.refreshSignInStatusResult = Self.signedInStatus(isTodaySigned: false)
+        accountService.claimDailyRewardResult = Self.signedInStatus(isTodaySigned: true)
+        let autoSignInStore = MockAutoSignInStore(isEnabled: true)
+        let now = Self.cnDate(year: 2026, month: 9, day: 5, hour: 10)
+        autoSignInStore.setScheduledAttemptDate(
+            now.addingTimeInterval(-60),
+            accountID: "10001",
+            uid: "100000001",
+            serverDay: Self.scheduledAttemptIdentifier("cn_gf01:2026-09-05")
+        )
+        let store = AppStore(accountService: accountService, autoSignInStore: autoSignInStore)
+        store.accountStatus = Self.signedInStatus(isTodaySigned: false)
+
+        await store.handleAppDidBecomeActive(now: now)
+
+        XCTAssertEqual(accountService.claimDailyRewardCallCount, 1)
+        XCTAssertEqual(store.successMessage, "自动签到完成")
+    }
+
+    @MainActor
+    func testRefreshSignInStatusReconcilesCompletedDayAndFailureCooldown() async {
+        let accountService = MockAccountSessionService()
+        accountService.refreshSignInStatusResult = Self.signedInStatus(isTodaySigned: true)
+        let autoSignInStore = MockAutoSignInStore(isEnabled: true)
+        let now = Self.cnDate(year: 2026, month: 9, day: 5, hour: 10)
+        autoSignInStore.setLastFailureDate(now.addingTimeInterval(-60), accountID: "10001", uid: "100000001")
+        let store = AppStore(accountService: accountService, autoSignInStore: autoSignInStore)
+        store.accountStatus = Self.signedInStatus(isTodaySigned: false)
+
+        await store.refreshSignInStatus(now: now)
+
+        XCTAssertEqual(autoSignInStore.completedDay(accountID: "10001", uid: "100000001"), "cn_gf01:2026-09-05")
+        XCTAssertNil(autoSignInStore.lastFailureDate(accountID: "10001", uid: "100000001"))
+    }
+
+    @MainActor
+    func testDismissedVerificationDoesNotBlockLaterAutomaticSignIn() async {
+        let accountService = MockAccountSessionService()
+        accountService.refreshLoginTokensResult = Self.signedInStatus(isTodaySigned: false)
+        accountService.refreshSignInStatusResult = Self.signedInStatus(isTodaySigned: false)
+        accountService.claimDailyRewardResult = Self.signedInStatus(isTodaySigned: true)
+        let autoSignInStore = MockAutoSignInStore(isEnabled: true)
+        let now = Self.cnDate(year: 2026, month: 9, day: 5, hour: 10)
+        autoSignInStore.setScheduledAttemptDate(
+            now.addingTimeInterval(-60),
+            accountID: "10001",
+            uid: "100000001",
+            serverDay: Self.scheduledAttemptIdentifier("cn_gf01:2026-09-05")
+        )
+        let store = AppStore(accountService: accountService, autoSignInStore: autoSignInStore)
+        store.accountStatus = Self.signedInStatus(isTodaySigned: false)
+        store.accountVerification = AccountVerificationState(
+            message: "需要验证",
+            url: HoYoConstants.signInVerificationURL,
+            payload: SignInResultPayload(success: 0, riskCode: -5003, gt: nil, challenge: nil),
+            webContext: nil,
+            purpose: .dailySignIn
+        )
+
+        store.dismissAccountVerification()
+        await store.runAutomaticSignInCheck(now: now)
+
+        XCTAssertNil(store.accountVerification)
+        XCTAssertEqual(accountService.claimDailyRewardCallCount, 1)
     }
 
     @MainActor
@@ -457,7 +764,11 @@ final class AccountSessionStateTests: XCTestCase {
             uid: "100000001",
             serverDay: Self.scheduledAttemptIdentifier("cn_gf01:2026-09-05")
         )
-        let store = AppStore(accountService: accountService, autoSignInStore: autoSignInStore)
+        let store = AppStore(
+            accountService: accountService,
+            autoSignInStore: autoSignInStore,
+            signInRiskConfirmationDelayNanoseconds: 0
+        )
         store.accountStatus = Self.signedInStatus(isTodaySigned: false)
 
         await store.runAutomaticSignInCheck(now: now)
@@ -478,7 +789,6 @@ final class AccountSessionStateTests: XCTestCase {
         let accountService = MockAccountSessionService()
         accountService.refreshLoginTokensResult = Self.signedInStatus(isTodaySigned: false)
         accountService.refreshSignInStatusResults = [
-            .success(Self.signedInStatus(isTodaySigned: false)),
             .success(Self.signedInStatus(isTodaySigned: false)),
             .success(Self.signedInStatus(isTodaySigned: true))
         ]
@@ -505,7 +815,7 @@ final class AccountSessionStateTests: XCTestCase {
         await store.runAutomaticSignInCheck(now: now)
 
         let sleepCalls = await sleepRecorder.calls
-        XCTAssertEqual(accountService.refreshSignInStatusCallCount, 3)
+        XCTAssertEqual(accountService.refreshSignInStatusCallCount, 2)
         XCTAssertEqual(sleepCalls, [99])
         XCTAssertEqual(store.accountStatus.signInSummary?.isTodaySigned, true)
         XCTAssertNil(store.accountVerification)
@@ -596,7 +906,11 @@ final class AccountSessionStateTests: XCTestCase {
         ]
         accountService.claimError = AccountSessionError.requiresVerification(payload)
         let autoSignInStore = MockAutoSignInStore(isEnabled: true)
-        let store = AppStore(accountService: accountService, autoSignInStore: autoSignInStore)
+        let store = AppStore(
+            accountService: accountService,
+            autoSignInStore: autoSignInStore,
+            signInRiskConfirmationDelayNanoseconds: 0
+        )
         store.accountStatus = Self.signedInStatus(isTodaySigned: false)
         let now = Self.cnDate(year: 2026, month: 9, day: 5, hour: 10)
 
@@ -618,7 +932,6 @@ final class AccountSessionStateTests: XCTestCase {
         let accountService = MockAccountSessionService()
         accountService.refreshSignInStatusResults = [
             .success(Self.signedInStatus(isTodaySigned: false)),
-            .success(Self.signedInStatus(isTodaySigned: false)),
             .success(Self.signedInStatus(isTodaySigned: true))
         ]
         accountService.claimError = AccountSessionError.requiresVerification(payload)
@@ -638,7 +951,7 @@ final class AccountSessionStateTests: XCTestCase {
         await store.claimDailyReward(now: now)
 
         let sleepCalls = await sleepRecorder.calls
-        XCTAssertEqual(accountService.refreshSignInStatusCallCount, 3)
+        XCTAssertEqual(accountService.refreshSignInStatusCallCount, 2)
         XCTAssertEqual(sleepCalls, [42])
         XCTAssertEqual(store.accountStatus.signInSummary?.isTodaySigned, true)
         XCTAssertNil(store.accountVerification)
@@ -684,10 +997,24 @@ final class AccountSessionStateTests: XCTestCase {
 
         await store.claimDailyReward(now: now)
 
-        XCTAssertEqual(accountService.refreshSignInStatusCallCount, 3)
+        XCTAssertEqual(accountService.refreshSignInStatusCallCount, 2)
         XCTAssertEqual(accountService.claimDailyRewardCallCount, 1)
         XCTAssertEqual(autoSignInStore.lastFailureDate(accountID: "10001", uid: "100000001"), now)
         XCTAssertNotNil(store.accountVerification)
+    }
+
+    @MainActor
+    func testRefreshFailureClearsPreviousSuccessMessage() async {
+        let accountService = MockAccountSessionService()
+        accountService.refreshError = AccountSessionError.apiFailure("网络暂时不可用")
+        let store = AppStore(accountService: accountService)
+        store.accountStatus = Self.signedInStatus(isTodaySigned: false)
+        store.successMessage = "签到状态已刷新"
+
+        await store.refreshSignInStatus(now: Self.cnDate(year: 2026, month: 9, day: 5, hour: 10))
+
+        XCTAssertNil(store.successMessage)
+        XCTAssertEqual(store.errorMessage, "刷新签到状态失败：接口返回错误：网络暂时不可用")
     }
 
     @MainActor
@@ -1146,6 +1473,11 @@ private final class MockAccountSessionService: AccountSessionServicing {
     var resignInfoResult: SignInResignInfoPayload?
     var signOutResult: LocalAccountStatus = .signedOut
     var loadStatusResult: LocalAccountStatus = .signedOut
+    var dailyNoteResult: DeskBridgeDailyNote?
+    var dailyNoteHandler: (() async throws -> DeskBridgeDailyNote)?
+    var dailyNoteError: Error?
+    var verifyDeskDailyNoteError: Error?
+    var verifyDeskDailyNoteResult = "server-retry-challenge"
     var startError: Error?
     var completeError: Error?
     var refreshError: Error?
@@ -1161,6 +1493,10 @@ private final class MockAccountSessionService: AccountSessionServicing {
     private(set) var claimResignRewardCallCount = 0
     private(set) var loadResignInfoCallCount = 0
     private(set) var completeQrLoginResultCallCount = 0
+    private(set) var loadDailyNoteCallCount = 0
+    private(set) var verifyDeskDailyNoteCallCount = 0
+    private(set) var lastDeskDailyNoteChallengePath: String?
+    private(set) var lastDailyNoteVerificationChallenge: String?
 
     func loadStatus() -> LocalAccountStatus { loadStatusResult }
 
@@ -1243,9 +1579,62 @@ private final class MockAccountSessionService: AccountSessionServicing {
         []
     }
 
+    func loadDeskDailyNote(verificationChallenge: String?) async throws -> DeskBridgeDailyNote {
+        loadDailyNoteCallCount += 1
+        lastDailyNoteVerificationChallenge = verificationChallenge
+        if let dailyNoteHandler { return try await dailyNoteHandler() }
+        if let dailyNoteError { throw dailyNoteError }
+        guard let dailyNoteResult else {
+            throw AccountSessionError.missingAccount
+        }
+        return dailyNoteResult
+    }
+
+    func verifyDeskDailyNote(
+        _ verification: SignInVerificationResult,
+        challengePath: String?
+    ) async throws -> String {
+        verifyDeskDailyNoteCallCount += 1
+        lastDeskDailyNoteChallengePath = challengePath
+        if let verifyDeskDailyNoteError { throw verifyDeskDailyNoteError }
+        return verifyDeskDailyNoteResult
+    }
+
     func signOut() throws -> LocalAccountStatus {
         if let signOutError { throw signOutError }
         return signOutResult
+    }
+}
+
+private actor DeferredDailyNoteResult {
+    private var continuation: CheckedContinuation<DeskBridgeDailyNote, Never>?
+    private var bufferedResult: DeskBridgeDailyNote?
+    private var requestStarted = false
+    private var startedContinuation: CheckedContinuation<Void, Never>?
+
+    func wait() async -> DeskBridgeDailyNote {
+        requestStarted = true
+        startedContinuation?.resume()
+        startedContinuation = nil
+        if let bufferedResult {
+            self.bufferedResult = nil
+            return bufferedResult
+        }
+        return await withCheckedContinuation { continuation = $0 }
+    }
+
+    func waitUntilRequested() async {
+        guard !requestStarted else { return }
+        await withCheckedContinuation { startedContinuation = $0 }
+    }
+
+    func resume(_ result: DeskBridgeDailyNote) {
+        if let continuation {
+            self.continuation = nil
+            continuation.resume(returning: result)
+        } else {
+            bufferedResult = result
+        }
     }
 }
 

@@ -6,6 +6,7 @@ import OSLog
 @Observable
 final class AppStore {
     private static let widgetLogger = Logger(subsystem: "com.nikolai.paimon-toolbox", category: "WidgetSnapshot")
+    private static let deskDailyNoteLogger = Logger(subsystem: "com.nikolai.paimon-toolbox", category: "DeskDailyNote")
 
     var selectedSection: AppSection = .overview
     var metadata: MetadataBundle?
@@ -37,6 +38,12 @@ final class AppStore {
     var qrLoginSyncError: String?
     var accountVerification: AccountVerificationState?
     var accountResignInfo: SignInResignInfoPayload?
+    var dailyNote: DeskBridgeDailyNote?
+    var deskDirectPairingRequest: DeskDirectPairingRequest?
+    var deskDirectServerStatus: String = "尚未启动"
+    var discoveredDeskDevices: [DirectDeskDevice] = []
+    var isScanningDeskDevices = false
+    var deskDailyNoteRefreshStatus: String?
     var isAccountBusy = false
     var searchText: String = ""
     var errorMessage: String?
@@ -89,6 +96,14 @@ final class AppStore {
     @ObservationIgnored private var automaticSignInWakeTask: Task<Void, Never>?
     @ObservationIgnored private var automaticSignInWakeDate: Date?
     @ObservationIgnored private var remoteDataRefreshMonitorTask: Task<Void, Never>?
+    @ObservationIgnored private var deskDailyNoteRefreshTask: Task<Void, Never>?
+    @ObservationIgnored private var deskDailyNoteLastRefreshAt: Date?
+    @ObservationIgnored private var deskDailyNoteLastManualRefreshAt: Date?
+    @ObservationIgnored private var deskDailyNoteRefreshPaused = false
+    @ObservationIgnored private var deskDailyNoteVerificationChallenge: String?
+    @ObservationIgnored private var deskDailyNoteRequestInFlight = false
+    @ObservationIgnored private var deskDirectServer: DeskDirectServer?
+    @ObservationIgnored private var deskDevicePresenceTask: Task<Void, Never>?
 
     private let metadataService: MetadataServicing
     private let overviewDataService: OverviewDataServicing
@@ -200,10 +215,12 @@ final class AppStore {
         }
 
         accountStatus = accountService.loadStatus()
+        dailyNote = nil
         refreshGachaSummary()
         if accountStatus.isSignedIn {
             try? await refreshLoginTokensIfNeeded(now: now)
             accountResignInfo = try? await accountService.loadResignInfo()
+            await refreshDeskDailyNoteIfNeeded(force: true)
         } else {
             accountResignInfo = nil
         }
@@ -241,6 +258,32 @@ final class AppStore {
         await refreshMetadata(from: RemoteDataSettings.githubMetadataURLString)
     }
 
+    func refreshDailyNote(force: Bool = false, now: Date = Date()) async {
+        guard accountStatus.isSignedIn else {
+            errorMessage = "请先登录米游社账号，再刷新实时便签。"
+            return
+        }
+        if force,
+           let lastManualRefresh = deskDailyNoteLastManualRefreshAt,
+           now.timeIntervalSince(lastManualRefresh) < 60 {
+            errorMessage = "实时便签刚刚刷新过，请稍后再试。"
+            return
+        }
+        if force {
+            deskDailyNoteLastManualRefreshAt = now
+            // A user-initiated refresh is the explicit request to leave a
+            // previous risk/session pause and try the current account again.
+            deskDailyNoteRefreshPaused = false
+            deskDailyNoteVerificationChallenge = nil
+            if accountVerification?.purpose == .deskDailyNote {
+                accountVerification = nil
+            }
+            deskDailyNoteRefreshStatus = "正在更新实时便签…"
+            errorMessage = nil
+        }
+        await refreshDeskDailyNoteIfNeeded(force: force)
+    }
+
     func startRemoteDataRefreshMonitor() {
         guard remoteDataRefreshMonitorTask == nil else {
             return
@@ -260,9 +303,224 @@ final class AppStore {
         }
     }
 
+    /// The Mac is the sole daily-note reader for the desk.  A refresh is
+    /// deliberately low-frequency, never initiated by MQTT/the device, and
+    /// pauses after a risk response instead of retrying.
+    func startDeskDailyNoteRefreshMonitor() {
+        guard deskDailyNoteRefreshTask == nil else { return }
+        deskDailyNoteRefreshTask = Task { [weak self] in
+            while !Task.isCancelled {
+                guard let self else { return }
+                await self.refreshDeskDailyNoteIfNeeded()
+                do {
+                    try await Task.sleep(nanoseconds: 30 * 60 * 1_000_000_000)
+                } catch {
+                    return
+                }
+            }
+        }
+    }
+
+    func stopDeskDailyNoteRefreshMonitor() {
+        deskDailyNoteRefreshTask?.cancel()
+        deskDailyNoteRefreshTask = nil
+    }
+
     func stopRemoteDataRefreshMonitor() {
         remoteDataRefreshMonitorTask?.cancel()
         remoteDataRefreshMonitorTask = nil
+    }
+
+    /// Starts the toolbox-owned LAN endpoint so the desk can run without Docker or MQTT.
+    func startDeskDirectServer() {
+        guard accountStatus.isSignedIn else {
+            stopDeskDirectServer()
+            deskDirectServerStatus = "登录后启动局域网服务"
+            return
+        }
+        if deskDirectServer == nil {
+            let server = DeskDirectServer()
+            server.onPairingRequest = { [weak self] request in
+                self?.deskDirectPairingRequest = request
+                self?.deskDirectServerStatus = "等待确认摆件（\(request.displayCode)）"
+            }
+            server.accountIDProvider = { [weak self] in self?.accountStatus.accountID }
+            server.snapshotProvider = { [weak self] in
+                guard let self else { return nil }
+                return self.directDeskSnapshotData()
+            }
+            server.actionHandler = { [weak self] action, _ in
+                guard let self else { return }
+                await self.handleDirectDeskAction(action)
+            }
+            server.onDevicePresenceChanged = { [weak self] device in
+                self?.replaceDiscoveredDeskDevice(device)
+                self?.deskDirectServerStatus = "摆件已连接，数据同步正常"
+            }
+            deskDirectServer = server
+        }
+        deskDirectServer?.start()
+        if let error = deskDirectServer?.lastError {
+            deskDirectServerStatus = "启动失败：\(error)"
+        } else if deskDirectServer?.isRunning == true {
+            restoreKnownDeskDevices()
+            startDeskDevicePresenceMonitor()
+            deskDirectServerStatus = discoveredDeskDevices.contains(where: { $0.status == "connected" })
+                ? "摆件已连接，数据同步正常"
+                : "已启动，等待摆件恢复在线"
+        }
+    }
+
+    func scanDeskDevices() async {
+        isScanningDeskDevices = true
+        defer { isScanningDeskDevices = false }
+        let liveDevices = await DeskDeviceDiscovery.scan()
+        let savedDevices = deskDirectServer?.knownDevices() ?? []
+        discoveredDeskDevices = mergeDeskDevices(live: liveDevices, saved: savedDevices)
+        if liveDevices.isEmpty, !savedDevices.isEmpty {
+            deskDirectServerStatus = "已保留绑定，等待摆件恢复在线"
+        } else {
+            deskDirectServerStatus = liveDevices.isEmpty ? "未发现摆件，请确认摆件和 Mac 在同一 Wi‑Fi" : "发现 \(liveDevices.count) 台摆件"
+        }
+    }
+
+    func connectDeskDevice(_ device: DirectDeskDevice) async {
+        guard let accountID = accountStatus.accountID, let server = deskDirectServer else { errorMessage = "请先登录米游社后再连接摆件。"; return }
+        guard let localHost = DeskDeviceDiscovery.localIPv4Address(preferredPeer: device.host) else { errorMessage = "无法取得 Mac 的局域网地址。"; return }
+        let token = server.issueAccessToken(for: device, accountID: accountID)
+        guard let url = URL(string: "http://\(device.host):47872/v1/connect-requests") else { return }
+        struct Request: Encodable { let host: String; let port: Int; let access_token: String; let account_id: String }
+        guard let data = try? JSONEncoder().encode(Request(host: localHost, port: Int(DeskDirectServer.httpPort), access_token: token, account_id: accountID)) else { return }
+        var request = URLRequest(url: url); request.httpMethod = "POST"; request.httpBody = data; request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        do {
+            let (_, response) = try await URLSession.shared.data(for: request)
+            guard (response as? HTTPURLResponse)?.statusCode == 202 else { throw URLError(.badServerResponse) }
+            deskDirectServerStatus = "请在摆件屏幕确认连接"
+            replaceDiscoveredDeskDevice(DirectDeskDevice(deviceID: device.deviceID, name: device.name, status: "awaiting_confirmation", host: device.host))
+            await waitForDeskConnection(device)
+        } catch { errorMessage = "无法向摆件发送连接请求：\(error.localizedDescription)" }
+    }
+
+    private func waitForDeskConnection(_ device: DirectDeskDevice) async {
+        for _ in 0..<15 {
+            try? await Task.sleep(for: .seconds(1))
+            guard let updated = await DeskDeviceDiscovery.probe(host: device.host) else { continue }
+            replaceDiscoveredDeskDevice(updated)
+            if updated.status == "connected" {
+                deskDirectServerStatus = "摆件已连接，数据同步正常"
+                successMessage = "\(updated.name) 已连接到本机工具箱。"
+                errorMessage = nil
+                return
+            }
+            if updated.status == "paired" {
+                deskDirectServerStatus = "摆件已授权，正在连接 Mac"
+            }
+        }
+    }
+
+    private func replaceDiscoveredDeskDevice(_ device: DirectDeskDevice) {
+        if let index = discoveredDeskDevices.firstIndex(where: { $0.deviceID == device.deviceID }) {
+            discoveredDeskDevices[index] = device
+        } else {
+            discoveredDeskDevices.append(device)
+        }
+    }
+
+    private func restoreKnownDeskDevices() {
+        guard let saved = deskDirectServer?.knownDevices(), !saved.isEmpty else { return }
+        discoveredDeskDevices = mergeDeskDevices(live: discoveredDeskDevices, saved: saved)
+    }
+
+    private func mergeDeskDevices(live: [DirectDeskDevice], saved: [DirectDeskDevice]) -> [DirectDeskDevice] {
+        var merged = Dictionary(uniqueKeysWithValues: saved.map { ($0.deviceID, $0) })
+        live.forEach { merged[$0.deviceID] = $0 }
+        return merged.values.sorted { ($0.host, $0.deviceID) < ($1.host, $1.deviceID) }
+    }
+
+    private func startDeskDevicePresenceMonitor() {
+        deskDevicePresenceTask?.cancel()
+        deskDevicePresenceTask = Task { [weak self] in
+            while !Task.isCancelled {
+                try? await Task.sleep(for: .seconds(30))
+                guard !Task.isCancelled, let self else { return }
+                self.restoreKnownDeskDevices()
+            }
+        }
+    }
+
+    func stopDeskDirectServer() {
+        deskDevicePresenceTask?.cancel()
+        deskDevicePresenceTask = nil
+        deskDirectServer?.stop()
+        deskDirectServerStatus = "已停止"
+    }
+
+    func approveDeskDirectPairing(displayCode: String? = nil) {
+        guard accountStatus.isSignedIn, let request = deskDirectPairingRequest else {
+            errorMessage = "请先登录米游社，并等待摆件显示配对码。"
+            return
+        }
+        let enteredCode = displayCode?.trimmingCharacters(in: .whitespacesAndNewlines).uppercased() ?? ""
+        guard enteredCode.count == 8, enteredCode == request.displayCode.uppercased() else {
+            errorMessage = "配对码与当前发现的摆件不一致，请核对摆件屏幕上的 8 位码。"
+            return
+        }
+        guard deskDirectServer?.approve(requestID: request.requestID, displayCode: enteredCode) == true else {
+            errorMessage = "直连配对失败，请让摆件重新生成配对码。"
+            return
+        }
+        deskDirectPairingRequest = nil
+        deskDirectServerStatus = "摆件已授权，Mac 直连已建立"
+        successMessage = "摆件已绑定到本机工具箱。"
+        errorMessage = nil
+    }
+
+    func rejectDeskDirectPairing() {
+        guard let request = deskDirectPairingRequest else { return }
+        deskDirectServer?.reject(requestID: request.requestID)
+        deskDirectPairingRequest = nil
+        deskDirectServerStatus = "已拒绝摆件绑定请求"
+    }
+
+    func directDeskSnapshotData() -> Data? {
+        guard accountStatus.isSignedIn, let accountID = accountStatus.accountID else { return nil }
+        let role = accountStatus.selectedRole.map(DeskBridgeRole.init)
+        let note = dailyNote
+        let summary = accountStatus.signInSummary
+        let status = accountVerification == nil ? "ready" : "verification_required"
+        let message = accountVerification == nil ? nil : "请在 Mac 工具箱中完成安全验证"
+        let snapshot = DeskBridgeSnapshot(
+            accountID: accountID,
+            nickname: accountStatus.nickname,
+            role: role,
+            signedToday: summary?.isTodaySigned,
+            signDayCount: summary?.totalSignDay,
+            resin: note?.resin,
+            resinMax: note?.resinMax,
+            resinRecoveryAt: note?.resinRecoveryAt,
+            commissionDone: note?.commissionDone,
+            commissionTotal: note?.commissionTotal,
+            expeditionFinished: note?.expeditionFinished,
+            expeditionTotal: note?.expeditionTotal,
+            refreshedAt: note?.observedAt,
+            status: status,
+            message: message,
+            codex: nil
+        )
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        return try? encoder.encode(snapshot)
+    }
+
+    private func handleDirectDeskAction(_ action: String) async {
+        switch action {
+        case "refresh":
+            await refreshDailyNote(force: false)
+        case "sign_in":
+            await claimDailyReward()
+        default:
+            break
+        }
     }
 
     func refreshMetadata(from urlString: String) async {
@@ -606,6 +864,8 @@ final class AppStore {
             let completedStatus = try await accountService.completeQrLogin(result: confirmedQrLoginResult)
             guard isActiveConfirmedQrLogin(sessionID: sessionID) else { return }
             accountStatus = completedStatus
+            dailyNote = nil
+            startDeskDirectServer()
             refreshGachaSummary()
             self.confirmedQrLoginResult = nil
             confirmedQrLoginSessionID = nil
@@ -616,6 +876,7 @@ final class AppStore {
             accountVerification = nil
             markLoginTokensRefreshed(at: now)
             accountResignInfo = try? await accountService.loadResignInfo()
+            await refreshDeskDailyNoteIfNeeded(force: true)
             successMessage = "米哈游账号已登录"
             errorMessage = nil
             isAccountBusy = false
@@ -656,12 +917,33 @@ final class AppStore {
             }
             accountResignInfo = try? await accountService.loadResignInfo()
             accountVerification = nil
+            reconcileDailySignInStateFromCurrentStatus(now: now)
+            if accountStatus.isSignedIn {
+                // The account page refresh is also the user's explicit
+                // session refresh for the homepage daily-note card.
+                deskDailyNoteRefreshPaused = false
+                deskDailyNoteVerificationChallenge = nil
+                await refreshDeskDailyNoteIfNeeded(force: true)
+            }
             successMessage = "签到状态已刷新"
             errorMessage = nil
             publishWidgetSnapshot()
         } catch {
+            successMessage = nil
             errorMessage = "刷新签到状态失败：\(error.localizedDescription)"
         }
+    }
+
+    /// Closing the sheet must never leave an old verification object blocking
+    /// every future automatic attempt. The failure cooldown remains intact.
+    func dismissAccountVerification() {
+        accountVerification = nil
+    }
+
+    /// A Mac can miss a scheduled wake while the system is asleep. Re-checking
+    /// on activation still respects the user's time window and failure cooldown.
+    func handleAppDidBecomeActive(now: Date = Date()) async {
+        await runAutomaticSignInCheck(now: now)
     }
 
     func refreshWidgetSnapshotFromWidget(now: Date = Date()) async {
@@ -677,6 +959,130 @@ final class AppStore {
             errorMessage = nil
             publishWidgetSnapshot(generatedAt: now)
         }
+    }
+
+    private func refreshDeskDailyNoteIfNeeded(force: Bool = false) async {
+        guard accountStatus.isSignedIn,
+              let requestedAccountID = accountStatus.accountID,
+              !deskDailyNoteRefreshPaused,
+              !deskDailyNoteRequestInFlight else { return }
+        if !force,
+           let lastRefresh = deskDailyNoteLastRefreshAt,
+           Date().timeIntervalSince(lastRefresh) < 25 * 60 {
+            return
+        }
+        deskDailyNoteRequestInFlight = true
+        defer { deskDailyNoteRequestInFlight = false }
+        do {
+            let note = try await accountService.loadDeskDailyNote(
+                verificationChallenge: deskDailyNoteVerificationChallenge
+            )
+            guard accountStatus.accountID == requestedAccountID else { return }
+            dailyNote = note
+            deskDailyNoteLastRefreshAt = note.observedAt
+            deskDailyNoteVerificationChallenge = nil
+            deskDailyNoteRefreshStatus = "便签已由本机更新"
+        } catch let error as AccountSessionError {
+            guard accountStatus.accountID == requestedAccountID else { return }
+            if case .requiresVerification = error {
+                // Do not repeatedly wake a Geetest challenge.  The next
+                // explicit login/session sync is the user's acknowledgement
+                // that verification has been completed.
+                deskDailyNoteRefreshPaused = true
+                deskDailyNoteVerificationChallenge = errorPayloadChallenge(error)
+                let payload = errorPayload(error)
+                let webContext = try? accountService.signInWebVerificationContext()
+                if payload?.gt != nil && payload?.challenge != nil {
+                    accountVerification = AccountVerificationState(
+                        message: "实时便签需要一次安全验证；完成后将恢复低频读取。",
+                        url: HoYoConstants.signInVerificationURL,
+                        payload: payload,
+                        webContext: webContext,
+                        purpose: .deskDailyNote
+                    )
+                    errorMessage = "实时便签需要安全验证，已暂停自动更新。"
+                } else {
+                    accountVerification = AccountVerificationState(
+                        message: "暂时没有获取到实时便签验证参数，请重新获取。",
+                        url: HoYoConstants.signInVerificationURL,
+                        payload: payload,
+                        webContext: nil,
+                        purpose: .deskDailyNote
+                    )
+                    errorMessage = "实时便签暂时没有获取到安全验证参数，请点击重新获取。"
+                }
+                deskDailyNoteRefreshStatus = "已暂停：需要安全验证"
+                Self.deskDailyNoteLogger.warning("Mac daily note paused for verification")
+            } else if error.indicatesExpiredSession || error == .missingAccount || error == .missingRole {
+                deskDailyNoteRefreshPaused = true
+                deskDailyNoteRefreshStatus = "已暂停：\(error.localizedDescription)"
+                Self.deskDailyNoteLogger.warning("Mac daily note paused: \(error.localizedDescription, privacy: .public)")
+            } else {
+                // Keep ordinary endpoint failures retryable. Only explicit
+                // risk or expired-session responses should pause the monitor.
+                deskDailyNoteRefreshStatus = "便签暂未更新：\(error.localizedDescription)，稍后自动重试"
+                errorMessage = "实时便签更新失败：\(error.localizedDescription)"
+                Self.deskDailyNoteLogger.notice("Mac daily note request will retry: \(error.localizedDescription, privacy: .public)")
+            }
+        } catch {
+            // A transient transport error keeps the last local data and will
+            // get at most one low-frequency retry at the next 30-minute tick.
+            guard accountStatus.accountID == requestedAccountID else { return }
+            deskDailyNoteRefreshStatus = "便签暂未更新：网络稍后重试"
+            errorMessage = "实时便签暂未更新：网络稍后重试"
+            Self.deskDailyNoteLogger.notice("Mac daily note transport failed; preserving cache")
+        }
+    }
+
+    func completeDeskDailyNoteVerification(_ verification: SignInVerificationResult) async {
+        guard accountStatus.isSignedIn else {
+            errorMessage = "请先登录米游社账号，再完成便签安全验证。"
+            return
+        }
+        isAccountBusy = true
+        defer { isAccountBusy = false }
+        do {
+            let challengePath = accountVerification?.payload?.challengePath
+            let retryChallenge = try await accountService.verifyDeskDailyNote(
+                verification,
+                challengePath: challengePath
+            )
+            deskDailyNoteVerificationChallenge = retryChallenge
+            deskDailyNoteRefreshPaused = false
+            accountVerification = nil
+            deskDailyNoteRefreshStatus = "验证完成，正在更新实时便签…"
+            await refreshDeskDailyNoteIfNeeded(force: true)
+        } catch let error as AccountSessionError {
+            deskDailyNoteRefreshPaused = true
+            deskDailyNoteRefreshStatus = "已暂停：\(error.localizedDescription)"
+            errorMessage = "实时便签验证未完成：\(error.localizedDescription)"
+        } catch {
+            deskDailyNoteRefreshPaused = true
+            deskDailyNoteRefreshStatus = "已暂停：验证连接失败"
+            errorMessage = "实时便签验证失败：\(error.localizedDescription)"
+        }
+    }
+
+    func retryDeskDailyNoteVerification() async {
+        guard accountStatus.isSignedIn else {
+            errorMessage = "请先登录米游社账号。"
+            return
+        }
+        accountVerification = nil
+        errorMessage = nil
+        deskDailyNoteVerificationChallenge = nil
+        deskDailyNoteRefreshPaused = false
+        deskDailyNoteRefreshStatus = "正在重新获取实时便签验证…"
+        await refreshDeskDailyNoteIfNeeded(force: true)
+    }
+
+    private func errorPayload(_ error: AccountSessionError) -> SignInResultPayload? {
+        guard case let .requiresVerification(payload) = error else { return nil }
+        return payload
+    }
+
+    private func errorPayloadChallenge(_ error: AccountSessionError) -> String? {
+        errorPayload(error)?.challenge
     }
 
     func claimDailyReward(now: Date = Date()) async {
@@ -713,10 +1119,19 @@ final class AppStore {
             errorMessage = nil
             publishWidgetSnapshot()
         } catch let error as AccountSessionError {
-            markDailySignInFailureIfPossible(now: now)
             successMessage = nil
             switch error {
             case .requiresVerification(let payload):
+                if let context = dailySignInContext(now: now),
+                   await markDailySignInCompletedIfStatusRefreshShowsSigned(
+                    context,
+                    now: now,
+                    successMessage: "签到完成"
+                   ) {
+                    publishWidgetSnapshot()
+                    return
+                }
+                markDailySignInFailureIfPossible(now: now)
                 accountVerification = AccountVerificationState(
                     message: error.localizedDescription,
                     url: HoYoConstants.signInVerificationURL,
@@ -726,6 +1141,7 @@ final class AppStore {
                 )
                 errorMessage = error.localizedDescription
             default:
+                markDailySignInFailureIfPossible(now: now)
                 errorMessage = "签到失败：\(error.localizedDescription)"
             }
         } catch {
@@ -859,6 +1275,12 @@ final class AppStore {
 
         do {
             accountStatus = try accountService.signOut()
+            stopDeskDirectServer()
+            deskDirectPairingRequest = nil
+            dailyNote = nil
+            deskDailyNoteRefreshStatus = nil
+            deskDailyNoteRefreshPaused = false
+            deskDailyNoteLastRefreshAt = nil
             qrLoginSyncError = nil
             qrLoginSession = nil
             qrLoginSessionID = nil
@@ -1189,14 +1611,23 @@ final class AppStore {
         clearDailySignInFailure(context)
     }
 
+    private func reconcileDailySignInStateFromCurrentStatus(now: Date) {
+        guard accountStatus.signInSummary?.isTodaySigned == true,
+              let context = dailySignInContext(now: now) else {
+            return
+        }
+        markDailySignInCompleted(context)
+        clearDailySignInFailure(context)
+    }
+
     private func markDailySignInCompletedIfStatusRefreshShowsSigned(
         _ context: DailySignInContext,
         now: Date,
         successMessage: String
     ) async -> Bool {
         let attempts = max(1, AutoSignInSettings.riskStatusConfirmationAttempts)
-        for attempt in 0..<attempts {
-            if attempt > 0, signInRiskConfirmationDelayNanoseconds > 0 {
+        for _ in 0..<attempts {
+            if signInRiskConfirmationDelayNanoseconds > 0 {
                 await sleep(signInRiskConfirmationDelayNanoseconds)
             }
 

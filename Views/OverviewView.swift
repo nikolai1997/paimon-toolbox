@@ -42,6 +42,14 @@ struct OverviewView: View {
                         store.selectedSection = .gachaLog
                     }
 
+                    DailyNotePanel(
+                        note: store.dailyNote,
+                        isSignedIn: store.accountStatus.isSignedIn,
+                        status: store.deskDailyNoteRefreshStatus
+                    ) {
+                        Task { await store.refreshDailyNote(force: true) }
+                    }
+
                     RerunTimerPanel(
                         characterEntries: characterRerunTimers,
                         weaponEntries: weaponRerunTimers
@@ -93,6 +101,110 @@ struct OverviewView: View {
         }
 
         return store.accountStatus.signInSummary?.isTodaySigned == true ? "已签到" : "待签到"
+    }
+}
+
+private struct DailyNotePanel: View {
+    var note: DeskBridgeDailyNote?
+    var isSignedIn: Bool
+    var status: String?
+    var refresh: () -> Void
+
+    var body: some View {
+        OverviewPanel(title: "实时便签", systemImage: "gauge.with.dots.needle.67percent", actionTitle: "刷新", action: refresh) {
+            if let note {
+                VStack(alignment: .leading, spacing: 14) {
+                    HStack(spacing: 18) {
+                        DailyNoteMetric(
+                            title: "原粹树脂",
+                            value: "\(note.resin)/\(note.resinMax)",
+                            systemImage: "drop.fill",
+                            tint: .cyan
+                        )
+                        DailyNoteMetric(
+                            title: "每日委托",
+                            value: "\(note.commissionDone)/\(note.commissionTotal)",
+                            systemImage: "checklist",
+                            tint: .orange
+                        )
+                        DailyNoteMetric(
+                            title: "派遣完成",
+                            value: "\(note.expeditionFinished)/\(note.expeditionTotal)",
+                            systemImage: "paperplane.fill",
+                            tint: .green
+                        )
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                    HStack(spacing: 8) {
+                        Image(systemName: resinStatusIcon(for: note))
+                            .foregroundStyle(resinStatusColor(for: note))
+                        Text(resinStatusText(for: note))
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+
+                        Spacer(minLength: 8)
+
+                        Text("更新于 \(note.observedAt.formatted(.dateTime.hour().minute()))")
+                            .font(.caption)
+                            .foregroundStyle(.tertiary)
+                    }
+                }
+            } else if !isSignedIn {
+                OverviewEmptyState(title: "未登录米游社账号", detail: "登录后自动显示树脂、委托和派遣状态", systemImage: "person.crop.circle.badge.questionmark")
+            } else {
+                OverviewEmptyState(title: "正在获取实时便签", detail: status ?? "需要有效的米游社登录态", systemImage: "arrow.triangle.2.circlepath")
+            }
+        }
+    }
+
+    private func resinStatusIcon(for note: DeskBridgeDailyNote) -> String {
+        note.resin >= note.resinMax ? "checkmark.circle.fill" : "clock"
+    }
+
+    private func resinStatusColor(for note: DeskBridgeDailyNote) -> Color {
+        note.resin >= note.resinMax ? .green : .accentColor
+    }
+
+    private func resinStatusText(for note: DeskBridgeDailyNote) -> String {
+        if note.resin >= note.resinMax {
+            return "树脂已回满"
+        }
+        guard let recoveryAt = note.resinRecoveryAt else {
+            return "树脂恢复时间暂不可用"
+        }
+        return "预计 \(recoveryAt.formatted(.dateTime.hour().minute())) 回满"
+    }
+}
+
+private struct DailyNoteMetric: View {
+    var title: String
+    var value: String
+    var systemImage: String
+    var tint: Color
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 9) {
+            Image(systemName: systemImage)
+                .font(.headline.weight(.semibold))
+                .foregroundStyle(tint)
+                .frame(width: 30, height: 30)
+                .background(tint.opacity(0.14), in: Circle())
+
+            VStack(alignment: .leading, spacing: 3) {
+                Text(value)
+                    .font(.title3.weight(.semibold))
+                    .monospacedDigit()
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.72)
+                Text(title)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityElement(children: .combine)
     }
 }
 

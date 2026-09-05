@@ -2,6 +2,7 @@ import SwiftUI
 
 enum AppAppearanceSettings {
     static let themeKey = "app.appearance.theme"
+    static let dynamicLightingEnabledKey = "app.appearance.dynamicLightingEnabled"
 }
 
 enum AppTheme: String, CaseIterable, Identifiable {

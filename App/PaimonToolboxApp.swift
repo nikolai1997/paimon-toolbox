@@ -24,12 +24,15 @@ struct PaimonToolboxApp: App {
                 .preferredColorScheme(appTheme.preferredColorScheme)
                 .task {
                     await store.load()
-                    await store.startAutomaticSignInMonitor()
+                    store.startDeskDirectServer()
                     store.startRemoteDataRefreshMonitor()
+                    store.startDeskDailyNoteRefreshMonitor()
+                    await store.startAutomaticSignInMonitor()
                 }
                 .onChange(of: scenePhase) { _, newPhase in
                     guard newPhase == .active else { return }
                     Task {
+                        await store.handleAppDidBecomeActive()
                         await store.refreshRemoteDataIfNeeded()
                     }
                 }

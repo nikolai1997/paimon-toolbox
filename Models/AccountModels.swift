@@ -45,6 +45,10 @@ struct AccountSecrets: Codable, Equatable {
     var mid: String
     var cookieToken: String?
     var ltoken: String?
+    /// A stable per-account fingerprint used by the game-record API. It is
+    /// stored with the encrypted local session and never exported to Bridge.
+    var deviceFingerprint: String? = nil
+    var deviceFingerprintIssuedAt: Date? = nil
 }
 
 struct AccountVerificationState: Equatable {
@@ -58,6 +62,7 @@ struct AccountVerificationState: Equatable {
 enum AccountVerificationPurpose: Equatable {
     case dailySignIn
     case resign
+    case deskDailyNote
 }
 
 struct SignInVerificationResult: Codable, Equatable {
@@ -87,6 +92,10 @@ struct SignInWebVerificationContext: Equatable {
     var cookieToken: String
     var ltoken: String?
     var selectedRole: GenshinRole? = nil
+    /// Kept only in the non-persistent official MiHoYo verification WebView.
+    /// The current sign-in page uses this cookie to recover the same account
+    /// and selected role as the native API session.
+    var stoken: String? = nil
 
     var cookies: [AccountWebCookie] {
         var result = [
@@ -95,6 +104,12 @@ struct SignInWebVerificationContext: Equatable {
             AccountWebCookie(name: "cookie_token", value: cookieToken),
             AccountWebCookie(name: "cookie_token_v2", value: cookieToken)
         ]
+        if let stoken, !stoken.isEmpty {
+            result.append(AccountWebCookie(name: "stuid", value: accountID))
+            result.append(AccountWebCookie(name: "stuid_v2", value: accountID))
+            result.append(AccountWebCookie(name: "stoken", value: stoken))
+            result.append(AccountWebCookie(name: "stoken_v2", value: stoken))
+        }
         if let mid, !mid.isEmpty {
             result.append(AccountWebCookie(name: "ltmid", value: mid))
             result.append(AccountWebCookie(name: "ltmid_v2", value: mid))
@@ -265,6 +280,7 @@ struct SignInResultPayload: Codable, Equatable {
     var isRisk: Bool?
     var gt: String?
     var challenge: String?
+    var challengePath: String?
 
     init(
         code: String? = nil,
@@ -272,7 +288,8 @@ struct SignInResultPayload: Codable, Equatable {
         riskCode: Int?,
         isRisk: Bool? = nil,
         gt: String?,
-        challenge: String?
+        challenge: String?,
+        challengePath: String? = nil
     ) {
         self.code = code
         self.success = success
@@ -280,6 +297,7 @@ struct SignInResultPayload: Codable, Equatable {
         self.isRisk = isRisk
         self.gt = gt
         self.challenge = challenge
+        self.challengePath = challengePath
     }
 
     enum CodingKeys: String, CodingKey {
@@ -289,5 +307,6 @@ struct SignInResultPayload: Codable, Equatable {
         case isRisk = "is_risk"
         case gt
         case challenge
+        case challengePath = "challenge_path"
     }
 }

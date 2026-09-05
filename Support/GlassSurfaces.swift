@@ -16,10 +16,6 @@ struct AppGlassBackground: View {
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-
-            Rectangle()
-                .fill(.ultraThinMaterial)
-                .opacity(0.72)
         }
         .ignoresSafeArea()
     }
@@ -111,31 +107,36 @@ extension View {
 struct GlassHoverGlowModifier: ViewModifier {
     let cornerRadius: CGFloat
 
+    @AppStorage(AppAppearanceSettings.dynamicLightingEnabledKey) private var isDynamicLightingEnabled = true
     @State private var isHovering = false
     @State private var hoverLocation = CGPoint.zero
 
     func body(content: Content) -> some View {
-        content
-            .contentShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
-            .overlay {
-                hoverFill
-            }
-            .overlay {
-                hoverBorder
-            }
-            .onContinuousHover { phase in
-                switch phase {
-                case .active(let location):
-                    hoverLocation = location
-                    withAnimation(.easeOut(duration: 0.12)) {
-                        isHovering = true
-                    }
-                case .ended:
-                    withAnimation(.easeOut(duration: 0.20)) {
-                        isHovering = false
+        if isDynamicLightingEnabled {
+            content
+                .contentShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+                .overlay {
+                    hoverFill
+                }
+                .overlay {
+                    hoverBorder
+                }
+                .onContinuousHover { phase in
+                    switch phase {
+                    case .active(let location):
+                        updateHoverLocation(location)
+                        withAnimation(.easeOut(duration: 0.12)) {
+                            isHovering = true
+                        }
+                    case .ended:
+                        withAnimation(.easeOut(duration: 0.20)) {
+                            isHovering = false
+                        }
                     }
                 }
-            }
+        } else {
+            content
+        }
     }
 
     private var hoverFill: some View {
@@ -185,5 +186,13 @@ struct GlassHoverGlowModifier: ViewModifier {
         let x = min(max(hoverLocation.x / size.width, 0), 1)
         let y = min(max(hoverLocation.y / size.height, 0), 1)
         return UnitPoint(x: x, y: y)
+    }
+
+    private func updateHoverLocation(_ location: CGPoint) {
+        // Avoid invalidating a material-backed card for every pointer pixel.
+        guard abs(location.x - hoverLocation.x) >= 18 || abs(location.y - hoverLocation.y) >= 18 else {
+            return
+        }
+        hoverLocation = location
     }
 }

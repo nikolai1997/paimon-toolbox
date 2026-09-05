@@ -28,7 +28,9 @@ enum HoYoConstants {
     static let bbsClientType = "2"
     static let bbsSDKVersion = "2.16.0"
     static let bbsGameBiz = "bbs_cn"
-    static let deviceID = UUID().uuidString.replacingOccurrences(of: "-", with: "").lowercased()
+    /// Keep one Mac-local client identity. A new ID on every launch makes a
+    /// normal daily-note read look like a new MiHoYo client.
+    static let deviceID = persistedDeviceID()
     static let hoyoPlayDeviceID = randomLowercaseAndNumber(count: 53)
     static let lunaActivityID = "e202311201442471"
     static let languageCode = "zh-cn"
@@ -37,6 +39,28 @@ enum HoYoConstants {
     private static func randomLowercaseAndNumber(count: Int) -> String {
         let alphabet = Array("0123456789abcdefghijklmnopqrstuvwxyz")
         return String((0..<count).map { _ in alphabet.randomElement()! })
+    }
+
+    private static func persistedDeviceID() -> String {
+        let key = "hoyo.mac_client_device_id"
+        if let existing = UserDefaults.standard.string(forKey: key)?.lowercased() {
+            if UUID(uuidString: existing) != nil {
+                return existing
+            }
+            if existing.range(of: "^[0-9a-f]{32}$", options: .regularExpression) != nil {
+                let first = String(existing.prefix(8))
+                let second = String(existing.dropFirst(8).prefix(4))
+                let third = String(existing.dropFirst(12).prefix(4))
+                let fourth = String(existing.dropFirst(16).prefix(4))
+                let fifth = String(existing.dropFirst(20))
+                let migrated = [first, second, third, fourth, fifth].joined(separator: "-")
+                UserDefaults.standard.set(migrated, forKey: key)
+                return migrated
+            }
+        }
+        let value = UUID().uuidString.lowercased()
+        UserDefaults.standard.set(value, forKey: key)
+        return value
     }
 }
 

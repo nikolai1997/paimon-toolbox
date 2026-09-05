@@ -69,6 +69,27 @@ final class AccountModelsTests: XCTestCase {
         XCTAssertEqual(context.cookieHeader, "account_id=10001; account_id_v2=10001; cookie_token=cookie-token; cookie_token_v2=cookie-token; ltmid=mid-10001; ltmid_v2=mid-10001; ltuid=10001; ltuid_v2=10001; ltoken=ltoken; ltoken_v2=ltoken")
     }
 
+    func testSignInWebVerificationContextIncludesNativeSessionForOfficialWebViewOnly() {
+        let context = SignInWebVerificationContext(
+            url: HoYoConstants.signInVerificationURL,
+            accountID: "10001",
+            cookieToken: "cookie-token",
+            ltoken: nil,
+            stoken: "native-session-token"
+        )
+
+        XCTAssertEqual(
+            context.cookies.suffix(4),
+            [
+                AccountWebCookie(name: "stuid", value: "10001"),
+                AccountWebCookie(name: "stuid_v2", value: "10001"),
+                AccountWebCookie(name: "stoken", value: "native-session-token"),
+                AccountWebCookie(name: "stoken_v2", value: "native-session-token")
+            ]
+        )
+        XCTAssertTrue(context.cookieHeader.contains("stoken=native-session-token"))
+    }
+
     func testSignInWebVerificationContextProvidesAppBridgeUserInfo() {
         let role = GenshinRole(uid: "100000001", region: "cn_gf01", nickname: "空", level: 60, isSelected: true)
         let context = SignInWebVerificationContext(

@@ -12,6 +12,15 @@ final class AppearanceSettingsTests: XCTestCase {
         XCTAssertTrue(settingsSource.contains("@AppStorage(AppAppearanceSettings.themeKey)"))
     }
 
+    func testSettingsExposeDynamicLightingPreference() throws {
+        let settingsSource = try Self.source("Views/SettingsView.swift")
+        let appearanceSource = try Self.source("Support/AppAppearanceSettings.swift")
+
+        XCTAssertTrue(appearanceSource.contains("dynamicLightingEnabledKey"))
+        XCTAssertTrue(settingsSource.contains("@AppStorage(AppAppearanceSettings.dynamicLightingEnabledKey)"))
+        XCTAssertTrue(settingsSource.contains("Toggle(\"动态光效\""))
+    }
+
     func testAppAppliesPreferredColorSchemeToMainAndSettingsWindows() throws {
         let appSource = try Self.source("App/PaimonToolboxApp.swift")
         let appearanceSource = try Self.source("Support/AppAppearanceSettings.swift")

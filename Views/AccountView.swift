@@ -3,10 +3,10 @@ import SwiftUI
 
 struct AccountView: View {
     @Bindable var store: AppStore
-
     @State private var isPresentingQRSheet = false
     @State private var isPresentingVerificationSheet = false
     @State private var isConfirmingResign = false
+    @State private var directBoardDisplayCode = ""
 
     private let rewardColumns = [
         GridItem(.adaptive(minimum: 120, maximum: 160), spacing: 12, alignment: .top)
@@ -18,7 +18,7 @@ struct AccountView: View {
                 VStack(alignment: .leading, spacing: 24) {
                     header
                     messageSection
-
+                    macDirectDeskPanel
                     if store.accountStatus.isSignedIn {
                         signedInWorkspace
                     } else {
@@ -150,10 +150,129 @@ struct AccountView: View {
         VStack(alignment: .leading, spacing: 24) {
             accountSummary
 
+            if let verification = store.accountVerification,
+               verification.purpose == .deskDailyNote {
+                dailyNoteVerificationPanel
+            }
+
             if let summary = store.accountStatus.signInSummary {
                 signInSummary(summary)
                 rewardGrid(summary.rewards)
             }
+        }
+    }
+
+    private var dailyNoteVerificationPanel: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 10) {
+                Label("实时便签需要安全验证", systemImage: "checkmark.shield")
+                    .font(.headline)
+                    .foregroundStyle(.orange)
+                Spacer()
+                Button {
+                    isPresentingVerificationSheet = true
+                } label: {
+                    Label("打开验证", systemImage: "network")
+                }
+                .buttonStyle(.borderedProminent)
+            }
+
+            Text("完成一次验证后，首页的树脂、委托和派遣信息会恢复低频自动更新。")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(16)
+        .glassPanel(cornerRadius: 14)
+    }
+
+    @ViewBuilder
+    private var macDirectDeskPanel: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Label("Mac 直连摆件", systemImage: "laptopcomputer.and.iphone")
+                    .font(.headline)
+                Spacer()
+                Text(store.deskDirectServerStatus)
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(store.deskDirectPairingRequest == nil ? Color.secondary : Color.orange)
+            }
+
+            if !store.accountStatus.isSignedIn {
+                Text("登录后，工具箱会在本机启动局域网服务。摆件只接收脱敏后的原神状态和受限动作。")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            } else if let request = store.deskDirectPairingRequest {
+                Text("发现摆件：\(request.deviceID)")
+                    .font(.subheadline)
+                Text("屏幕配对码：\(request.displayCode)")
+                    .font(.title3.monospaced().weight(.semibold))
+                    .textSelection(.enabled)
+                Text("确认后会为这台摆件生成独立访问令牌；令牌不会显示在界面或日志中。")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                HStack {
+                    TextField("输入摆件上的 8 位配对码", text: $directBoardDisplayCode)
+                        .textFieldStyle(.roundedBorder)
+                    Button("确认绑定") {
+                        store.approveDeskDirectPairing(displayCode: directBoardDisplayCode)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(directBoardDisplayCode.trimmingCharacters(in: .whitespacesAndNewlines).count != 8)
+                    Button("拒绝") {
+                        store.rejectDeskDirectPairing()
+                        directBoardDisplayCode = ""
+                    }
+                    .buttonStyle(.bordered)
+                }
+                Text("输入与摆件屏幕一致的 8 位配对码后确认。")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } else {
+                Text("扫描同一 Wi‑Fi 内的摆件；选择后将在摆件屏幕上确认连接。")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                Button(store.isScanningDeskDevices ? "正在扫描…" : "扫描摆件") {
+                    Task { await store.scanDeskDevices() }
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(store.isScanningDeskDevices)
+                ForEach(store.discoveredDeskDevices) { device in
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text(device.name).font(.subheadline.weight(.semibold))
+                            Text((device.host.isEmpty ? "地址待发现" : device.host) + " · " + deskConnectionText(device.status))
+                                .font(.caption).foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                        if device.status == "available" || device.status == "paired" {
+                            Button(device.status == "paired" ? "重新连接" : "连接") { Task { await store.connectDeskDevice(device) } }
+                                .buttonStyle(.bordered)
+                        } else if device.status == "awaiting_confirmation" {
+                            ProgressView().controlSize(.small)
+                        } else {
+                            Label(device.status == "connected" ? "已连接" : "已绑定", systemImage: device.status == "connected" ? "checkmark.circle.fill" : "link.circle")
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(device.status == "connected" ? .green : .secondary)
+                        }
+                    }
+                }
+            }
+        }
+        .padding(16)
+        .glassPanel(cornerRadius: 14)
+        .accessibilityIdentifier("mac-direct-desk-panel")
+    }
+
+    private func deskConnectionText(_ status: String) -> String {
+        switch status {
+        case "connected": "已连接 · 同步正常"
+        case "paired": "已授权 · 正在建立同步"
+        case "saved": "已绑定 · 等待恢复在线"
+        case "awaiting_confirmation": "等待摆件确认"
+        default: "可连接"
         }
     }
 
@@ -380,12 +499,24 @@ struct AccountView: View {
     }
 
     private func verificationSheet(_ verification: AccountVerificationState) -> some View {
-        VStack(spacing: 0) {
+        let hasGeetestPayload = verification.payload?.gt != nil && verification.payload?.challenge != nil
+        let verificationWebContext: SignInWebVerificationContext? = {
+            // Daily-note verification must submit the challenge returned by
+            // createVerification. Do not replace that challenge with the
+            // already signed-in activity page just because a web context is
+            // also available.
+            if verification.purpose == .deskDailyNote, hasGeetestPayload {
+                return nil
+            }
+            return verification.webContext
+        }()
+
+        return VStack(spacing: 0) {
             HStack(spacing: 12) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("安全验证")
                         .font(.headline)
-                    Text(verification.webContext != nil || verification.payload?.gt == nil ? "正在使用内嵌米游社页面完成安全验证。" : "完成验证后会自动重试签到。")
+                    Text(hasGeetestPayload ? "请完成安全验证，完成后会自动更新实时便签。" : "正在使用内嵌米游社页面完成安全验证。")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
@@ -393,7 +524,7 @@ struct AccountView: View {
                 Spacer()
 
                 Button {
-                    isPresentingVerificationSheet = false
+                    closeVerificationSheet(verification)
                 } label: {
                     Label("关闭", systemImage: "xmark")
                 }
@@ -403,11 +534,11 @@ struct AccountView: View {
 
             Divider()
 
-            if let payload = verification.payload, payload.gt != nil || verification.webContext != nil {
+            if verificationWebContext != nil || hasGeetestPayload {
                 MiHoYoVerificationWebView(
-                    payload: payload,
+                    payload: verification.payload,
                     fallbackURL: verification.url,
-                    webContext: verification.webContext
+                    webContext: verificationWebContext
                 ) { result in
                     isPresentingVerificationSheet = false
                     Task {
@@ -416,13 +547,12 @@ struct AccountView: View {
                             await store.completeSignInVerification(result)
                         case .resign:
                             await store.completeResignVerification(result)
+                        case .deskDailyNote:
+                            await store.completeDeskDailyNoteVerification(result)
                         }
                     }
                 } onClose: {
-                    isPresentingVerificationSheet = false
-                    Task {
-                        await store.refreshSignInStatus()
-                    }
+                    closeVerificationSheet(verification)
                 }
                 .frame(minWidth: 760, minHeight: 560)
             } else {
@@ -430,7 +560,11 @@ struct AccountView: View {
                     ContentUnavailableView(
                         "无法内嵌验证",
                         systemImage: "exclamationmark.triangle",
-                        description: Text("米游社这次没有返回验证参数，也缺少本地登录凭据上下文。请重新扫码登录后再试。")
+                        description: Text(
+                            verification.purpose == .deskDailyNote
+                                ? "本次没有获取到实时便签验证参数，请重新获取；不会打开签到页面。"
+                                : "米游社这次没有返回验证参数，也缺少本地登录凭据上下文。请重新扫码登录后再试。"
+                        )
                     )
 
                     HStack(spacing: 12) {
@@ -442,15 +576,20 @@ struct AccountView: View {
                                     await store.claimDailyReward()
                                 case .resign:
                                     await store.claimResignReward()
+                                case .deskDailyNote:
+                                    await store.retryDeskDailyNoteVerification()
                                 }
                             }
                         } label: {
-                            Label("我已完成，重试签到", systemImage: "arrow.clockwise")
+                            Label(
+                                verification.purpose == .deskDailyNote ? "重新获取验证" : "我已完成，重试签到",
+                                systemImage: "arrow.clockwise"
+                            )
                         }
                         .buttonStyle(.bordered)
 
                         Button {
-                            isPresentingVerificationSheet = false
+                            closeVerificationSheet(verification)
                         } label: {
                             Label("关闭", systemImage: "xmark")
                         }
@@ -461,6 +600,21 @@ struct AccountView: View {
             }
         }
         .frame(minWidth: 760, minHeight: 640)
+    }
+
+    private func closeVerificationSheet(_ verification: AccountVerificationState) {
+        isPresentingVerificationSheet = false
+        store.dismissAccountVerification()
+        Task {
+            switch verification.purpose {
+            case .deskDailyNote:
+                // A cancelled daily-note challenge stays paused. Never turn a
+                // close action into another background MiHoYo request.
+                return
+            case .dailySignIn, .resign:
+                await store.refreshSignInStatus()
+            }
+        }
     }
 
     private var shouldShowVerificationHint: Bool {

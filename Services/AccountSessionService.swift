@@ -14,10 +14,26 @@ protocol AccountSessionServicing {
     func signInWebVerificationContext() throws -> SignInWebVerificationContext
     func refreshLoginTokens() async throws -> LocalAccountStatus
     func loadGachaRecords() async throws -> [GachaRecord]
+    func loadDeskDailyNote(verificationChallenge: String?) async throws -> DeskBridgeDailyNote
+    func verifyDeskDailyNote(_ verification: SignInVerificationResult, challengePath: String?) async throws -> String
     func signOut() throws -> LocalAccountStatus
 }
 
+extension AccountSessionServicing {
+    /// Existing read-only test doubles and alternative session providers do
+    /// not gain a network daily-note capability by conforming to the account
+    /// protocol.  Only the concrete local service implements it.
+    func loadDeskDailyNote(verificationChallenge: String? = nil) async throws -> DeskBridgeDailyNote {
+        throw AccountSessionError.missingAccount
+    }
+
+    func verifyDeskDailyNote(_ verification: SignInVerificationResult, challengePath: String?) async throws -> String {
+        throw AccountSessionError.missingAccount
+    }
+}
+
 struct LocalAccountSessionService: AccountSessionServicing {
+    private static let deviceFingerprintRefreshInterval: TimeInterval = 7 * 24 * 60 * 60
     private let metadataStore: AccountMetadataStoring
     private let secretStore: AccountSecretStoring
     private let passportClient: MiHoYoPassportClient
@@ -25,6 +41,8 @@ struct LocalAccountSessionService: AccountSessionServicing {
     private let bindingClient: MiHoYoBindingClient
     private let signInClient: GenshinSignInClient
     private let gachaLogClient: GachaLogRemoteClient
+    private let dailyNoteClient: GenshinDailyNoteClient
+    private let deviceFingerprintClient: HoYoDeviceFingerprintClient
 
     init(
         metadataStore: AccountMetadataStoring? = nil,
@@ -33,7 +51,9 @@ struct LocalAccountSessionService: AccountSessionServicing {
         userClient: MiHoYoUserProfileLoading = MiHoYoUserClient(),
         bindingClient: MiHoYoBindingClient = MiHoYoBindingClient(),
         signInClient: GenshinSignInClient = GenshinSignInClient(),
-        gachaLogClient: GachaLogRemoteClient = GachaLogRemoteClient()
+        gachaLogClient: GachaLogRemoteClient = GachaLogRemoteClient(),
+        dailyNoteClient: GenshinDailyNoteClient = GenshinDailyNoteClient(),
+        deviceFingerprintClient: HoYoDeviceFingerprintClient = HoYoDeviceFingerprintClient()
     ) {
         self.metadataStore = metadataStore ?? Self.makeDefaultMetadataStore()
         self.secretStore = secretStore ?? Self.makeDefaultSecretStore()
@@ -42,6 +62,8 @@ struct LocalAccountSessionService: AccountSessionServicing {
         self.bindingClient = bindingClient
         self.signInClient = signInClient
         self.gachaLogClient = gachaLogClient
+        self.dailyNoteClient = dailyNoteClient
+        self.deviceFingerprintClient = deviceFingerprintClient
     }
 
     func loadStatus() -> LocalAccountStatus {
@@ -197,7 +219,8 @@ struct LocalAccountSessionService: AccountSessionServicing {
             avatarURL: metadata.account.avatarURL,
             cookieToken: cookieToken,
             ltoken: secrets.ltoken,
-            selectedRole: metadata.selectedRole
+            selectedRole: metadata.selectedRole,
+            stoken: secrets.stoken
         )
     }
 
@@ -206,6 +229,34 @@ struct LocalAccountSessionService: AccountSessionServicing {
         let role = try requireRole(metadata)
         let secrets = try requireSecrets(metadata)
         return try await gachaLogClient.loadRecords(role: role, secrets: secrets)
+    }
+
+    func loadDeskDailyNote(verificationChallenge: String? = nil) async throws -> DeskBridgeDailyNote {
+        let metadata = try requireMetadata()
+        let role = try requireRole(metadata)
+        var secrets = try requireSecrets(metadata)
+        if secrets.deviceFingerprintIssuedAt.map({ Date().timeIntervalSince($0) >= Self.deviceFingerprintRefreshInterval }) ?? true {
+            do {
+                secrets.deviceFingerprint = try await deviceFingerprintClient.fetch(
+                    existingFingerprint: secrets.deviceFingerprint
+                )
+                secrets.deviceFingerprintIssuedAt = Date()
+                try secretStore.save(secrets, accountID: metadata.account.accountID)
+            } catch {
+                guard secrets.deviceFingerprint?.isEmpty == false else { throw error }
+            }
+        }
+        return try await dailyNoteClient.load(role: role, secrets: secrets, verificationChallenge: verificationChallenge)
+    }
+
+    func verifyDeskDailyNote(_ verification: SignInVerificationResult, challengePath: String?) async throws -> String {
+        let metadata = try requireMetadata()
+        let secrets = try requireSecrets(metadata)
+        return try await dailyNoteClient.verify(
+            verification,
+            secrets: secrets,
+            challengePath: challengePath
+        )
     }
 
     func signOut() throws -> LocalAccountStatus {
