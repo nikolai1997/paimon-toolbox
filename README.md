@@ -46,48 +46,6 @@ https://nikolai1997.github.io/paimon-toolbox-data/metadata.json
 
 请只从本项目的 GitHub Releases 获取安装包。每次更新后，macOS 可能会再次要求确认。
 
-## 本地开发
-
-需要 macOS 14+ 和 Xcode / Swift 6 工具链。
-
-运行测试：
-
-```bash
-swift test --disable-sandbox
-```
-
-启动并做自检：
-
-```bash
-./script/build_and_run.sh --verify
-```
-
-生成 DMG 安装包：
-
-```bash
-./script/package_dmg.sh
-```
-
-安装包输出到：
-
-```txt
-dist/PaimonToolbox-<version>.dmg
-```
-
-## 数据更新工具
-
-本仓库内保留一份生成脚本，便于本地更新内置数据：
-
-```bash
-python3 script/update_remote_data.py \
-  --source genshin-db \
-  --gacha-source snap-metadata \
-  --manual-dir data/manual \
-  --fetch-official-announcements \
-  --public-dir data/public \
-  --release-dir data/releases
-```
-
 ## 许可证
 
 代码以 MIT License 开源。第三方项目的版权与许可声明见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。游戏素材、名称、图标和公告的权利归其各自权利方所有。

@@ -44,11 +44,10 @@ class ReleaseReadinessTests(unittest.TestCase):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         self.assertIn("THIRD_PARTY_NOTICES.md", readme)
 
-    def test_readme_uses_release_visuals_and_version_placeholder(self):
+    def test_readme_uses_release_visuals(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         self.assertIn("docs/assets/app-icon.png", readme)
         self.assertIn("docs/assets/app-overview.png", readme)
-        self.assertIn("PaimonToolbox-<version>.dmg", readme)
         self.assertNotIn("PaimonToolbox-0.1.1.dmg", readme)
 
     def test_readme_explains_unnotarized_first_launch(self):
