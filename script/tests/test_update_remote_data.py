@@ -143,6 +143,45 @@ class UpdateRemoteDataTests(unittest.TestCase):
         self.assertIsNone(item["banner"])
         self.assertIsNone(item["contentURL"])
 
+    def test_miyoushe_recommended_posts_convert_to_announcement_feed(self):
+        converted = update_remote_data.convert_miyoushe_recommended(
+            {
+                "data": {
+                    "list": [
+                        {
+                            "post_id": "78300001",
+                            "subject": "7.1版本活动速递",
+                            "official_type": 3,
+                            "banner": "https://upload-bbs.miyoushe.com/upload/2026/09/21/example.jpg",
+                        }
+                    ]
+                }
+            }
+        )
+
+        self.assertEqual(converted["items"][0]["id"], "miyoushe-78300001")
+        self.assertEqual(converted["items"][0]["startTime"], "2026-09-21 00:00:00")
+        self.assertEqual(
+            converted["items"][0]["contentURL"],
+            "https://www.miyoushe.com/ys/article/78300001",
+        )
+
+    def test_newer_announcement_content_beats_retimestamped_stale_cache(self):
+        stale_cache = {
+            "schemaVersion": 1,
+            "updatedAt": "2026-09-22T00:00:00Z",
+            "items": [{"id": "old", "title": "7月公告", "startTime": "2026-07-01 07:00:00"}],
+        }
+        current = {
+            "schemaVersion": 1,
+            "updatedAt": "2026-09-21T00:00:00Z",
+            "items": [{"id": "new", "title": "9月公告", "startTime": "2026-09-21 07:00:00"}],
+        }
+
+        selected = update_remote_data.select_announcement_feed(stale_cache, current)
+
+        self.assertEqual(selected["items"][0]["id"], "new")
+
     def test_merge_official_gacha_events_merges_same_banner_with_different_start_time(self):
         snap_event = {
             "name": "镜中的茶宴",
@@ -166,7 +205,7 @@ class UpdateRemoteDataTests(unittest.TestCase):
                                     "title": "「镜中的茶宴」祈愿：「镜水析谬·桑多涅(冰)」概率UP！",
                                     "subtitle": "「镜中的茶宴」祈愿",
                                     "start_time": "2026-06-29 12:00:00",
-                                    "end_time": "2026-07-21 17:59:00",
+                                    "end_time": "2026-07-21 17:59:59",
                                 }
                             ],
                         }
@@ -195,7 +234,7 @@ class UpdateRemoteDataTests(unittest.TestCase):
                     {
                         "id": "7",
                         "title": "测试公告",
-                        "banner": "   ",
+                        "banner": " http://www.mihoyo.com/banner.png ",
                         "contentURL": " https://www.mihoyo.com/notice/7 ",
                         "startTime": "2026-07-10 10:00:00",
                         "endTime": "2026-07-11 10:00:00",
@@ -212,6 +251,8 @@ class UpdateRemoteDataTests(unittest.TestCase):
         self.assertEqual(item["type"], "活动公告")
         self.assertNotIn("url", item)
         self.assertNotIn("startsAt", item)
+
+        self.assertIsNone(update_remote_data.normalize_optional_https_url("http://www.mihoyo.com/notice/7"))
 
     def test_announcement_validation_requires_swift_decodable_contract(self):
         with self.assertRaisesRegex(RuntimeError, "schemaVersion"):

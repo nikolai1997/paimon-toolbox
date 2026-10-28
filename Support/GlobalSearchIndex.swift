@@ -125,6 +125,7 @@ enum GlobalSearchIndex {
             entry(.gachaLog, "祈愿记录", "总抽数，五星，四星，当前垫数，导入，导出 UIGF"),
             entry(.planner, "养成规划", "调整材料数量，恢复样例，剩余，进度"),
             entry(.account, "账号与签到", "米游社扫码登录，扫码登录，立即签到，刷新，退出，启动后每天自动签到"),
+            entry(.settings, "Mac 直连摆件", "摆件设置，扫描摆件，配对码，确认绑定，拒绝，连接，重新连接，同步"),
             entry(.settings, "静态资源", "启动时自动从 GitHub 更新，刷新资料库缓存，内置数据源"),
             entry(.settings, "离线资料包", "网盘 data-pack.zip 分享链接，打开网盘下载链接，导入 data-pack.zip"),
             entry(.settings, "隐私声明", "本应用仅在本机处理账号凭据、抽卡记录和养成计划，不会主动上传个人数据")

@@ -32,6 +32,27 @@ struct AnnouncementItem: Codable, Identifiable, Equatable {
     var endsAt: Date?
     var typeLabel: String?
 
+    var officialContentID: Int? {
+        guard !id.isEmpty, id.utf8.allSatisfy({ (48...57).contains($0) }),
+              let value = Int(id), value > 0 else {
+            return nil
+        }
+        return value
+    }
+
+    var readableURL: URL? {
+        guard let url,
+              url.scheme?.lowercased() == "https",
+              url.host?.isEmpty == false else {
+            return nil
+        }
+        return url
+    }
+
+    var canReadFullContent: Bool {
+        readableURL != nil || officialContentID != nil
+    }
+
     enum CodingKeys: String, CodingKey {
         case id
         case title
@@ -112,7 +133,7 @@ struct AnnouncementItem: Codable, Identifiable, Equatable {
             guard !value.isEmpty,
                   let url = URL(string: value),
                   let scheme = url.scheme?.lowercased(),
-                  scheme == "http" || scheme == "https",
+                  scheme == "https",
                   let host = url.host,
                   !host.isEmpty else {
                 continue

@@ -50,6 +50,8 @@ struct SettingsView: View {
                         .foregroundStyle(.secondary)
                 }
 
+                DeskSettingsPanel(store: store)
+
                 settingsSection("桌面小组件") {
                     WidgetPreviewPanel(snapshot: store.widgetSnapshot)
                     Text("小组件读取本机快照；签到动作会打开 App 处理账号、验证码和错误提示。")

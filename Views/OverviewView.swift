@@ -616,6 +616,7 @@ private struct PlanSummaryPanel: View {
 private struct AnnouncementPanel: View {
     var items: [AnnouncementItem]
     @State private var selectedItem: AnnouncementItem?
+    @State private var readingItem: AnnouncementItem?
 
     var body: some View {
         OverviewPanel(title: "近期公告", systemImage: "megaphone", actionTitle: nil, action: nil) {
@@ -653,13 +654,20 @@ private struct AnnouncementPanel: View {
             }
         }
         .popover(item: $selectedItem, arrowEdge: .trailing) { item in
-            AnnouncementDetailSheet(item: item)
+            AnnouncementDetailSheet(item: item) {
+                selectedItem = nil
+                readingItem = item
+            }
+        }
+        .sheet(item: $readingItem) { item in
+            AnnouncementReaderView(item: item)
         }
     }
 }
 
 private struct AnnouncementDetailSheet: View {
     var item: AnnouncementItem
+    var onRead: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
@@ -687,10 +695,11 @@ private struct AnnouncementDetailSheet: View {
                 }
             }
 
-            if let url = item.url {
-                Link(destination: url) {
-                    Label("打开原文", systemImage: "safari")
+            if item.canReadFullContent {
+                Button(action: onRead) {
+                    Label("阅读全文", systemImage: "doc.text")
                 }
+                .buttonStyle(.borderedProminent)
                 .controlSize(.large)
             }
 

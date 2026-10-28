@@ -7,6 +7,147 @@
         "哀叙冰玉块",
         "哀叙冰玉"
       ],
+      "bossMaterialName": "焰中不灭花枝",
+      "commonMaterialNames": [
+        "幻造萤屑",
+        "幻造裂晶",
+        "幻造晶鳞石"
+      ],
+      "localSpecialtyName": "霜仙花",
+      "talentBookNames": [
+        "「慈爱」的教导",
+        "「慈爱」的指引",
+        "「慈爱」的哲学"
+      ],
+      "weeklyBossMaterialName": "扭曲的枯枝"
+    },
+    "element": "冰",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Odette.png",
+    "id": 10000150,
+    "materials": [
+      "哀叙冰玉碎屑",
+      "霜仙花",
+      "幻造萤屑",
+      "哀叙冰玉断片",
+      "焰中不灭花枝",
+      "幻造裂晶",
+      "哀叙冰玉块",
+      "幻造晶鳞石",
+      "哀叙冰玉",
+      "「慈爱」的哲学",
+      "扭曲的枯枝",
+      "智识之冕",
+      "「慈爱」的教导",
+      "「慈爱」的指引"
+    ],
+    "name": "奥黛塔",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Odette.png",
+    "rarity": 5,
+    "region": "科洛列夫茨基剧团",
+    "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "自在松石碎屑",
+        "自在松石断片",
+        "自在松石块",
+        "自在松石"
+      ],
+      "bossMaterialName": "游离者的裂甲",
+      "commonMaterialNames": [
+        "幻造萤屑",
+        "幻造裂晶",
+        "幻造晶鳞石"
+      ],
+      "localSpecialtyName": "金蕨",
+      "talentBookNames": [
+        "「荣光」的教导",
+        "「荣光」的指引",
+        "「荣光」的哲学"
+      ],
+      "weeklyBossMaterialName": "亵渎的新芽"
+    },
+    "element": "风",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Vesna.png",
+    "id": 10000143,
+    "materials": [
+      "自在松石碎屑",
+      "金蕨",
+      "幻造萤屑",
+      "自在松石断片",
+      "游离者的裂甲",
+      "幻造裂晶",
+      "自在松石块",
+      "幻造晶鳞石",
+      "自在松石",
+      "「荣光」的哲学",
+      "亵渎的新芽",
+      "智识之冕",
+      "「荣光」的教导",
+      "「荣光」的指引"
+    ],
+    "name": "薇斯纳",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Vesna.png",
+    "rarity": 5,
+    "region": "冬契军",
+    "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "涤净青金碎屑",
+        "涤净青金断片",
+        "涤净青金块",
+        "涤净青金"
+      ],
+      "bossMaterialName": "焰中不灭花枝",
+      "commonMaterialNames": [
+        "嵌合种",
+        "并生嵌合胞",
+        "源生嵌合体"
+      ],
+      "localSpecialtyName": "霜仙花",
+      "talentBookNames": [
+        "「坚忍」的教导",
+        "「坚忍」的指引",
+        "「坚忍」的哲学"
+      ],
+      "weeklyBossMaterialName": "狂人的约束"
+    },
+    "element": "水",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Vodyanitsa.png",
+    "id": 10000140,
+    "materials": [
+      "涤净青金碎屑",
+      "霜仙花",
+      "嵌合种",
+      "涤净青金断片",
+      "焰中不灭花枝",
+      "并生嵌合胞",
+      "涤净青金块",
+      "源生嵌合体",
+      "涤净青金",
+      "「坚忍」的哲学",
+      "狂人的约束",
+      "智识之冕",
+      "「坚忍」的教导",
+      "「坚忍」的指引"
+    ],
+    "name": "沃雅妮莎",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Vodyanitsa.png",
+    "rarity": 5,
+    "region": "科洛列夫茨基剧团",
+    "weaponType": "法器"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "哀叙冰玉碎屑",
+        "哀叙冰玉断片",
+        "哀叙冰玉块",
+        "哀叙冰玉"
+      ],
       "bossMaterialName": "堕天的落羽",
       "commonMaterialNames": [
         "毁损机轴",
@@ -517,31 +658,10 @@
     "weaponType": "法器"
   },
   {
-    "cultivation": {
-      "ascensionGemNames": [],
-      "bossMaterialName": "",
-      "commonMaterialNames": [],
-      "localSpecialtyName": "",
-      "talentBookNames": [
-        "「纷争」的教导",
-        "「纷争」的指引",
-        "「纷争」的哲学"
-      ],
-      "weeklyBossMaterialName": "蚀灭的阳焰"
-    },
     "element": "无",
     "iconURL": "https://enka.network/ui/UI_AvatarIcon_MannequinGirl.png",
     "id": 10000118,
-    "materials": [
-      "「纷争」的哲学",
-      "龙冠武士的金哨",
-      "蚀灭的阳焰",
-      "智识之冕",
-      "「纷争」的教导",
-      "卫从的木哨",
-      "「纷争」的指引",
-      "战士的铁哨"
-    ],
+    "materials": [],
     "name": "奇偶·女性",
     "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_MannequinGirl.png",
     "rarity": 5,
@@ -549,31 +669,10 @@
     "weaponType": "单手剑"
   },
   {
-    "cultivation": {
-      "ascensionGemNames": [],
-      "bossMaterialName": "",
-      "commonMaterialNames": [],
-      "localSpecialtyName": "",
-      "talentBookNames": [
-        "「纷争」的教导",
-        "「纷争」的指引",
-        "「纷争」的哲学"
-      ],
-      "weeklyBossMaterialName": "蚀灭的阳焰"
-    },
     "element": "无",
     "iconURL": "https://enka.network/ui/UI_AvatarIcon_MannequinBoy.png",
     "id": 10000117,
-    "materials": [
-      "「纷争」的哲学",
-      "龙冠武士的金哨",
-      "蚀灭的阳焰",
-      "智识之冕",
-      "「纷争」的教导",
-      "卫从的木哨",
-      "「纷争」的指引",
-      "战士的铁哨"
-    ],
+    "materials": [],
     "name": "奇偶·男性",
     "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_MannequinBoy.png",
     "rarity": 5,
@@ -1235,7 +1334,7 @@
     "name": "阿蕾奇诺",
     "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Arlecchino.png",
     "rarity": 5,
-    "region": "愚人众",
+    "region": "至冬",
     "weaponType": "长柄武器"
   },
   {
@@ -2833,7 +2932,7 @@
     "name": "达达利亚",
     "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Tartaglia.png",
     "rarity": 5,
-    "region": "愚人众",
+    "region": "至冬",
     "weaponType": "弓"
   },
   {
@@ -3238,6 +3337,53 @@
     "rarity": 5,
     "region": "稻妻",
     "weaponType": "单手剑"
+  },
+  {
+    "cultivation": {
+      "ascensionGemNames": [
+        "最胜紫晶碎屑",
+        "最胜紫晶断片",
+        "最胜紫晶块",
+        "最胜紫晶"
+      ],
+      "bossMaterialName": "游空之物的断尾",
+      "commonMaterialNames": [
+        "嵌合种",
+        "并生嵌合胞",
+        "源生嵌合体"
+      ],
+      "localSpecialtyName": "植绒草",
+      "talentBookNames": [
+        "「坚忍」的教导",
+        "「坚忍」的指引",
+        "「坚忍」的哲学"
+      ],
+      "weeklyBossMaterialName": "异端的瓶剂"
+    },
+    "element": "雷",
+    "iconURL": "https://enka.network/ui/UI_AvatarIcon_Alyosha.png",
+    "id": 10000148,
+    "materials": [
+      "最胜紫晶碎屑",
+      "植绒草",
+      "嵌合种",
+      "最胜紫晶断片",
+      "游空之物的断尾",
+      "并生嵌合胞",
+      "最胜紫晶块",
+      "源生嵌合体",
+      "最胜紫晶",
+      "「坚忍」的哲学",
+      "异端的瓶剂",
+      "智识之冕",
+      "「坚忍」的教导",
+      "「坚忍」的指引"
+    ],
+    "name": "阿罗夏",
+    "portraitURL": "https://enka.network/ui/UI_AvatarIcon_Side_Alyosha.png",
+    "rarity": 4,
+    "region": "至冬",
+    "weaponType": "长柄武器"
   },
   {
     "cultivation": {

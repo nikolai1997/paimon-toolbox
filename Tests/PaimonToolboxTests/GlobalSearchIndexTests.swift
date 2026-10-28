@@ -14,6 +14,20 @@ final class GlobalSearchIndexTests: XCTestCase {
         XCTAssertEqual(results.first?.section, .settings)
     }
 
+    func testDeskSettingsSearchRoutesToSettings() {
+        for query in ["摆件设置", "扫描摆件", "配对码", "重新连接"] {
+            let results = GlobalSearchIndex.results(
+                matching: query,
+                metadata: nil,
+                gachaRecords: [],
+                plans: []
+            )
+
+            XCTAssertTrue(results.contains { $0.title == "Mac 直连摆件" && $0.section == .settings }, query)
+            XCTAssertFalse(results.contains { $0.section == .account }, query)
+        }
+    }
+
     func testSearchFindsMetadataGachaAndPlannerData() {
         let metadata = MetadataBundle(
             version: "test",

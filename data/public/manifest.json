@@ -3,44 +3,44 @@
     {
       "kind": "metadata",
       "path": "metadata.json",
-      "sha256": "6cb4d64b153ec7fda1a7bafa2856a634b73eae0274306359aa357b3964a04253"
+      "sha256": "edce027f3b5cc5a5c0168049a6ae01e595ea83022632ac3481d520b1a37235cf"
     },
     {
       "kind": "characters",
       "path": "characters.json",
-      "sha256": "ed02b3c0c130ce6edec39a3a9d13d84df1985c24b0ea5da3cfcff457aa62ec51"
+      "sha256": "07936390ee863baf725bd1678be5dddc9a59cfa9f45e6488b4175e857e4868f6"
     },
     {
       "kind": "weapons",
       "path": "weapons.json",
-      "sha256": "674696dc52365acd5f533b8b8a42a06572cd6168851bfbedfa2e63586bc225a4"
+      "sha256": "f1eb642b87b4771a3393ab12aa7e8b30608117bc53b134e421f179bd06902212"
     },
     {
       "kind": "materials",
       "path": "materials.json",
-      "sha256": "79a2889c4e460cf07a5468fcdafa68a6bd8e4fb946ce417705ed3a75385a3a89"
+      "sha256": "0853bf8e2c56ccc0b251630f7898506939bb5f525946e8a4c40a588fe98f9e7e"
     },
     {
       "kind": "gachaEvents",
       "path": "gacha-events.json",
-      "sha256": "349b11b12c023c61a91d92cd2e5f906ded2b7bc7fd43bc2b5967f8dfbed819fa"
+      "sha256": "b2064fddf3aca8bfc89c1adf18f391d1de3667f3a0f2d3ed6112e2c2ec200806"
     },
     {
       "kind": "config",
       "path": "config.json",
-      "sha256": "4019f1cf3fd45818e38eb19df5e442b269e9f7768d7d0c5ac3e98cb4e1083ff8"
+      "sha256": "630232719e13a139d6d2aaa0cce13e3e90f8d7da7690c8d36b9b18129a5a2a07"
     },
     {
       "kind": "latest",
       "path": "latest.json",
-      "sha256": "cb4c26accc443331e1d1a6144c93b218ea31d657dc68591ec83fbdd9614bd0f1"
+      "sha256": "6230033fab15e4d43eb39cc4b67063feefaffc8589388a884f1dede4eeaf07af"
     },
     {
       "kind": "announcements",
       "path": "announcements.json",
-      "sha256": "9f7cea9b764bd4372647d891b52f77c12b007ab7aed9f192d69997b72df2e497"
+      "sha256": "7fa944149d99f9b86ee5d25121273125dcbb444e94c35d49f9ac6a27f6a75a02"
     }
   ],
-  "generatedAt": "2026-07-11T16:10:00Z",
+  "generatedAt": "2026-10-28T07:49:38Z",
   "schemaVersion": 1
 }

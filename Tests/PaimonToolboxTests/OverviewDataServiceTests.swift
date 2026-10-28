@@ -45,7 +45,7 @@ final class OverviewDataServiceTests: XCTestCase {
                   "title": "全新内容一览",
                   "subtitle": "版本现已开启",
                   "banner": "https://",
-                  "contentURL": "https:notice/21788",
+                  "contentURL": "http://www.mihoyo.com/notice/21788",
                   "startTime": "2026-07-01 07:00:00",
                   "endTime": "2026-08-12 06:00:00",
                   "type": "游戏公告"

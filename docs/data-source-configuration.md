@@ -48,7 +48,7 @@ python3 script/update_remote_data.py \
 
 | 数据类型 | 当前来源 | 说明 |
 |---|---|---|
-| 角色、武器、材料 | `theBowja/genshin-db` | 基础资料库主来源。当前生成结果为角色 120、武器 237、材料 855。角色养成素材由 `characters/` 的突破消耗和 `talents/` 的天赋消耗共同生成。 |
+| 角色、武器、材料 | `theBowja/genshin-db` | 基础资料库主来源。当前生成结果为角色 124、武器 255、材料 921。角色养成素材由 `characters/` 的突破消耗和 `talents/` 的天赋消耗共同生成。 |
 | 卡池信息 | `SnapHutaoRemasteringProject/Snap.Metadata` | 使用 `Genshin/CHS/GachaEvent.json`，用于当前卡池、历史卡池和复刻统计。 |
 | 公告 | 米哈游官方公告接口 | 更新脚本抓取，并缓存到 `data/manual/official-announcements.raw.json`。 |
 | 图片 URL | 上游图片字段 + Enka URL 规则 | 生成器补齐 `iconURL` / `portraitURL`。 |

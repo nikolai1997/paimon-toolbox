@@ -4856,7 +4856,7 @@
   },
   {
     "banner": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/04/14/8034d25eb3f8c453ca387fdc40fcdff5_8256411566276241077_transformed.jpg",
-    "from": "2026-04-25T18:00:00+08:00",
+    "from": "2026-04-28T18:00:00+08:00",
     "name": "苍林月祷",
     "to": "2026-05-19T14:59:00+08:00",
     "type": 301,
@@ -4872,7 +4872,7 @@
   },
   {
     "banner": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/04/14/c0d3328713d93757155c0e79e2dfc585_2935894208369955747_transformed.jpg",
-    "from": "2026-04-25T18:00:00+08:00",
+    "from": "2026-04-28T18:00:00+08:00",
     "name": "赤砂的诱言",
     "to": "2026-05-19T14:59:00+08:00",
     "type": 400,
@@ -4888,7 +4888,7 @@
   },
   {
     "banner": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/04/14/686858c8f1d35c1df9d3bbfff2bf9786_8480989340843877689_transformed.jpg",
-    "from": "2026-04-25T18:00:00+08:00",
+    "from": "2026-04-28T18:00:00+08:00",
     "name": "神铸赋形",
     "to": "2026-05-19T14:59:00+08:00",
     "type": 302,
@@ -4907,7 +4907,7 @@
   },
   {
     "banner": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/04/14/906dd725a134f1848a6ce6365976f2b2_1011682847059388272_transformed.jpg",
-    "from": "2026-04-25T18:00:00+08:00",
+    "from": "2026-04-28T18:00:00+08:00",
     "name": "露景涓然",
     "to": "2026-05-19T14:59:00+08:00",
     "type": 500,
@@ -5005,7 +5005,7 @@
   },
   {
     "banner": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/05/26/c2a3b8cc3cf10224c248a781325ce2e3_5629417702843428147_transformed.jpg",
-    "from": "2026-06-05T18:00:00+08:00",
+    "from": "2026-06-09T18:00:00+08:00",
     "name": "霜锋夜白",
     "to": "2026-06-30T14:59:00+08:00",
     "type": 301,
@@ -5021,7 +5021,7 @@
   },
   {
     "banner": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/05/26/e92b6dbc10613a757f7c775919ae346c_5720336689852618885_transformed.jpg",
-    "from": "2026-06-05T18:00:00+08:00",
+    "from": "2026-06-09T18:00:00+08:00",
     "name": "宿古的赫炎",
     "to": "2026-06-30T14:59:00+08:00",
     "type": 400,
@@ -5037,7 +5037,7 @@
   },
   {
     "banner": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/05/26/f648f6212812b4aa1f5fbf53409470a2_3354070259740915076_transformed.jpg",
-    "from": "2026-06-05T18:00:00+08:00",
+    "from": "2026-06-09T18:00:00+08:00",
     "name": "神铸赋形",
     "to": "2026-06-30T14:59:00+08:00",
     "type": 302,
@@ -5123,76 +5123,262 @@
       14513,
       14518
     ],
+    "upPurpleList": [],
+    "version": "6.7"
+  },
+  {
+    "banner": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/07/07/c8fb39c62c6a8ec60faab54c67e5f025_4328241174560449438_transformed.jpg",
+    "from": "2026-07-21T18:00:00+08:00",
+    "name": "伴月同眠",
+    "to": "2026-08-11T14:59:00+08:00",
+    "type": 301,
+    "upOrangeList": [
+      10000125
+    ],
     "upPurpleList": [
-      10000006,
-      10000014,
-      10000015,
-      10000020,
-      10000021,
-      10000023,
-      10000024,
-      10000025,
-      10000027,
-      10000031,
-      10000032,
-      10000034,
-      10000036,
-      10000039,
-      10000043,
-      10000044,
-      10000045,
-      10000048,
-      10000050,
-      10000053,
-      10000055,
-      10000056,
-      10000059,
-      10000061,
-      10000064,
-      10000065,
-      10000067,
-      10000068,
-      10000072,
-      10000074,
-      10000076,
-      10000077,
-      10000080,
-      10000081,
-      10000083,
-      10000085,
-      10000088,
-      10000090,
-      10000092,
       10000097,
-      10000100,
       10000105,
-      10000108,
-      10000110,
-      10000113,
-      10000115,
-      10000121,
-      10000124,
-      10000127,
-      10000132,
-      11401,
-      11402,
-      11403,
-      11405,
-      12401,
-      12402,
-      12403,
-      12405,
-      13401,
-      13407,
-      14401,
-      14402,
-      14403,
-      14409,
-      15401,
-      15402,
-      15403,
-      15405
+      10000124
     ],
     "version": "6.7"
+  },
+  {
+    "banner": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/07/07/5e7a7348730900c4b4cf210f5c061693_2349137515764696348_transformed.jpg",
+    "from": "2026-07-21T18:00:00+08:00",
+    "name": "影寂天下人",
+    "to": "2026-08-11T14:59:00+08:00",
+    "type": 400,
+    "upOrangeList": [
+      10000052
+    ],
+    "upPurpleList": [
+      10000097,
+      10000105,
+      10000124
+    ],
+    "version": "6.7"
+  },
+  {
+    "banner": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/07/07/d5fdbf8997d440f25848244365596855_6259960005832090377_transformed.jpg",
+    "from": "2026-07-21T18:00:00+08:00",
+    "name": "神铸赋形",
+    "to": "2026-08-11T14:59:00+08:00",
+    "type": 302,
+    "upOrangeList": [
+      13509,
+      14522
+    ],
+    "upPurpleList": [
+      11403,
+      12402,
+      13407,
+      14430,
+      15401
+    ],
+    "version": "6.7"
+  },
+  {
+    "banner": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/08/05/4162840e0955f9c39dce2bfd6959509a_5472030932343604302_transformed.jpg",
+    "from": "2026-08-12T06:00:00+08:00",
+    "name": "冰绡鹄影",
+    "to": "2026-09-01T17:59:00+08:00",
+    "type": 301,
+    "upOrangeList": [
+      10000150
+    ],
+    "upPurpleList": [
+      10000043,
+      10000083,
+      10000148
+    ],
+    "version": "7.0"
+  },
+  {
+    "banner": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/08/04/63006e3c4f92fb7fa4986657a23f1210_7782385828351251329_transformed.jpg",
+    "from": "2026-08-12T06:00:00+08:00",
+    "name": "炉边烬影",
+    "to": "2026-09-01T17:59:00+08:00",
+    "type": 400,
+    "upOrangeList": [
+      10000096
+    ],
+    "upPurpleList": [
+      10000043,
+      10000083,
+      10000148
+    ],
+    "version": "7.0"
+  },
+  {
+    "banner": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/08/04/d5e3aec4eeecbaaaeea500ea682b7a7b_2648436946302119594_transformed.jpg",
+    "from": "2026-08-12T06:00:00+08:00",
+    "name": "神铸赋形",
+    "to": "2026-09-01T17:59:00+08:00",
+    "type": 302,
+    "upOrangeList": [
+      11520,
+      13512
+    ],
+    "upPurpleList": [
+      11401,
+      12402,
+      13401,
+      14403,
+      15405
+    ],
+    "version": "7.0"
+  },
+  {
+    "banner": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/08/18/ea633682a29be769b52d32744d6d9b8a_5416475972197875744_transformed.jpg",
+    "from": "2026-09-01T18:00:00+08:00",
+    "name": "孤灯夜访",
+    "to": "2026-09-22T14:59:00+08:00",
+    "type": 301,
+    "upOrangeList": [
+      10000120
+    ],
+    "upPurpleList": [
+      10000108,
+      10000110,
+      10000121
+    ],
+    "version": "7.0"
+  },
+  {
+    "banner": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/08/18/1a55332fb785a86c501a69918ea52844_7466642129189982555_transformed.jpg",
+    "from": "2026-09-01T18:00:00+08:00",
+    "name": "聚星源动",
+    "to": "2026-09-22T14:59:00+08:00",
+    "type": 400,
+    "upOrangeList": [
+      10000116
+    ],
+    "upPurpleList": [
+      10000108,
+      10000110,
+      10000121
+    ],
+    "version": "7.0"
+  },
+  {
+    "banner": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/08/18/81c378b75443f31b4f94d24462b8e10c_963347245316198726_transformed.jpg",
+    "from": "2026-09-01T18:00:00+08:00",
+    "name": "神铸赋形",
+    "to": "2026-09-22T14:59:00+08:00",
+    "type": 302,
+    "upOrangeList": [
+      13515,
+      13516
+    ],
+    "upPurpleList": [
+      11402,
+      12401,
+      13407,
+      14409,
+      15402
+    ],
+    "version": "7.0"
+  },
+  {
+    "banner": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/09/11/1ac93244f05eebd065627a7d7b06c028_4633734522165510386_transformed.jpg",
+    "from": "2026-09-23T06:00:00+08:00",
+    "name": "煦风欢舞时",
+    "to": "2026-10-13T17:59:00+08:00",
+    "type": 301,
+    "upOrangeList": [
+      10000143
+    ],
+    "upPurpleList": [
+      10000036,
+      10000039,
+      10000076
+    ],
+    "version": "7.1"
+  },
+  {
+    "banner": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/09/11/ed5b6858865abee281e907f4bb311338_2361939764776998707_transformed.jpg",
+    "from": "2026-09-23T06:00:00+08:00",
+    "name": "涌浪叙歌",
+    "to": "2026-10-13T17:59:00+08:00",
+    "type": 400,
+    "upOrangeList": [
+      10000140
+    ],
+    "upPurpleList": [
+      10000036,
+      10000039,
+      10000076
+    ],
+    "version": "7.1"
+  },
+  {
+    "banner": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/09/11/b3be26ece1baf3366ea495d364a789d2_4898269335729252786_transformed.jpg",
+    "from": "2026-09-23T06:00:00+08:00",
+    "name": "神铸赋形",
+    "to": "2026-10-13T17:59:00+08:00",
+    "type": 302,
+    "upOrangeList": [
+      11522,
+      14524
+    ],
+    "upPurpleList": [
+      11437,
+      12401,
+      13401,
+      14437,
+      15437
+    ],
+    "version": "7.1"
+  },
+  {
+    "banner": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/09/23/92220da84f2e0fbeb5b6ddfd09b22336_6625910379513968240_transformed.jpg",
+    "from": "2026-10-13T18:00:00+08:00",
+    "name": "虚星临渡",
+    "to": "2026-11-03T14:59:00+08:00",
+    "type": 301,
+    "upOrangeList": [
+      10000114
+    ],
+    "upPurpleList": [
+      10000072,
+      10000080,
+      10000115
+    ],
+    "version": "7.1"
+  },
+  {
+    "banner": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/09/23/e19bead93ab29bcf630303ba0b444cab_1986922250942047135_transformed.jpg",
+    "from": "2026-10-13T18:00:00+08:00",
+    "name": "莓色香颂",
+    "to": "2026-11-03T14:59:00+08:00",
+    "type": 400,
+    "upOrangeList": [
+      10000112
+    ],
+    "upPurpleList": [
+      10000072,
+      10000080,
+      10000115
+    ],
+    "version": "7.1"
+  },
+  {
+    "banner": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/09/23/c4c3993da57d8a5aadd361f5258b6c81_7399065482636503040_transformed.jpg",
+    "from": "2026-10-13T18:00:00+08:00",
+    "name": "神铸赋形",
+    "to": "2026-11-03T14:59:00+08:00",
+    "type": 302,
+    "upOrangeList": [
+      11517,
+      13514
+    ],
+    "upPurpleList": [
+      11430,
+      12403,
+      13407,
+      14402,
+      15403
+    ],
+    "version": "7.1"
   }
 ]
