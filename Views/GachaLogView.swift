@@ -13,7 +13,13 @@ struct GachaLogView: View {
                 .padding(.top, 20)
 
             if store.activeGachaRecords.isEmpty {
-                ContentUnavailableView("暂无祈愿记录", systemImage: "sparkles", description: Text("会优先读取本机已保存的祈愿记录；没有本地记录时，可从账号更新或导入 UIGF JSON。"))
+                ContentUnavailableView(
+                    store.gachaSyncProgress == nil ? "暂无祈愿记录" : "正在读取祈愿记录",
+                    systemImage: "sparkles",
+                    description: Text(store.gachaSyncProgress == nil
+                        ? "会优先读取本机已保存的祈愿记录；没有本地记录时，可从账号更新或导入 UIGF JSON。"
+                        : "读取进度显示在上方，完成后会自动展示统计。")
+                )
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .padding(24)
             } else {
@@ -88,6 +94,7 @@ private struct GachaLogHeader: View {
                         }
                         .pickerStyle(.menu)
                         .frame(maxWidth: 180)
+                        .disabled(store.gachaSyncProgress != nil)
                     }
 
                     Button {
@@ -95,15 +102,17 @@ private struct GachaLogHeader: View {
                             await store.syncGachaRecordsFromAccount()
                         }
                     } label: {
-                        Label("从账号更新", systemImage: "arrow.triangle.2.circlepath")
+                        Label(store.gachaSyncProgress == nil ? "从账号更新" : "正在读取…", systemImage: "arrow.triangle.2.circlepath")
                     }
                     .disabled(!store.accountStatus.isSignedIn || store.isAccountBusy)
+                    .accessibilityIdentifier("gacha-sync-button")
 
                     Button {
                         importRecords()
                     } label: {
                         Label("导入", systemImage: "square.and.arrow.down")
                     }
+                    .disabled(store.gachaSyncProgress != nil)
 
                     Button {
                         exportRecords()
@@ -113,6 +122,37 @@ private struct GachaLogHeader: View {
                     .disabled(store.activeGachaRecords.isEmpty)
                 }
                 .controlSize(.large)
+            }
+
+            if let progress = store.gachaSyncProgress {
+                HStack(spacing: 14) {
+                    ProgressView()
+                        .controlSize(.small)
+                        .accessibilityLabel(progress.title)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(progress.title).font(.headline)
+                        Text(progress.detail).font(.caption).foregroundStyle(.secondary)
+                    }
+                    Spacer(minLength: 8)
+                    VStack(alignment: .trailing, spacing: 4) {
+                        Text("已读取 \(progress.recordsRead) 条记录")
+                            .monospacedDigit()
+                            .accessibilityIdentifier("gacha-sync-record-count")
+                        if let startedAt = store.gachaSyncStartedAt {
+                            TimelineView(.periodic(from: startedAt, by: 1)) { context in
+                                let seconds = max(0, Int(context.date.timeIntervalSince(startedAt)))
+                                Text("已用时 \(seconds / 60):\(String(format: "%02d", seconds % 60))")
+                                    .font(.caption).monospacedDigit().foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                    Button("取消") { store.cancelGachaSync() }
+                        .disabled(!progress.canCancel)
+                        .accessibilityIdentifier("gacha-sync-cancel")
+                }
+                .padding(14)
+                .background(Color.accentColor.opacity(0.08), in: RoundedRectangle(cornerRadius: 12))
+                .accessibilityIdentifier("gacha-sync-progress")
             }
 
             if let message = store.successMessage {

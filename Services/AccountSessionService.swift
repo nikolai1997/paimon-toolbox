@@ -7,6 +7,7 @@ protocol AccountSessionServicing {
     func queryQrLoginResult(ticket: String) async throws -> QrLoginResultPayload
     func completeQrLogin(result: QrLoginResultPayload) async throws -> LocalAccountStatus
     func completeQrLogin(ticket: String) async throws -> LocalAccountStatus
+    func completeHoYoLABLogin(cookieHeader: String, server: HoYoLABServer) async throws -> LocalAccountStatus
     func refreshSignInStatus() async throws -> LocalAccountStatus
     func claimDailyReward(verification: SignInVerificationResult?) async throws -> LocalAccountStatus
     func loadResignInfo() async throws -> SignInResignInfoPayload
@@ -14,12 +15,21 @@ protocol AccountSessionServicing {
     func signInWebVerificationContext() throws -> SignInWebVerificationContext
     func refreshLoginTokens() async throws -> LocalAccountStatus
     func loadGachaRecords() async throws -> [GachaRecord]
+    func loadGachaRecords(progress: @escaping GachaSyncProgressHandler) async throws -> [GachaRecord]
     func loadDeskDailyNote(verificationChallenge: String?) async throws -> DeskBridgeDailyNote
     func verifyDeskDailyNote(_ verification: SignInVerificationResult, challengePath: String?) async throws -> String
     func signOut() throws -> LocalAccountStatus
 }
 
 extension AccountSessionServicing {
+    func loadGachaRecords(progress: @escaping GachaSyncProgressHandler) async throws -> [GachaRecord] {
+        try await loadGachaRecords()
+    }
+
+    func completeHoYoLABLogin(cookieHeader: String, server: HoYoLABServer) async throws -> LocalAccountStatus {
+        throw AccountSessionError.invalidResponse("当前账号服务不支持 HoYoLAB 登录")
+    }
+
     /// Existing read-only test doubles and alternative session providers do
     /// not gain a network daily-note capability by conforming to the account
     /// protocol.  Only the concrete local service implements it.
@@ -130,6 +140,35 @@ struct LocalAccountSessionService: AccountSessionServicing {
         return Self.status(from: metadata)
     }
 
+    func completeHoYoLABLogin(cookieHeader: String, server: HoYoLABServer) async throws -> LocalAccountStatus {
+        let credentials = try HoYoLABCredentials(cookieHeader: cookieHeader)
+        let secrets = credentials.secrets
+        let roles = try await bindingClient.loadGenshinRoles(secrets: secrets)
+        guard var role = roles.first(where: { $0.region == server.rawValue }) else {
+            throw AccountSessionError.invalidResponse("此 HoYoLAB 账号未绑定 \(server.title) 原神角色，请检查服务器和登录账号")
+        }
+        role.isSelected = true
+        // Namespace international accounts so identical CN and OS IDs cannot share secrets.
+        let account = MiHoYoAccount(accountID: "hoyolab:\(credentials.accountID)", mid: secrets.mid, nickname: role.nickname)
+        // A check-in outage must not prevent a validated account from using daily notes.
+        let summary = try? await signInClient.loadSummary(role: role, secrets: secrets)
+        let metadata = AccountMetadata(account: account, selectedRole: role, lastSummary: summary)
+        try Task.checkCancellation()
+        let previousSecrets = try secretStore.load(accountID: account.accountID)
+        try secretStore.save(secrets, accountID: account.accountID)
+        do {
+            try metadataStore.save(metadata)
+        } catch {
+            if let previousSecrets {
+                try? secretStore.save(previousSecrets, accountID: account.accountID)
+            } else {
+                try? secretStore.delete(accountID: account.accountID)
+            }
+            throw error
+        }
+        return Self.status(from: metadata)
+    }
+
     private func runAccountSyncStep<T: Sendable>(_ name: String, operation: () async throws -> T) async throws -> T {
         do {
             return try await operation()
@@ -194,6 +233,11 @@ struct LocalAccountSessionService: AccountSessionServicing {
         let metadata = try requireMetadata()
         let role = try requireRole(metadata)
         var secrets = try requireSecrets(metadata)
+        if secrets.isHoYoLAB {
+            // Browser credentials cannot be refreshed using the CN SToken exchange.
+            // Validate them in place; an expired session requires signing in again.
+            return try await refreshSignInStatus()
+        }
         secrets = try await passportClient.refreshLToken(secrets: secrets)
         secrets = try await passportClient.refreshCookieToken(secrets: secrets)
 
@@ -208,6 +252,9 @@ struct LocalAccountSessionService: AccountSessionServicing {
     func signInWebVerificationContext() throws -> SignInWebVerificationContext {
         let metadata = try requireMetadata()
         let secrets = try requireSecrets(metadata)
+        guard !secrets.isHoYoLAB else {
+            throw AccountSessionError.apiFailure("请在 HoYoLAB 完成安全验证后刷新状态")
+        }
         guard let cookieToken = secrets.cookieToken, !cookieToken.isEmpty else {
             throw AccountSessionError.missingAccount
         }
@@ -231,11 +278,19 @@ struct LocalAccountSessionService: AccountSessionServicing {
         return try await gachaLogClient.loadRecords(role: role, secrets: secrets)
     }
 
+    func loadGachaRecords(progress: @escaping GachaSyncProgressHandler) async throws -> [GachaRecord] {
+        let metadata = try requireMetadata()
+        let role = try requireRole(metadata)
+        let secrets = try requireSecrets(metadata)
+        return try await gachaLogClient.loadRecords(role: role, secrets: secrets, progress: progress)
+    }
+
     func loadDeskDailyNote(verificationChallenge: String? = nil) async throws -> DeskBridgeDailyNote {
         let metadata = try requireMetadata()
         let role = try requireRole(metadata)
         var secrets = try requireSecrets(metadata)
-        if secrets.deviceFingerprintIssuedAt.map({ Date().timeIntervalSince($0) >= Self.deviceFingerprintRefreshInterval }) ?? true {
+        if !secrets.isHoYoLAB,
+           secrets.deviceFingerprintIssuedAt.map({ Date().timeIntervalSince($0) >= Self.deviceFingerprintRefreshInterval }) ?? true {
             do {
                 secrets.deviceFingerprint = try await deviceFingerprintClient.fetch(
                     existingFingerprint: secrets.deviceFingerprint
@@ -331,6 +386,7 @@ struct LocalAccountSessionService: AccountSessionServicing {
     }
 
     private func refreshedAccountProfile(_ account: MiHoYoAccount) async -> MiHoYoAccount {
+        guard !account.accountID.hasPrefix("hoyolab:") else { return account }
         do {
             let profile = try await userClient.loadUserProfile(accountID: account.accountID)
             var updated = account

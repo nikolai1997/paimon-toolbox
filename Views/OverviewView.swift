@@ -151,9 +151,9 @@ private struct DailyNotePanel: View {
                     }
                 }
             } else if !isSignedIn {
-                OverviewEmptyState(title: "未登录米游社账号", detail: "登录后自动显示树脂、委托和派遣状态", systemImage: "person.crop.circle.badge.questionmark")
+                OverviewEmptyState(title: "未登录账号", detail: "登录后自动显示树脂、委托和派遣状态", systemImage: "person.crop.circle.badge.questionmark")
             } else {
-                OverviewEmptyState(title: "正在获取实时便签", detail: status ?? "需要有效的米游社登录态", systemImage: "arrow.triangle.2.circlepath")
+                OverviewEmptyState(title: "正在获取实时便签", detail: status ?? "需要有效的账号登录态", systemImage: "arrow.triangle.2.circlepath")
             }
         }
     }

@@ -3,8 +3,8 @@ import Foundation
 struct BoundRoleListPayload: Codable, Equatable {
     var list: [BoundRolePayload]
 
-    func genshinRoles() -> [GenshinRole] {
-        list.filter { $0.gameBiz == "hk4e_cn" }.enumerated().map { index, payload in
+    func genshinRoles(gameBiz: String = "hk4e_cn") -> [GenshinRole] {
+        list.filter { $0.gameBiz == gameBiz }.enumerated().map { index, payload in
             GenshinRole(
                 uid: payload.gameUid,
                 region: payload.region,
@@ -36,6 +36,12 @@ struct MiHoYoBindingClient {
     var httpClient = HoYoHTTPClient()
 
     func loadGenshinRoles(secrets: AccountSecrets) async throws -> [GenshinRole] {
+        if secrets.isHoYoLAB {
+            let url = URL(string: "https://api-os-takumi.mihoyo.com/binding/api/getUserGameRolesByCookie?game_biz=hk4e_global")!
+            let request = try HoYoLABAPI.request(url: url, secrets: secrets, signed: true)
+            let response: HoYoResponse<BoundRoleListPayload> = try await httpClient.send(request)
+            return try response.requireDataPreservingRetcode().genshinRoles(gameBiz: "hk4e_global")
+        }
         guard let cookieToken = secrets.cookieToken, !cookieToken.isEmpty else {
             throw AccountSessionError.missingAccount
         }

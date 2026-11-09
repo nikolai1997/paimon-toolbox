@@ -37,6 +37,9 @@ struct GenshinRole: Codable, Equatable, Identifiable {
     var nickname: String
     var level: Int
     var isSelected: Bool
+
+    var isHoYoLAB: Bool { HoYoLABServer(rawValue: region) != nil }
+    var serverName: String { HoYoLABServer(rawValue: region)?.title ?? region }
 }
 
 struct AccountSecrets: Codable, Equatable {
@@ -49,6 +52,10 @@ struct AccountSecrets: Codable, Equatable {
     /// stored with the encrypted local session and never exported to Bridge.
     var deviceFingerprint: String? = nil
     var deviceFingerprintIssuedAt: Date? = nil
+    /// Preserve the original cookie names: v1 and v2 credentials are not interchangeable.
+    var hoyolabCookies: [String: String]? = nil
+
+    var isHoYoLAB: Bool { hoyolabCookies != nil }
 }
 
 struct AccountVerificationState: Equatable {

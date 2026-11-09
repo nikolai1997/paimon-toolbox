@@ -35,13 +35,13 @@ enum AccountSessionError: Error, LocalizedError, Equatable {
             let hasEmbeddedChallenge = payload.gt != nil && payload.challenge != nil
             if let riskCode = payload.riskCode {
                 if !hasEmbeddedChallenge {
-                    return "签到触发风控验证（\(riskCode)），本次没有返回可内嵌验证参数，请到米游社完成验证后重试"
+                    return "签到触发风控验证（\(riskCode)），本次没有返回可内嵌验证参数，请到米游社或 HoYoLAB 完成验证后重试"
                 }
                 return "签到触发风控验证（\(riskCode)），请完成安全验证后重试"
             }
             if payload.isRisk == true || payload.success == 1 {
                 if !hasEmbeddedChallenge {
-                    return "签到触发风控验证，本次没有返回可内嵌验证参数，请到米游社完成验证后重试"
+                    return "签到触发风控验证，本次没有返回可内嵌验证参数，请到米游社或 HoYoLAB 完成验证后重试"
                 }
                 return "签到触发风控验证，请完成安全验证后重试"
             }

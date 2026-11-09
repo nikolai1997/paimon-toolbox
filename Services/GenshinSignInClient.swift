@@ -1,5 +1,19 @@
 import Foundation
 
+private struct HoYoLABSignInPayload: Decodable {
+    var result: SignInResultPayload
+
+    private enum CodingKeys: String, CodingKey { case gtResult = "gt_result" }
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let root = try SignInResultPayload(from: decoder)
+        result = try container.decodeIfPresent(SignInResultPayload.self, forKey: .gtResult) ?? root
+        if result.code == nil { result.code = root.code }
+        if root.isRisk == true { result.isRisk = true }
+        if let riskCode = root.riskCode, riskCode != 0 { result.riskCode = riskCode }
+    }
+}
+
 struct SignInRewardHomePayload: Codable, Equatable {
     var month: Int
     var awards: [SignInAwardPayload]
@@ -45,6 +59,7 @@ struct GenshinSignInClient {
     var httpClient = HoYoHTTPClient()
 
     func loadSummary(role: GenshinRole, secrets: AccountSecrets) async throws -> SignInSummary {
+        try HoYoLABAPI.validate(role: role, secrets: secrets)
         let rewardHome = try await loadRewardHome(secrets: secrets)
         let info = try await loadInfo(role: role, secrets: secrets)
         return SignInSummary(
@@ -62,6 +77,32 @@ struct GenshinSignInClient {
         secrets: AccountSecrets,
         verification: SignInVerificationResult? = nil
     ) async throws -> SignInResultPayload {
+        try HoYoLABAPI.validate(role: role, secrets: secrets)
+        if secrets.isHoYoLAB {
+            let url = Self.hoYoLABRewardURL(endpoint: "sign")
+            let body = try JSONEncoder().encode(["act_id": HoYoLABAPI.signInActivityID])
+            var request = try HoYoLABAPI.request(url: url, secrets: secrets, method: "POST", body: body)
+            request.setValue("hk4e", forHTTPHeaderField: "x-rpc-signgame")
+            if let verification {
+                request.setValue(verification.challenge, forHTTPHeaderField: "x-rpc-challenge")
+                request.setValue(verification.validate, forHTTPHeaderField: "x-rpc-validate")
+                request.setValue(verification.seccode, forHTTPHeaderField: "x-rpc-seccode")
+            }
+            let response: HoYoResponse<HoYoLABSignInPayload> = try await httpClient.send(request)
+            if response.retcode == -5003 {
+                var payload = response.data?.result ?? SignInResultPayload(success: 1, riskCode: -5003, gt: nil, challenge: nil)
+                payload.riskCode = -5003
+                return payload
+            }
+            // HoYoLAB may return an empty data object for a successful claim.
+            // The session service independently confirms is_sign after claiming.
+            var payload = try response.requireDataPreservingRetcode().result
+            if payload.isRisk == true || payload.riskCode.map({ $0 != 0 }) == true || payload.success == 1 {
+                payload.isRisk = true
+                return payload
+            }
+            return SignInResultPayload(code: "ok", success: 0, riskCode: nil, gt: nil, challenge: nil)
+        }
         let url = URL(string: "https://api-takumi.mihoyo.com/event/luna/sign")!
         let body = try JSONEncoder().encode(SignInData(uid: role.uid, region: role.region))
         var request = try signedRequest(url: url, method: "POST", body: body, secrets: secrets, verification: verification)
@@ -71,6 +112,9 @@ struct GenshinSignInClient {
     }
 
     func loadResignInfo(role: GenshinRole, secrets: AccountSecrets) async throws -> SignInResignInfoPayload {
+        guard !secrets.isHoYoLAB else {
+            throw AccountSessionError.apiFailure("HoYoLAB 不支持米游社补签")
+        }
         let url = URL(string: "https://api-takumi.mihoyo.com/event/luna/resign_info?lang=zh-cn&act_id=\(HoYoConstants.lunaActivityID)&uid=\(role.uid)&region=\(role.region)")!
         let request = try signedRequest(url: url, method: "GET", body: nil, secrets: secrets)
         let response: HoYoResponse<SignInResignInfoPayload> = try await httpClient.send(request)
@@ -82,6 +126,9 @@ struct GenshinSignInClient {
         secrets: AccountSecrets,
         verification: SignInVerificationResult? = nil
     ) async throws -> SignInResultPayload {
+        guard !secrets.isHoYoLAB else {
+            throw AccountSessionError.apiFailure("HoYoLAB 不支持米游社补签")
+        }
         let url = URL(string: "https://api-takumi.mihoyo.com/event/luna/resign?lang=zh-cn")!
         let body = try JSONEncoder().encode(SignInData(uid: role.uid, region: role.region))
         var request = try signedRequest(url: url, method: "POST", body: body, secrets: secrets, verification: verification)
@@ -104,6 +151,11 @@ struct GenshinSignInClient {
     }
 
     private func loadRewardHome(secrets: AccountSecrets) async throws -> SignInRewardHomePayload {
+        if secrets.isHoYoLAB {
+            let request = try HoYoLABAPI.request(url: Self.hoYoLABRewardURL(endpoint: "home"), secrets: secrets)
+            let response: HoYoResponse<SignInRewardHomePayload> = try await httpClient.send(request)
+            return try response.requireDataPreservingRetcode()
+        }
         let url = URL(string: "https://api-takumi.mihoyo.com/event/luna/home?lang=zh-cn&act_id=\(HoYoConstants.lunaActivityID)")!
         let request = try signedRequest(url: url, method: "GET", body: nil, secrets: secrets)
         let response: HoYoResponse<SignInRewardHomePayload> = try await httpClient.send(request)
@@ -111,10 +163,19 @@ struct GenshinSignInClient {
     }
 
     private func loadInfo(role: GenshinRole, secrets: AccountSecrets) async throws -> SignInInfoPayload {
+        if secrets.isHoYoLAB {
+            let request = try HoYoLABAPI.request(url: Self.hoYoLABRewardURL(endpoint: "info"), secrets: secrets)
+            let response: HoYoResponse<SignInInfoPayload> = try await httpClient.send(request)
+            return try response.requireDataPreservingRetcode()
+        }
         let url = URL(string: "https://api-takumi.mihoyo.com/event/luna/info?lang=zh-cn&act_id=\(HoYoConstants.lunaActivityID)&uid=\(role.uid)&region=\(role.region)")!
         let request = try signedRequest(url: url, method: "GET", body: nil, secrets: secrets)
         let response: HoYoResponse<SignInInfoPayload> = try await httpClient.send(request)
         return try response.requireData()
+    }
+
+    private static func hoYoLABRewardURL(endpoint: String) -> URL {
+        URL(string: "https://sg-hk4e-api.hoyolab.com/event/sol/\(endpoint)?act_id=\(HoYoLABAPI.signInActivityID)&lang=\(HoYoLABAPI.language)")!
     }
 
     private func signedRequest(

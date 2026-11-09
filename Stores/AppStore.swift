@@ -45,6 +45,9 @@ final class AppStore {
     var isScanningDeskDevices = false
     var deskDailyNoteRefreshStatus: String?
     var isAccountBusy = false
+    var gachaSyncProgress: GachaSyncProgress?
+    var gachaSyncStartedAt: Date?
+    @ObservationIgnored private var gachaSyncTask: Task<[GachaRecord], Error>?
     var searchText: String = ""
     var errorMessage: String?
     var successMessage: String?
@@ -218,7 +221,11 @@ final class AppStore {
         dailyNote = nil
         refreshGachaSummary()
         if accountStatus.isSignedIn {
-            try? await refreshLoginTokensIfNeeded(now: now)
+            if accountStatus.selectedRole?.isHoYoLAB == true {
+                if let refreshed = try? await accountService.refreshSignInStatus() { accountStatus = refreshed }
+            } else {
+                try? await refreshLoginTokensIfNeeded(now: now)
+            }
             accountResignInfo = try? await accountService.loadResignInfo()
             await refreshDeskDailyNoteIfNeeded(force: true)
         } else {
@@ -260,7 +267,7 @@ final class AppStore {
 
     func refreshDailyNote(force: Bool = false, now: Date = Date()) async {
         guard accountStatus.isSignedIn else {
-            errorMessage = "请先登录米游社账号，再刷新实时便签。"
+            errorMessage = "请先登录账号，再刷新实时便签。"
             return
         }
         if force,
@@ -385,7 +392,7 @@ final class AppStore {
     }
 
     func connectDeskDevice(_ device: DirectDeskDevice) async {
-        guard let accountID = accountStatus.accountID, let server = deskDirectServer else { errorMessage = "请先登录米游社后再连接摆件。"; return }
+        guard let accountID = accountStatus.accountID, let server = deskDirectServer else { errorMessage = "请先登录账号后再连接摆件。"; return }
         guard let localHost = DeskDeviceDiscovery.localIPv4Address(preferredPeer: device.host) else { errorMessage = "无法取得 Mac 的局域网地址。"; return }
         let token = server.issueAccessToken(for: device, accountID: accountID)
         guard let url = URL(string: "http://\(device.host):47872/v1/connect-requests") else { return }
@@ -457,7 +464,7 @@ final class AppStore {
 
     func approveDeskDirectPairing(displayCode: String? = nil) {
         guard accountStatus.isSignedIn, let request = deskDirectPairingRequest else {
-            errorMessage = "请先登录米游社，并等待摆件显示配对码。"
+            errorMessage = "请先登录账号，并等待摆件显示配对码。"
             return
         }
         let enteredCode = displayCode?.trimmingCharacters(in: .whitespacesAndNewlines).uppercased() ?? ""
@@ -600,12 +607,40 @@ final class AppStore {
     }
 
     func syncGachaRecordsFromAccount() async {
+        guard accountStatus.isSignedIn, !isAccountBusy, gachaSyncProgress == nil else { return }
         isAccountBusy = true
-        defer { isAccountBusy = false }
+        successMessage = nil
+        errorMessage = nil
+        gachaSyncStartedAt = Date()
+        gachaSyncProgress = GachaSyncProgress()
+        let requestedAccountID = accountStatus.accountID
+        let selectedUID = accountStatus.selectedRole?.uid
+        let task = Task {
+            try await accountService.loadGachaRecords { [weak self] progress in
+                guard !Task.isCancelled else { return }
+                self?.gachaSyncProgress = progress
+            }
+        }
+        gachaSyncTask = task
+        defer {
+            gachaSyncTask = nil
+            gachaSyncProgress = nil
+            gachaSyncStartedAt = nil
+            isAccountBusy = false
+        }
 
         do {
-            let loadedRecords = try await accountService.loadGachaRecords()
-            let selectedUID = accountStatus.selectedRole?.uid
+            let loadedRecords = try await withTaskCancellationHandler {
+                try await task.value
+            } onCancel: {
+                task.cancel()
+            }
+            guard !task.isCancelled else { throw CancellationError() }
+            try Task.checkCancellation()
+            guard accountStatus.accountID == requestedAccountID,
+                  accountStatus.selectedRole?.uid == selectedUID else { throw CancellationError() }
+            gachaSyncProgress?.phase = .saving
+            gachaSyncProgress?.recordsRead = loadedRecords.count
             let remoteRecords = loadedRecords.map { record in
                 var ownedRecord = record
                 ownedRecord.uid = selectedUID ?? ownedRecord.uid
@@ -620,9 +655,20 @@ final class AppStore {
             errorMessage = nil
             publishWidgetSnapshot()
         } catch {
-            successMessage = nil
-            errorMessage = "账号更新祈愿记录失败：\(error.localizedDescription)"
+            if task.isCancelled || error is CancellationError || (error as? URLError)?.code == .cancelled {
+                successMessage = "已取消更新，已有祈愿记录保持不变"
+                errorMessage = nil
+            } else {
+                successMessage = nil
+                errorMessage = "账号更新祈愿记录失败：\(error.localizedDescription)"
+            }
         }
+    }
+
+    func cancelGachaSync() {
+        guard gachaSyncProgress?.canCancel == true else { return }
+        gachaSyncProgress?.phase = .cancelling
+        gachaSyncTask?.cancel()
     }
 
     func updateRequirement(planID: CultivationPlan.ID, requirementID: MaterialRequirement.ID, owned: Int) async {
@@ -898,6 +944,41 @@ final class AppStore {
         }
     }
 
+    func completeHoYoLABLogin(cookieHeader: String, server: HoYoLABServer) async -> Bool {
+        guard !isAccountBusy else { return false }
+        isAccountBusy = true
+        defer { isAccountBusy = false }
+        do {
+            let status = try await accountService.completeHoYoLABLogin(cookieHeader: cookieHeader, server: server)
+            errorMessage = nil
+            accountStatus = status
+            dailyNote = nil
+            deskDailyNoteRefreshPaused = false
+            deskDailyNoteVerificationChallenge = nil
+            deskDailyNoteLastRefreshAt = nil
+            accountVerification = nil
+            accountResignInfo = nil
+            qrLoginSession = nil
+            qrLoginSessionID = nil
+            confirmedQrLoginResult = nil
+            confirmedQrLoginSessionID = nil
+            qrLoginSyncError = nil
+            qrLoginState = .idle
+            refreshGachaSummary()
+            startDeskDirectServer()
+            await refreshDeskDailyNoteIfNeeded(force: true)
+            successMessage = "HoYoLAB 已登录 · \(server.title)"
+            // Keep any daily-note error visible so disabled notes can be enabled in HoYoLAB.
+            if dailyNote != nil { errorMessage = nil }
+            publishWidgetSnapshot()
+            return true
+        } catch {
+            successMessage = nil
+            errorMessage = "HoYoLAB 登录失败：\(error.localizedDescription)"
+            return false
+        }
+    }
+
     func retryConfirmedQrLoginSync(now: Date = Date()) async {
         guard canRetryConfirmedQrLoginSync,
               let sessionID = confirmedQrLoginSessionID else { return }
@@ -932,6 +1013,11 @@ final class AppStore {
             successMessage = nil
             errorMessage = "刷新签到状态失败：\(error.localizedDescription)"
         }
+    }
+
+    private func accountVerificationURL(for purpose: AccountVerificationPurpose) -> URL {
+        guard accountStatus.selectedRole?.isHoYoLAB == true else { return HoYoConstants.signInVerificationURL }
+        return purpose == .deskDailyNote ? HoYoLABAPI.notesURL : HoYoLABAPI.signInURL
     }
 
     /// Closing the sheet must never leave an old verification object blocking
@@ -995,7 +1081,7 @@ final class AppStore {
                 if payload?.gt != nil && payload?.challenge != nil {
                     accountVerification = AccountVerificationState(
                         message: "实时便签需要一次安全验证；完成后将恢复低频读取。",
-                        url: HoYoConstants.signInVerificationURL,
+                        url: accountVerificationURL(for: .deskDailyNote),
                         payload: payload,
                         webContext: webContext,
                         purpose: .deskDailyNote
@@ -1004,7 +1090,7 @@ final class AppStore {
                 } else {
                     accountVerification = AccountVerificationState(
                         message: "暂时没有获取到实时便签验证参数，请重新获取。",
-                        url: HoYoConstants.signInVerificationURL,
+                        url: accountVerificationURL(for: .deskDailyNote),
                         payload: payload,
                         webContext: nil,
                         purpose: .deskDailyNote
@@ -1036,7 +1122,7 @@ final class AppStore {
 
     func completeDeskDailyNoteVerification(_ verification: SignInVerificationResult) async {
         guard accountStatus.isSignedIn else {
-            errorMessage = "请先登录米游社账号，再完成便签安全验证。"
+            errorMessage = "请先登录账号，再完成便签安全验证。"
             return
         }
         isAccountBusy = true
@@ -1065,7 +1151,7 @@ final class AppStore {
 
     func retryDeskDailyNoteVerification() async {
         guard accountStatus.isSignedIn else {
-            errorMessage = "请先登录米游社账号。"
+            errorMessage = "请先登录账号。"
             return
         }
         accountVerification = nil
@@ -1134,7 +1220,7 @@ final class AppStore {
                 markDailySignInFailureIfPossible(now: now)
                 accountVerification = AccountVerificationState(
                     message: error.localizedDescription,
-                    url: HoYoConstants.signInVerificationURL,
+                    url: accountVerificationURL(for: .dailySignIn),
                     payload: payload,
                     webContext: try? accountService.signInWebVerificationContext(),
                     purpose: .dailySignIn
@@ -1152,7 +1238,7 @@ final class AppStore {
 
     private func claimDailyRewardIfNeeded(now: Date) async {
         guard let context = dailySignInContext(now: now) else {
-            errorMessage = "签到失败：未登录米游社账号或未绑定原神角色。"
+            errorMessage = "签到失败：未登录账号或未绑定原神角色。"
             successMessage = nil
             return
         }
@@ -1211,7 +1297,7 @@ final class AppStore {
                 markDailySignInFailure(context, now: now)
                 accountVerification = AccountVerificationState(
                     message: error.localizedDescription,
-                    url: HoYoConstants.signInVerificationURL,
+                    url: accountVerificationURL(for: .dailySignIn),
                     payload: payload,
                     webContext: try? accountService.signInWebVerificationContext(),
                     purpose: .dailySignIn
@@ -1254,7 +1340,7 @@ final class AppStore {
             case .requiresVerification(let payload):
                 accountVerification = AccountVerificationState(
                     message: error.localizedDescription,
-                    url: HoYoConstants.signInVerificationURL,
+                    url: accountVerificationURL(for: .dailySignIn),
                     payload: payload,
                     webContext: try? accountService.signInWebVerificationContext(),
                     purpose: .resign
@@ -1365,7 +1451,7 @@ final class AppStore {
                 markDailySignInFailure(context, now: now)
                 accountVerification = AccountVerificationState(
                     message: error.localizedDescription,
-                    url: HoYoConstants.signInVerificationURL,
+                    url: accountVerificationURL(for: .dailySignIn),
                     payload: payload,
                     webContext: try? accountService.signInWebVerificationContext(),
                     purpose: .dailySignIn
@@ -1401,6 +1487,7 @@ final class AppStore {
         guard accountStatus.isSignedIn, let accountID = accountStatus.accountID else {
             return
         }
+        guard accountStatus.selectedRole?.isHoYoLAB != true else { return }
         if !force,
            let lastRefresh = tokenRefreshStore.lastRefreshDate(accountID: accountID),
            now.timeIntervalSince(lastRefresh) < AccountTokenRefreshSettings.minimumRefreshInterval {
@@ -1419,6 +1506,7 @@ final class AppStore {
     }
 
     private func shouldRefreshLoginTokens(after error: Error) -> Bool {
+        guard accountStatus.selectedRole?.isHoYoLAB != true else { return false }
         if case AccountSessionError.requiresVerification = error {
             return false
         }

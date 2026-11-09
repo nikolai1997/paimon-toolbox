@@ -84,31 +84,55 @@ struct GachaLogRemoteClient: @unchecked Sendable {
         secrets: AccountSecrets,
         bannerTypes: [String] = ["301", "400", "302", "500", "200"],
         pageSize: Int = 20,
-        maxPagesPerBanner: Int = 500
+        maxPagesPerBanner: Int = 500,
+        progress: GachaSyncProgressHandler? = nil
     ) async throws -> [GachaRecord] {
+        try Task.checkCancellation()
+        await progress?(GachaSyncProgress())
+        try HoYoLABAPI.validate(role: role, secrets: secrets)
         let authkey = try await generateAuthKey(role: role, secrets: secrets)
         var records: [GachaRecord] = []
         var didRequestPage = false
 
-        for bannerType in bannerTypes {
+        for (bannerIndex, bannerType) in bannerTypes.enumerated() {
             var endID = "0"
-            for _ in 0..<maxPagesPerBanner {
+            for pageIndex in 0..<maxPagesPerBanner {
+                try Task.checkCancellation()
+                var currentProgress = GachaSyncProgress(
+                    phase: .reading, bannerName: BannerKind(gachaLogType: bannerType).title,
+                    bannerIndex: bannerIndex + 1, bannerCount: bannerTypes.count,
+                    page: pageIndex + 1, recordsRead: records.count
+                )
+                await progress?(currentProgress)
                 if didRequestPage, pageDelayNanoseconds > 0 {
                     try await sleep(pageDelayNanoseconds)
                 }
+                try Task.checkCancellation()
                 let page = try await loadPageWithRateLimit(
                     authkey: authkey,
                     role: role,
                     bannerType: bannerType,
                     endID: endID,
-                    pageSize: pageSize
+                    pageSize: pageSize,
+                    progressState: currentProgress,
+                    progress: progress
                 )
+                try Task.checkCancellation()
                 didRequestPage = true
-                let pageRecords = page.list.compactMap(\.record)
+                let pageRecords = page.list.compactMap { item -> GachaRecord? in
+                    guard var record = item.record else { return nil }
+                    if let server = HoYoLABServer(rawValue: role.region) {
+                        record.uid = role.uid
+                        record.time = record.time.addingTimeInterval(TimeInterval((8 - server.timeZoneHours) * 3600))
+                    }
+                    return record
+                }
                 guard !pageRecords.isEmpty else {
                     break
                 }
                 records.append(contentsOf: pageRecords)
+                currentProgress.recordsRead = records.count
+                await progress?(currentProgress)
                 guard let lastID = page.list.last?.id, !lastID.isEmpty, lastID != endID else {
                     break
                 }
@@ -116,6 +140,7 @@ struct GachaLogRemoteClient: @unchecked Sendable {
             }
         }
 
+        try Task.checkCancellation()
         return GachaLogDocument.mergedRecords(existing: [], imported: records)
     }
 
@@ -124,9 +149,13 @@ struct GachaLogRemoteClient: @unchecked Sendable {
         role: GenshinRole,
         bannerType: String,
         endID: String,
-        pageSize: Int
+        pageSize: Int,
+        progressState: GachaSyncProgress,
+        progress: GachaSyncProgressHandler?
     ) async throws -> GachaLogPagePayload {
         for retryIndex in 0...rateLimitRetryDelaysNanoseconds.count {
+            try Task.checkCancellation()
+            await progress?(progressState)
             do {
                 return try await loadPage(
                     authkey: authkey,
@@ -139,13 +168,28 @@ struct GachaLogRemoteClient: @unchecked Sendable {
                 guard retryIndex < rateLimitRetryDelaysNanoseconds.count else {
                     throw AccountSessionError.apiFailure("访问过于频繁，请稍后再试")
                 }
-                try await sleep(rateLimitRetryDelaysNanoseconds[retryIndex])
+                let delay = rateLimitRetryDelaysNanoseconds[retryIndex]
+                var waiting = progressState
+                waiting.phase = .waitingToRetry(seconds: Int((Double(delay) / 1_000_000_000).rounded(.up)))
+                await progress?(waiting)
+                try await sleep(delay)
             }
         }
         throw AccountSessionError.apiFailure("访问过于频繁，请稍后再试")
     }
 
     private func generateAuthKey(role: GenshinRole, secrets: AccountSecrets) async throws -> String {
+        if let cookies = secrets.hoyolabCookies {
+            guard ["cookie_token_v2", "account_id_v2", "account_mid_v2"].allSatisfy({ cookies[$0]?.isEmpty == false }) else {
+                throw AccountSessionError.invalidResponse("自动同步祈愿需要 cookie_token_v2、account_id_v2 和 account_mid_v2，请重新登录或导入完整 HoYoLAB Cookie；也可手动导入 UIGF")
+            }
+            let url = URL(string: "https://api-account-os.hoyoverse.com/binding/api/genAuthKeyByCookieToken")!
+            let body = try JSONEncoder().encode(GachaAuthKeyRequest(gameBiz: "hk4e_global", gameUID: role.uid, region: role.region))
+            let request = try HoYoLABAPI.request(url: url, secrets: secrets, method: "POST", body: body)
+            let response: HoYoResponse<GachaAuthKeyPayload> = try await httpClient.send(request)
+            let key = try response.requireDataPreservingRetcode().authkey
+            return key.removingPercentEncoding ?? key
+        }
         guard !secrets.stoken.isEmpty else {
             throw AccountSessionError.missingAccount
         }
@@ -180,13 +224,14 @@ struct GachaLogRemoteClient: @unchecked Sendable {
         endID: String,
         pageSize: Int
     ) async throws -> GachaLogPagePayload {
-        var components = URLComponents(string: "https://public-operation-hk4e.mihoyo.com/gacha_info/api/getGachaLog")!
+        let host = role.isHoYoLAB ? "public-operation-hk4e-sg.hoyoverse.com" : "public-operation-hk4e.mihoyo.com"
+        var components = URLComponents(string: "https://\(host)/gacha_info/api/getGachaLog")!
         components.queryItems = [
             URLQueryItem(name: "authkey_ver", value: "1"),
             URLQueryItem(name: "sign_type", value: "2"),
             URLQueryItem(name: "auth_appid", value: "webview_gacha"),
             URLQueryItem(name: "authkey", value: authkey),
-            URLQueryItem(name: "game_biz", value: "hk4e_cn"),
+            URLQueryItem(name: "game_biz", value: role.isHoYoLAB ? "hk4e_global" : "hk4e_cn"),
             URLQueryItem(name: "lang", value: HoYoConstants.languageCode),
             URLQueryItem(name: "region", value: role.region),
             URLQueryItem(name: "gacha_type", value: bannerType),
@@ -201,6 +246,7 @@ struct GachaLogRemoteClient: @unchecked Sendable {
 
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
+        if role.isHoYoLAB { request.httpShouldHandleCookies = false }
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue(HoYoConstants.mobileUserAgent, forHTTPHeaderField: "User-Agent")
         let response: HoYoResponse<GachaLogPagePayload> = try await httpClient.send(request)
