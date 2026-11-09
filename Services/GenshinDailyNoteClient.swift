@@ -30,6 +30,10 @@ struct GenshinDailyNoteClient: Sendable {
         secrets: AccountSecrets,
         verificationChallenge: String? = nil
     ) async throws -> DeskBridgeDailyNote {
+        try HoYoLABAPI.validate(role: role, secrets: secrets)
+        if secrets.isHoYoLAB {
+            return try await loadHoYoLABNote(role: role, secrets: secrets)
+        }
         // Snap Hutao warms the same game-record session with the player index
         // before reading dailyNote. This reduces false 1034 responses and
         // keeps both requests on one client identity.
@@ -81,6 +85,9 @@ struct GenshinDailyNoteClient: Sendable {
         secrets: AccountSecrets,
         challengePath: String?
     ) async throws -> String {
+        guard !secrets.isHoYoLAB else {
+            throw AccountSessionError.apiFailure("请在 HoYoLAB 中完成实时便签验证，再点击刷新状态")
+        }
         let url = URL(string: "https://api-takumi-record.mihoyo.com/game_record/app/card/wapi/verifyVerification")!
         let body = try JSONEncoder().encode([
             "geetest_challenge": verification.challenge,
@@ -106,6 +113,33 @@ struct GenshinDailyNoteClient: Sendable {
             throw AccountSessionError.invalidResponse("便签验证成功但缺少重试 challenge")
         }
         return challenge
+    }
+
+    private func loadHoYoLABNote(role: GenshinRole, secrets: AccountSecrets) async throws -> DeskBridgeDailyNote {
+        var components = URLComponents(string: "https://sg-public-api.hoyolab.com/event/game_record/genshin/api/dailyNote")!
+        components.queryItems = [
+            URLQueryItem(name: "role_id", value: role.uid),
+            URLQueryItem(name: "server", value: role.region)
+        ]
+        let request = try HoYoLABAPI.request(url: components.url!, secrets: secrets, signed: true)
+        let response: HoYoResponse<Payload> = try await httpClient.send(request)
+        if Self.isVerificationRetcode(response.retcode) || [10035, 10041].contains(response.retcode) {
+            throw AccountSessionError.requiresVerification(SignInResultPayload(
+                success: 1, riskCode: response.retcode, isRisk: true, gt: nil, challenge: nil
+            ))
+        }
+        if response.retcode == 10102 {
+            throw AccountSessionError.apiFailure("请先在 HoYoLAB 战绩中启用实时便签，再点击刷新状态")
+        }
+        let payload = try Self.requireData(response)
+        let observedAt = now()
+        return DeskBridgeDailyNote(
+            resin: max(0, payload.currentResin), resinMax: max(1, payload.maxResin),
+            resinRecoveryAt: Self.recoveryDate(payload.resinRecoveryTime, observedAt: observedAt),
+            commissionDone: max(0, payload.finishedTaskNum), commissionTotal: max(1, payload.totalTaskNum),
+            expeditionFinished: payload.expeditions.filter { $0.status == "Finished" }.count,
+            expeditionTotal: max(1, payload.maxExpeditionNum), observedAt: observedAt
+        )
     }
 
     private func createVerification(secrets: AccountSecrets, challengePath: String) async throws -> VerificationChallenge {

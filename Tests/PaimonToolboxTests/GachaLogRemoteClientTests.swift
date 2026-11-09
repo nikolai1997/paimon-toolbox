@@ -208,6 +208,75 @@ final class GachaLogRemoteClientTests: XCTestCase {
         XCTAssertEqual(records.map(\.banner.rawValue), ["chronicled", "characterEvent2"])
     }
 
+    @MainActor
+    func testProgressUpdatesAcrossPagesAndReportsRateLimitWaiting() async throws {
+        let recorder = GachaProgressRecorder()
+        var pageRequests = 0
+        GachaCapturingURLProtocol.requestHandler = { request in
+            let body: String
+            if request.url?.path.hasSuffix("genAuthKey") == true {
+                body = #"{"retcode":0,"message":"OK","data":{"authkey":"test"}}"#
+            } else {
+                pageRequests += 1
+                if pageRequests == 1 {
+                    body = #"{"retcode":-100,"message":"visit too frequently","data":null}"#
+                } else if pageRequests == 2 {
+                    body = #"{"retcode":0,"message":"OK","data":{"list":[{"id":"1","time":"2026-11-09 12:00:00","name":"Test","item_type":"武器","rank_type":"3","gacha_type":"301"}]}}"#
+                } else {
+                    body = #"{"retcode":0,"message":"OK","data":{"list":[]}}"#
+                }
+            }
+            return (HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!, Data(body.utf8))
+        }
+        let client = GachaLogRemoteClient(httpClient: HoYoHTTPClient(session: Self.capturingSession()),
+            pageDelayNanoseconds: 0, rateLimitRetryDelaysNanoseconds: [5_000_000_000], sleep: { _ in })
+        let records = try await client.loadRecords(
+            role: GenshinRole(uid: "1001", region: "cn_gf01", nickname: "Test", level: 60, isSelected: true),
+            secrets: AccountSecrets(stuid: "1", stoken: "test", mid: "test"),
+            bannerTypes: ["301", "302"], progress: { recorder.values.append($0) }
+        )
+        XCTAssertEqual(records.count, 1)
+        XCTAssertEqual(recorder.values.first?.phase, .authorizing)
+        XCTAssertTrue(recorder.values.contains { $0.phase == .waitingToRetry(seconds: 5) })
+        XCTAssertTrue(recorder.values.contains { $0.bannerIndex == 1 && $0.page == 2 && $0.recordsRead == 1 })
+        XCTAssertEqual(recorder.values.last?.bannerName, "武器活动祈愿")
+        XCTAssertEqual(recorder.values.last?.bannerIndex, 2)
+        XCTAssertEqual(recorder.values.last?.bannerCount, 2)
+        XCTAssertEqual(recorder.values.last?.recordsRead, 1)
+    }
+
+    func testCancellationDuringPageDelayStopsFurtherRequests() async throws {
+        let waiting = expectation(description: "Waiting between pages")
+        var pageRequests = 0
+        GachaCapturingURLProtocol.requestHandler = { request in
+            let body: String
+            if request.url?.path.hasSuffix("genAuthKey") == true {
+                body = #"{"retcode":0,"message":"OK","data":{"authkey":"test"}}"#
+            } else {
+                pageRequests += 1
+                body = #"{"retcode":0,"message":"OK","data":{"list":[{"id":"1","time":"2026-11-09 12:00:00","name":"Test","item_type":"武器","rank_type":"3","gacha_type":"301"}]}}"#
+            }
+            return (HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!, Data(body.utf8))
+        }
+        let client = GachaLogRemoteClient(httpClient: HoYoHTTPClient(session: Self.capturingSession()), sleep: { _ in
+            waiting.fulfill()
+            try await Task.sleep(for: .seconds(60))
+        })
+        let operation = Task {
+            try await client.loadRecords(
+                role: GenshinRole(uid: "1001", region: "cn_gf01", nickname: "Test", level: 60, isSelected: true),
+                secrets: AccountSecrets(stuid: "1", stoken: "test", mid: "test"), bannerTypes: ["301"]
+            )
+        }
+        await fulfillment(of: [waiting], timeout: 2)
+        operation.cancel()
+        do {
+            _ = try await operation.value
+            XCTFail("Expected cancellation")
+        } catch is CancellationError {}
+        XCTAssertEqual(pageRequests, 1)
+    }
+
     private static func capturingSession() -> URLSession {
         let configuration = URLSessionConfiguration.ephemeral
         configuration.protocolClasses = [GachaCapturingURLProtocol.self]
@@ -247,6 +316,11 @@ final class GachaLogRemoteClientTests: XCTestCase {
         }
         return data
     }
+}
+
+@MainActor
+private final class GachaProgressRecorder {
+    var values: [GachaSyncProgress] = []
 }
 
 private actor SleepRecorder {

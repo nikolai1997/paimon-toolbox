@@ -4,6 +4,7 @@ import SwiftUI
 struct AccountView: View {
     @Bindable var store: AppStore
     @State private var isPresentingQRSheet = false
+    @State private var isPresentingHoYoLABSheet = false
     @State private var isPresentingVerificationSheet = false
     @State private var isConfirmingResign = false
 
@@ -41,9 +42,16 @@ struct AccountView: View {
         .sheet(isPresented: $isPresentingQRSheet) {
             QRCodeLoginSheet(store: store)
         }
+        .sheet(isPresented: $isPresentingHoYoLABSheet) {
+            HoYoLABLoginSheet(store: store)
+        }
         .sheet(isPresented: $isPresentingVerificationSheet) {
             if let verification = store.accountVerification {
-                verificationSheet(verification)
+                if store.accountStatus.selectedRole?.isHoYoLAB == true {
+                    hoYoLABVerificationSheet(verification)
+                } else {
+                    verificationSheet(verification)
+                }
             }
         }
         .confirmationDialog(
@@ -68,7 +76,7 @@ struct AccountView: View {
         VStack(alignment: .leading, spacing: 6) {
             Text("账号与签到")
                 .font(.largeTitle.bold())
-            Text("使用米游社扫码登录，登录态加密保存到这台 Mac 的本机文件中。")
+            Text("支持米游社国服和 HoYoLAB 国际服，登录态加密保存到这台 Mac 的本机文件中。")
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -99,7 +107,9 @@ struct AccountView: View {
                     }
 
                     if shouldShowVerificationHint {
-                        Text("请点击打开验证，在内嵌米游社页面完成安全验证或签到后，再刷新状态。")
+                        Text(store.accountStatus.selectedRole?.isHoYoLAB == true
+                             ? "请在 HoYoLAB 官方网页完成安全验证或签到后，再刷新状态。"
+                             : "请点击打开验证，在内嵌米游社页面完成安全验证或签到后，再刷新状态。")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                             .fixedSize(horizontal: false, vertical: true)
@@ -123,9 +133,9 @@ struct AccountView: View {
     private var signedOutWorkspace: some View {
         VStack(alignment: .leading, spacing: 18) {
             ContentUnavailableView(
-                "未登录米游社账号",
+                "未登录账号",
                 systemImage: "person.crop.circle.badge.questionmark",
-                description: Text("扫码后即可同步当前角色签到状态，登录凭据加密保存到本机文件。")
+                description: Text("选择米游社（国服）或 HoYoLAB（国际服）登录，登录凭据加密保存到本机文件。")
             )
             .frame(maxWidth: .infinity)
 
@@ -133,11 +143,21 @@ struct AccountView: View {
                 isPresentingQRSheet = true
                 Task { await store.startQrLogin() }
             } label: {
-                Label("扫码登录", systemImage: "qrcode")
+                Label("米游社扫码登录 · 国服", systemImage: "qrcode")
             }
             .buttonStyle(.borderedProminent)
             .controlSize(.large)
             .disabled(store.isAccountBusy)
+
+            Button {
+                isPresentingHoYoLABSheet = true
+            } label: {
+                Label("HoYoLAB 登录 · 国际服", systemImage: "globe.asia.australia")
+            }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
+            .disabled(store.isAccountBusy)
+            .accessibilityIdentifier("hoyolab-login")
         }
         .padding(20)
         .frame(maxWidth: .infinity)
@@ -210,9 +230,13 @@ struct AccountView: View {
             Grid(alignment: .leading, horizontalSpacing: 24, verticalSpacing: 10) {
                 GridRow {
                     infoMetric("UID", store.accountStatus.selectedRole?.uid ?? "--")
-                    infoMetric("服务器", store.accountStatus.selectedRole?.region ?? "--")
+                    infoMetric("服务器", store.accountStatus.selectedRole?.serverName ?? "--")
                     infoMetric("等级", store.accountStatus.selectedRole.map { "Lv.\($0.level)" } ?? "--")
                 }
+            }
+            if store.accountStatus.selectedRole?.isHoYoLAB == true {
+                Button("重新登录 HoYoLAB / 更换服务器") { isPresentingHoYoLABSheet = true }
+                    .disabled(store.isAccountBusy)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -405,6 +429,26 @@ struct AccountView: View {
             Image(systemName: systemImage)
                 .foregroundStyle(tint)
         }
+    }
+
+    private func hoYoLABVerificationSheet(_ verification: AccountVerificationState) -> some View {
+        VStack(alignment: .leading, spacing: 18) {
+            Text("HoYoLAB 安全验证").font(.title2.bold())
+            Text("请在 HoYoLAB 官方网页登录同一账号并完成验证。实时便签需在战绩设置中启用；完成后返回刷新状态。")
+                .foregroundStyle(.secondary)
+            Link("打开 HoYoLAB", destination: verification.url)
+            HStack {
+                Spacer()
+                Button("完成并刷新状态") {
+                    isPresentingVerificationSheet = false
+                    store.dismissAccountVerification()
+                    Task { await store.refreshSignInStatus() }
+                }
+                    .buttonStyle(.borderedProminent)
+            }
+        }
+        .padding(24)
+        .frame(width: 500)
     }
 
     private func verificationSheet(_ verification: AccountVerificationState) -> some View {

@@ -382,6 +382,7 @@ final class GachaLogServiceTests: XCTestCase {
         let gachaService = InMemoryGachaService(records: [existing])
         let accountService = GachaSyncAccountService(records: [remote])
         let store = AppStore(gachaService: gachaService, accountService: accountService)
+        store.accountStatus = signedInStatus()
         store.gachaRecords = [existing]
         store.gachaSummary = gachaService.summary(for: [existing])
 
@@ -391,6 +392,8 @@ final class GachaLogServiceTests: XCTestCase {
         XCTAssertEqual(gachaService.savedRecords.map(\.id), ["new", "old"])
         XCTAssertEqual(store.successMessage, "已从账号更新 1 条祈愿记录，当前共 2 条")
         XCTAssertNil(store.errorMessage)
+        XCTAssertNil(store.gachaSyncProgress)
+        XCTAssertFalse(store.isAccountBusy)
     }
 
     func testSignedInAccountSummaryDoesNotMixRecordsFromAnotherUID() async throws {
@@ -432,6 +435,67 @@ final class GachaLogServiceTests: XCTestCase {
         XCTAssertEqual(store.activeGachaRecords.map(\.uid), ["1001"])
         XCTAssertEqual(store.gachaSummary.totalPulls, 1)
         XCTAssertEqual(store.activeGachaRecords.first?.name, "当前账号")
+    }
+
+    func testSyncReportsProgressPreventsDuplicateRequestsAndCancellationPreservesSavedRecords() async throws {
+        let existing = GachaRecord(uid: "1001", id: "saved", time: Date(), banner: .standard, name: "Saved", itemType: "武器", rarity: 3)
+        let gachaService = InMemoryGachaService(records: [existing])
+        let accountService = GachaSyncAccountService(records: [])
+        let gate = GachaSyncGate()
+        accountService.progressHandler = { progress in
+            progress(GachaSyncProgress(phase: .reading, bannerName: "角色活动祈愿", bannerIndex: 1, bannerCount: 5, page: 2, recordsRead: 20))
+            return await gate.wait()
+        }
+        let store = AppStore(gachaService: gachaService, accountService: accountService)
+        store.accountStatus = signedInStatus()
+        store.gachaRecords = [existing]
+        store.successMessage = "Old success"
+        let operation = Task { await store.syncGachaRecordsFromAccount() }
+        await gate.waitUntilStarted()
+        XCTAssertTrue(store.isAccountBusy)
+        XCTAssertNotNil(store.gachaSyncStartedAt)
+        XCTAssertEqual(store.gachaSyncProgress?.recordsRead, 20)
+        XCTAssertEqual(store.gachaSyncProgress?.page, 2)
+        XCTAssertNil(store.successMessage)
+        await store.syncGachaRecordsFromAccount()
+        XCTAssertEqual(accountService.loadGachaCallCount, 1)
+
+        store.cancelGachaSync()
+        XCTAssertEqual(store.gachaSyncProgress?.phase, .cancelling)
+        // Even a provider that returns after cancellation must not publish partial results.
+        await gate.finish([])
+        await operation.value
+        XCTAssertEqual(store.gachaRecords, [existing])
+        XCTAssertEqual(gachaService.records, [existing])
+        XCTAssertTrue(gachaService.savedRecords.isEmpty)
+        XCTAssertEqual(store.successMessage, "已取消更新，已有祈愿记录保持不变")
+        XCTAssertNil(store.errorMessage)
+        XCTAssertNil(store.gachaSyncProgress)
+        XCTAssertNil(store.gachaSyncStartedAt)
+        XCTAssertFalse(store.isAccountBusy)
+    }
+
+    func testFailedSyncClearsProgressAndLeavesSavedRecordsUntouched() async {
+        let existing = GachaRecord(uid: "1001", id: "saved", time: Date(), banner: .standard, name: "Saved", itemType: "武器", rarity: 3)
+        let gachaService = InMemoryGachaService(records: [existing])
+        let accountService = GachaSyncAccountService(records: [])
+        accountService.progressHandler = { _ in throw AccountSessionError.networkFailure("fixture") }
+        let store = AppStore(gachaService: gachaService, accountService: accountService)
+        store.accountStatus = signedInStatus()
+        store.gachaRecords = [existing]
+        await store.syncGachaRecordsFromAccount()
+        XCTAssertEqual(store.gachaRecords, [existing])
+        XCTAssertTrue(gachaService.savedRecords.isEmpty)
+        XCTAssertTrue(store.errorMessage?.contains("fixture") == true)
+        XCTAssertNil(store.gachaSyncProgress)
+        XCTAssertNil(store.gachaSyncStartedAt)
+        XCTAssertFalse(store.isAccountBusy)
+    }
+
+    private func signedInStatus() -> LocalAccountStatus {
+        LocalAccountStatus(isSignedIn: true, nickname: "Traveler", accountID: "account",
+            selectedRole: GenshinRole(uid: "1001", region: "os_asia", nickname: "Traveler", level: 60, isSelected: true),
+            signInSummary: nil, sessionMessage: nil, lastCheckInDate: nil)
     }
 
     private func makeUserDefaults() throws -> UserDefaults {
@@ -510,6 +574,8 @@ private final class InMemoryGachaService: GachaLogServicing {
 private final class GachaSyncAccountService: AccountSessionServicing {
     var records: [GachaRecord]
     var status: LocalAccountStatus
+    var progressHandler: ((GachaSyncProgressHandler) async throws -> [GachaRecord])?
+    private(set) var loadGachaCallCount = 0
 
     init(records: [GachaRecord], status: LocalAccountStatus = .signedOut) {
         self.records = records
@@ -528,5 +594,30 @@ private final class GachaSyncAccountService: AccountSessionServicing {
     func signInWebVerificationContext() throws -> SignInWebVerificationContext { throw AccountSessionError.missingAccount }
     func refreshLoginTokens() async throws -> LocalAccountStatus { throw AccountSessionError.missingAccount }
     func loadGachaRecords() async throws -> [GachaRecord] { records }
+    func loadGachaRecords(progress: @escaping GachaSyncProgressHandler) async throws -> [GachaRecord] {
+        loadGachaCallCount += 1
+        if let progressHandler { return try await progressHandler(progress) }
+        return records
+    }
     func signOut() throws -> LocalAccountStatus { .signedOut }
+}
+
+private actor GachaSyncGate {
+    private var started = false
+    private var startedContinuation: CheckedContinuation<Void, Never>?
+    private var resultContinuation: CheckedContinuation<[GachaRecord], Never>?
+
+    func wait() async -> [GachaRecord] {
+        started = true
+        startedContinuation?.resume()
+        startedContinuation = nil
+        return await withCheckedContinuation { resultContinuation = $0 }
+    }
+    func waitUntilStarted() async {
+        if !started { await withCheckedContinuation { startedContinuation = $0 } }
+    }
+    func finish(_ records: [GachaRecord]) {
+        resultContinuation?.resume(returning: records)
+        resultContinuation = nil
+    }
 }
