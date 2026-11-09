@@ -87,6 +87,8 @@ WIDGET_SOURCES = [
 APP_RESOURCES = [
     ("Resources/AppIcon.icns", "image.icns", None),
     ("Resources/metadata.sample.json", "text.json", None),
+    ("assets/donations/wechat.png", "image.png", None),
+    ("assets/donations/alipay.png", "image.png", None),
     ("data/public", "folder", "public"),
 ]
 

@@ -49,3 +49,19 @@ https://nikolai1997.github.io/paimon-toolbox-data/metadata.json
 ## 许可证
 
 代码以 MIT License 开源。第三方项目的版权与许可声明见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。游戏素材、名称、图标和公告的权利归其各自权利方所有。
+
+## Star 趋势
+
+[![Star History Chart](https://api.star-history.com/svg?repos=nikolai1997/paimon-toolbox&type=Date)](https://www.star-history.com/#nikolai1997/paimon-toolbox&Date)
+
+## 支持开发者
+
+如果派蒙工具箱对你有帮助，欢迎请开发者喝杯咖啡。你的支持，是我持续维护和改进的动力。
+
+| 微信 | 支付宝 |
+| :---: | :---: |
+| <img src="assets/donations/wechat.png" alt="微信赞赏码" width="260"> | <img src="assets/donations/alipay.png" alt="支付宝赞赏码" width="260"> |
+
+感谢打赏，祝老板银行卡余额比我的感谢词还长
+
+自愿赞赏，不影响任何功能的使用。

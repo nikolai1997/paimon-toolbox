@@ -1,5 +1,6 @@
 import CryptoKit
 import Foundation
+import ImageIO
 
 enum SelfCheck {
     static func runAndExit() -> Never {
@@ -16,9 +17,21 @@ enum SelfCheck {
     private static func run() throws {
         try verifyMetadata()
         try verifyBundledPublicData()
+        try verifyDonationImages()
         try verifyGacha()
         try verifyUIGF()
         verifyPlanner()
+    }
+
+    static func verifyDonationImages() throws {
+        for method in DonationPaymentMethod.allCases {
+            guard let url = method.imageURL,
+                  let source = CGImageSourceCreateWithURL(url as CFURL, nil),
+                  let image = CGImageSourceCreateImageAtIndex(source, 0, nil) else {
+                throw SelfCheckError.missingResource("\(method.rawValue).png")
+            }
+            try require(image.width == image.height && image.width >= 500, "donation image size mismatch")
+        }
     }
 
     static func verifyBundledPublicData() throws {

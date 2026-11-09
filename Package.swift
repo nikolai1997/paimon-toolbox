@@ -17,6 +17,7 @@ let package = Package(
             exclude: [
                 ".codex",
                 ".git",
+                "assets/donations/pet-sitting.png",
                 "data/manual",
                 "data/releases",
                 "dist",
@@ -43,6 +44,8 @@ let package = Package(
             ],
             resources: [
                 .process("Resources"),
+                .copy("assets/donations/wechat.png"),
+                .copy("assets/donations/alipay.png"),
                 .process("data/public")
             ]
         ),

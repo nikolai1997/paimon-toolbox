@@ -5,6 +5,7 @@ struct SidebarView: View {
     private static let horizontalPadding: CGFloat = 14
 
     @Binding var selection: AppSection
+    @State private var isPresentingDonation = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -16,12 +17,30 @@ struct SidebarView: View {
             }
 
             Spacer()
+
+            Button {
+                isPresentingDonation = true
+            } label: {
+                Image(systemName: "cup.and.saucer")
+                    .font(.system(size: 18, weight: .medium))
+                    .frame(width: 38, height: 38)
+                    .background(.regularMaterial, in: Circle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("支持开发者")
+            .accessibilityIdentifier("donation-support-button")
+            .delayedTooltip("请开发者喝杯咖啡")
+            .padding(.leading, 12)
+            .padding(.bottom, 8)
         }
         .padding(.horizontal, Self.horizontalPadding)
         .padding(.bottom, 14)
         .background(.ultraThinMaterial)
         .frame(minWidth: Self.width, idealWidth: Self.width, maxWidth: Self.width, alignment: .leading)
         .frame(maxHeight: .infinity)
+        .sheet(isPresented: $isPresentingDonation) {
+            DonationSupportView()
+        }
     }
 
     private func sidebarButton(for section: AppSection) -> some View {
