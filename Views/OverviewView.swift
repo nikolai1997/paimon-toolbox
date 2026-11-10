@@ -563,13 +563,13 @@ private struct SignInStatusPanel: View {
                                 .controlSize(.small)
                         }
                     }
-                    Text(status.nickname ?? status.selectedRole?.nickname ?? "已登录账号")
+                    Text(PresentationPrivacy.nickname(status.nickname ?? status.selectedRole?.nickname ?? "已登录账号"))
                         .foregroundStyle(.secondary)
                     if let summary = status.signInSummary {
                         HStack(spacing: 14) {
                             OverviewInlineMetric(title: "本月", value: "\(summary.totalSignDay) 天")
                             OverviewInlineMetric(title: "月份", value: "\(summary.month) 月")
-                            OverviewInlineMetric(title: "UID", value: summary.uid)
+                            OverviewInlineMetric(title: "UID", value: PresentationPrivacy.identifier(summary.uid))
                         }
                     }
                 }

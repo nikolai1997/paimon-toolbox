@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 import hashlib
+import base64
+import json
+import plistlib
 from pathlib import Path
+from fetch_sparkle import SDK_DIRECTORY
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -85,6 +89,8 @@ WIDGET_SOURCES = [
     "Widgets/PaimonToolboxWidgets.swift",
 ]
 APP_RESOURCES = [
+    ("Resources/software-update.json", "text.json", None),
+    ("Resources/Sparkle-LICENSE.txt", "text", None),
     ("Resources/AppIcon.icns", "image.icns", None),
     ("Resources/metadata.sample.json", "text.json", None),
     ("assets/donations/wechat.png", "image.png", None),
@@ -175,6 +181,23 @@ def write_info_plists():
 """, encoding="utf-8")
 
 
+    update_configuration = json.loads((ROOT / "Resources/software-update.json").read_text())
+    public_key = update_configuration["publicKey"]
+    if len(base64.b64decode(public_key, validate=True)) != 32:
+        raise ValueError("Invalid software update public key")
+    app_info = plistlib.loads(APP_INFO_PLIST.read_bytes())
+    app_info.update({
+        "SUFeedURL": update_configuration["githubFeedURL"],
+        "SUPublicEDKey": public_key,
+        "SUEnableAutomaticChecks": True,
+        "SUAutomaticallyUpdate": True,
+        "SUScheduledCheckInterval": 86400,
+        "SUEnableSystemProfiling": False,
+        "SUVerifyUpdateBeforeExtraction": True,
+    })
+    APP_INFO_PLIST.write_bytes(plistlib.dumps(app_info))
+
+
 def build_settings_base(debug: bool) -> dict:
     settings = {
         "ALWAYS_SEARCH_USER_PATHS": "NO",
@@ -238,7 +261,7 @@ def target_settings(product: str, bundle_id: str, plist: str, entitlements: str,
         "CODE_SIGN_IDENTITY": "-",
         "CODE_SIGN_STYLE": "Manual",
         "COMBINE_HIDPI_IMAGES": "YES",
-        "CURRENT_PROJECT_VERSION": "8",
+        "CURRENT_PROJECT_VERSION": APP_VERSION,
         "DEVELOPMENT_TEAM": "",
         "GENERATE_INFOPLIST_FILE": "NO",
         "INFOPLIST_FILE": plist,
@@ -265,6 +288,7 @@ def target_settings(product: str, bundle_id: str, plist: str, entitlements: str,
         settings["SKIP_INSTALL"] = "YES"
     else:
         settings["ENABLE_HARDENED_RUNTIME"] = "YES"
+        settings["FRAMEWORK_SEARCH_PATHS"] = ["$(inherited)", str(SDK_DIRECTORY)]
         settings["SKIP_INSTALL"] = "NO"
     return settings
 
@@ -350,6 +374,9 @@ def generate_project():
         elif ext == ".icns":
             file_type = "image.icns"
             name = None
+        elif ext == ".txt":
+            file_type = "text"
+            name = None
         else:
             file_type = "text.json"
             name = None
@@ -364,7 +391,22 @@ def generate_project():
         file_refs[rel] = add_object(objects, f"fileref:{rel}", fields)
         group_children.append(file_refs[rel])
 
+    sparkle_reference = add_object(objects, "fileref:sparkle", {
+        "isa": "PBXFileReference",
+        "lastKnownFileType": "wrapper.framework",
+        "path": str(SDK_DIRECTORY.relative_to(ROOT) / "Sparkle.framework"),
+        "sourceTree": "SOURCE_ROOT",
+    })
+    group_children.append(sparkle_reference)
     objects[main_group]["children"] = group_children + [products_group]
+
+    sparkle_link = add_object(objects, "buildfile:sparkle:link", {
+        "isa": "PBXBuildFile", "fileRef": sparkle_reference,
+    })
+    sparkle_embed = add_object(objects, "buildfile:sparkle:embed", {
+        "isa": "PBXBuildFile", "fileRef": sparkle_reference,
+        "settings": {"ATTRIBUTES": ["CodeSignOnCopy", "RemoveHeadersOnCopy"]},
+    })
 
     app_source_builds = [
         add_object(objects, f"buildfile:app-source:{rel}", {
@@ -404,7 +446,7 @@ def generate_project():
     app_frameworks_phase = add_object(objects, "phase:app:frameworks", {
         "isa": "PBXFrameworksBuildPhase",
         "buildActionMask": 2147483647,
-        "files": [],
+        "files": [sparkle_link],
         "runOnlyForDeploymentPostprocessing": 0,
     })
     app_resources_phase = add_object(objects, "phase:app:resources", {
@@ -420,6 +462,15 @@ def generate_project():
         "dstSubfolderSpec": 13,
         "files": [embedded_widget_build],
         "name": "Embed App Extensions",
+        "runOnlyForDeploymentPostprocessing": 0,
+    })
+    app_sparkle_phase = add_object(objects, "phase:app:embed-frameworks", {
+        "isa": "PBXCopyFilesBuildPhase",
+        "buildActionMask": 2147483647,
+        "dstPath": "",
+        "dstSubfolderSpec": 10,
+        "files": [sparkle_embed],
+        "name": "Embed Frameworks",
         "runOnlyForDeploymentPostprocessing": 0,
     })
 
@@ -479,7 +530,7 @@ def generate_project():
     objects[app_target] = {
         "isa": "PBXNativeTarget",
         "buildConfigurationList": app_config,
-        "buildPhases": [app_sources_phase, app_frameworks_phase, app_resources_phase, app_embed_phase],
+        "buildPhases": [app_sources_phase, app_frameworks_phase, app_resources_phase, app_sparkle_phase, app_embed_phase],
         "buildRules": [],
         "dependencies": [target_dependency],
         "name": PROJECT_NAME,

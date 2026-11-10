@@ -54,6 +54,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
+## Sparkle
+
+Source: <https://github.com/sparkle-project/Sparkle>
+
+Sparkle 2.10.1 provides the macOS software update installer. Its license and bundled third-party notices are included in [Resources/Sparkle-LICENSE.txt](Resources/Sparkle-LICENSE.txt).
+
 ## Game Content
 
 本项目是非官方工具。HoYoverse / 米哈游的游戏名称、角色、图标、公告及其他游戏内容的权利归其各自权利方所有。

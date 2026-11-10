@@ -5,6 +5,8 @@ enum AppSection: String, CaseIterable, Identifiable {
     case database
     case gachaLog
     case planner
+    case map
+    case cloudGame
     case account
     case settings
 
@@ -16,6 +18,8 @@ enum AppSection: String, CaseIterable, Identifiable {
         case .database: "资料库"
         case .gachaLog: "祈愿记录"
         case .planner: "养成规划"
+        case .map: "大地图"
+        case .cloudGame: "原神，启动"
         case .account: "账号"
         case .settings: "设置"
         }
@@ -27,6 +31,8 @@ enum AppSection: String, CaseIterable, Identifiable {
         case .database: "books.vertical"
         case .gachaLog: "sparkles"
         case .planner: "checklist"
+        case .map: "map"
+        case .cloudGame: "gamecontroller"
         case .account: "person.crop.circle"
         case .settings: "gearshape"
         }

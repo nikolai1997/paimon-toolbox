@@ -43,7 +43,7 @@ enum SelfCheck {
             throw SelfCheckError.missingResource("public")
         }
         let resourceDirectory = manifestURL.deletingLastPathComponent()
-        try verifyPublicData(at: resourceDirectory, allowedExtraJSONNames: ["metadata.sample.json"])
+        try verifyPublicData(at: resourceDirectory, allowedExtraJSONNames: ["metadata.sample.json", "software-update.json"])
     }
 
     private static func verifyPublicData(at directory: URL, allowedExtraJSONNames: Set<String>) throws {

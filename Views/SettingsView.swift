@@ -9,6 +9,7 @@ struct SettingsView: View {
     @AppStorage(AutoSignInSettings.windowKey) private var autoSignInWindowRawValue = AutoSignInSettings.defaultWindow.rawValue
     @AppStorage(AppAppearanceSettings.themeKey) private var appThemeRawValue = AppTheme.system.rawValue
     @AppStorage(AppAppearanceSettings.dynamicLightingEnabledKey) private var isDynamicLightingEnabled = true
+    @AppStorage(SidebarVisibility.key) private var hiddenSections = ""
     @State private var isImportingDataPackage = false
 
     var body: some View {
@@ -26,6 +27,17 @@ struct SettingsView: View {
                     Toggle("动态光效", isOn: $isDynamicLightingEnabled)
                     Text("开启后，鼠标悬停在玻璃模块上会出现轻微亮光。性能受限时可关闭，玻璃材质和所有功能不受影响。")
                         .foregroundStyle(.secondary)
+                }
+
+                settingsSection("边栏显示") {
+                    ForEach(AppSection.allCases.filter { $0 != .settings }) { section in
+                        Toggle(isOn: Binding(
+                            get: { SidebarVisibility.isVisible(section, hidden: hiddenSections) },
+                            set: { hiddenSections = SidebarVisibility.setting(section, visible: $0, hidden: hiddenSections) }
+                        )) {
+                            Label(section.title, systemImage: section.systemImage)
+                        }
+                    }
                 }
 
                 settingsSection("账号与签到") {
@@ -51,6 +63,8 @@ struct SettingsView: View {
                 }
 
                 DeskSettingsPanel(store: store)
+
+                AppUpdateSettingsPanel()
 
                 settingsSection("桌面小组件") {
                     WidgetPreviewPanel(snapshot: store.widgetSnapshot)

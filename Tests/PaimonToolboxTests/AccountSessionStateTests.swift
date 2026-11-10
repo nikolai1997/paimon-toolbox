@@ -38,6 +38,22 @@ final class AccountSessionStateTests: XCTestCase {
     }
 
     @MainActor
+    func testMapContextUsesAccountSessionAndSignedOutNeverReadsOldCredentials() throws {
+        let service = MockAccountSessionService()
+        service.webVerificationContext = SignInWebVerificationContext(
+            url: HoYoConstants.signInVerificationURL,
+            accountID: "10001", cookieToken: "cookie", ltoken: "web-token", stoken: "refresh-token"
+        )
+        let store = AppStore(accountService: service)
+        store.accountStatus = Self.signedInStatus(isTodaySigned: false)
+        XCTAssertEqual(try store.mapWebSessionContext().accountID, "10001")
+        service.webVerificationContext?.accountID = "another-account"
+        XCTAssertThrowsError(try store.mapWebSessionContext())
+        store.accountStatus = .signedOut
+        XCTAssertEqual(try store.mapWebSessionContext(), .guest)
+    }
+
+    @MainActor
     func testVerificationContextUsesSavedAccountAvatarURL() throws {
         let metadata = AccountMetadata(
             account: MiHoYoAccount(

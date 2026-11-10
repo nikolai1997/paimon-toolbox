@@ -192,7 +192,7 @@ struct AccountView: View {
 
                 VStack(alignment: .leading, spacing: 4) {
                     HStack(alignment: .firstTextBaseline, spacing: 12) {
-                        Text(store.accountStatus.nickname ?? "已登录账号")
+                        Text(PresentationPrivacy.nickname(store.accountStatus.nickname ?? "已登录账号"))
                             .font(.title2.bold())
                         if store.isAccountBusy {
                             ProgressView()
@@ -209,7 +209,7 @@ struct AccountView: View {
 
             Grid(alignment: .leading, horizontalSpacing: 24, verticalSpacing: 10) {
                 GridRow {
-                    infoMetric("UID", store.accountStatus.selectedRole?.uid ?? "--")
+                    infoMetric("UID", PresentationPrivacy.identifier(store.accountStatus.selectedRole?.uid ?? "--"))
                     infoMetric("服务器", store.accountStatus.selectedRole?.region ?? "--")
                     infoMetric("等级", store.accountStatus.selectedRole.map { "Lv.\($0.level)" } ?? "--")
                 }

@@ -1,0 +1,72 @@
+name: Publish software update
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-software-update
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: macos-15
+    timeout-minutes: 40
+    env:
+      ARCH: universal
+      DEVELOPER_DIR: /Applications/Xcode_26.2.app/Contents/Developer
+      SOFTWARE_MIRROR_DOWNLOAD_BASE_URL: ${{ vars.SOFTWARE_MIRROR_DOWNLOAD_BASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check whether release is already published
+        id: existing
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          published=false
+          if test "$(gh release view "$GITHUB_REF_NAME" --json isDraft --jq .isDraft 2>/dev/null)" = false; then
+            published=true
+          fi
+          echo "published=$published" >> "$GITHUB_OUTPUT"
+      - name: Validate release version and signing key
+        if: steps.existing.outputs.published != 'true'
+        env:
+          SPARKLE_ED25519_PRIVATE_KEY: ${{ secrets.SPARKLE_ED25519_PRIVATE_KEY }}
+        run: |
+          test -n "$SPARKLE_ED25519_PRIVATE_KEY" || { echo "Software update signing key is not configured."; exit 1; }
+          version="$(cat VERSION)"
+          test "$GITHUB_REF_NAME" = "v$version" || { echo "Run this workflow from the matching version tag."; exit 1; }
+      - name: Run release checks
+        if: steps.existing.outputs.published != 'true'
+        run: |
+          python3 -m unittest discover -s script/tests -p 'test_*.py'
+          swift test --disable-sandbox
+      - name: Build software package
+        if: steps.existing.outputs.published != 'true'
+        run: ./script/package_dmg.sh
+      - name: Prepare signed update feed
+        if: steps.existing.outputs.published != 'true'
+        env:
+          SPARKLE_ED25519_PRIVATE_KEY: ${{ secrets.SPARKLE_ED25519_PRIVATE_KEY }}
+        run: python3 script/prepare_software_update.py
+      - name: Publish release assets
+        if: steps.existing.outputs.published != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="$(cat VERSION)"
+          if gh release view "v$version" --json isDraft >/dev/null 2>&1; then
+            if test "$(gh release view "v$version" --json isDraft --jq .isDraft)" = false; then
+              echo "This version is already published; preserving its assets."
+              exit 0
+            fi
+          else
+            gh release create "v$version" --verify-tag --title "派蒙工具箱 $version" --generate-notes --draft
+          fi
+          gh release upload "v$version" "dist/PaimonToolbox-$version.dmg" dist/software-update/*.xml dist/software-update/software-latest.json --clobber
+          gh release edit "v$version" --draft=false --latest

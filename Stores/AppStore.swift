@@ -907,6 +907,15 @@ final class AppStore {
         await finishConfirmedQrLogin(sessionID: sessionID, now: now)
     }
 
+    func mapWebSessionContext() throws -> MapWebSessionContext {
+        guard accountStatus.isSignedIn else { return .guest }
+        let context = try accountService.signInWebVerificationContext()
+        guard context.accountID == accountStatus.accountID else {
+            throw AccountSessionError.missingAccount
+        }
+        return MapWebSessionContext(accountContext: context)
+    }
+
     func refreshSignInStatus(now: Date = Date()) async {
         isAccountBusy = true
         defer { isAccountBusy = false }

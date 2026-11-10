@@ -1,0 +1,129 @@
+name: Update remote data
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 * * * *"
+  push:
+    branches:
+      - main
+    paths:
+      - "tools/**"
+      - "data/manual/**"
+      - ".github/workflows/update-data.yml"
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: genshin-toolbox-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Generate public data
+        run: |
+          python3 tools/update_remote_data.py \
+            --source genshin-db \
+            --gacha-source snap-metadata \
+            --manual-dir data/manual \
+            --fetch-official-announcements \
+            --public-dir data/public \
+            --release-dir data/releases
+
+      - name: Check generated changes
+        id: changes
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "push" ] || ! git diff --quiet -- data/public; then
+            echo "public_changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "public_changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          if git diff --quiet -- data/public data/releases data/manual/official-announcements.raw.json; then
+            echo "generated_changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "generated_changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit generated data
+        if: steps.changes.outputs.generated_changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/public data/releases data/manual/official-announcements.raw.json
+          git commit -m "chore: update generated data"
+          git push
+
+      - name: Upload offline package to Jianguoyun
+        env:
+          JIANGUOYUN_USERNAME: ${{ secrets.JIANGUOYUN_USERNAME }}
+          JIANGUOYUN_APP_PASSWORD: ${{ secrets.JIANGUOYUN_APP_PASSWORD }}
+          JIANGUOYUN_WEBDAV_BASE_URL: https://dav.jianguoyun.com/dav/%E6%88%91%E7%9A%84%E5%9D%9A%E6%9E%9C%E4%BA%91/GenshinToolbox
+        run: |
+          if [ -z "$JIANGUOYUN_USERNAME" ] || [ -z "$JIANGUOYUN_APP_PASSWORD" ]; then
+            echo "Jianguoyun secrets are not configured; skipping offline package upload."
+            exit 0
+          fi
+
+          latest_package="$(ls -t data/releases/data-pack-*.zip | head -n 1)"
+          test -n "$latest_package"
+          latest_package_name="$(basename "$latest_package")"
+
+          curl --fail --silent --show-error \
+            --user "$JIANGUOYUN_USERNAME:$JIANGUOYUN_APP_PASSWORD" \
+            --request MKCOL "$JIANGUOYUN_WEBDAV_BASE_URL" || true
+
+          curl --fail --silent --show-error \
+            --user "$JIANGUOYUN_USERNAME:$JIANGUOYUN_APP_PASSWORD" \
+            --upload-file "$latest_package" \
+            "$JIANGUOYUN_WEBDAV_BASE_URL/data-pack-latest.zip"
+
+          curl --fail --silent --show-error \
+            --user "$JIANGUOYUN_USERNAME:$JIANGUOYUN_APP_PASSWORD" \
+            --upload-file "$latest_package" \
+            "$JIANGUOYUN_WEBDAV_BASE_URL/$latest_package_name"
+
+          for remote_name in data-pack-latest.zip "$latest_package_name"; do
+            propfind_response="$(mktemp)"
+            curl --fail --silent --show-error \
+              --user "$JIANGUOYUN_USERNAME:$JIANGUOYUN_APP_PASSWORD" \
+              --request PROPFIND \
+              --header "Depth: 0" \
+              "$JIANGUOYUN_WEBDAV_BASE_URL/$remote_name" \
+              --output "$propfind_response"
+            python3 -c 'import sys, xml.etree.ElementTree as ET; remote=sys.argv[1]; prop=ET.parse(sys.argv[2]).getroot().find(".//{DAV:}prop"); get=lambda tag: ((prop.find("{DAV:}"+tag).text or "").strip() if prop is not None and prop.find("{DAV:}"+tag) is not None else ""); print("Verified Jianguoyun package:", remote, "size="+get("getcontentlength"), "modified="+get("getlastmodified")); sys.exit(0 if prop is not None else 1)' "$remote_name" "$propfind_response"
+          done
+
+          python3 tools/cleanup_jianguoyun_data.py \
+            --latest-package-name "$latest_package_name" \
+            --expected-size "$(stat -c %s "$latest_package")" \
+            --keep 7 \
+            --apply
+
+      - name: Configure Pages
+        if: steps.changes.outputs.public_changed == 'true'
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        if: steps.changes.outputs.public_changed == 'true'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: data/public
+
+      - name: Deploy Pages
+        if: steps.changes.outputs.public_changed == 'true'
+        uses: actions/deploy-pages@v4
+

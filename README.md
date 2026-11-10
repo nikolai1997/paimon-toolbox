@@ -4,11 +4,19 @@
 
 # 派蒙工具箱
 
-派蒙工具箱是一个 macOS 原神工具应用，当前包含资料库、祈愿记录分析、角色培养规划、米游社扫码登录签到、实时便签、桌面摆件连接、桌面小组件和远程数据更新能力。
+派蒙工具箱是一个 macOS 原神工具应用，当前包含资料库、祈愿记录分析、角色培养规划、米游社扫码登录签到、实时便签、官方大地图、云·原神入口、桌面摆件连接、桌面小组件和软件自动更新能力。
 
 本项目是非官方工具，和 HoYoverse / 米哈游没有从属关系。
 
 ![派蒙工具箱总览](docs/assets/app-overview.png)
+
+祈愿记录统计（UID 已隐藏）：
+
+![祈愿记录统计](docs/assets/app-gacha.png)
+
+官方大地图：
+
+![官方大地图](docs/assets/app-map.png)
 
 ## 功能
 
@@ -18,10 +26,14 @@
 - 米游社扫码登录与每日签到
 - 实时便签：原粹树脂、每日委托和探索派遣状态
 - 官方公告正文阅读
+- 官方大地图与可置顶悬浮地图窗口
+- 云·原神网页入口，支持切换栏目后继续运行
+- 可自定义侧栏显示栏目
 - 局域网桌面 ESP 摆件发现、配对与状态同步
 - macOS 桌面小组件
 - GitHub Pages 在线数据更新
 - 离线 `data-pack-YYYY.MM.DD.zip` 导入兜底
+- 软件自动更新与签名校验，GitHub 连接失败时可前往夸克手动下载
 
 ## 数据来源
 
@@ -44,7 +56,7 @@ https://nikolai1997.github.io/paimon-toolbox-data/metadata.json
 3. 在再次出现的提示中选择“打开”。
 4. 如果仍被阻止，进入“系统设置” > “隐私与安全性”，在安全性提示旁选择“仍要打开”。
 
-请只从本项目的 GitHub Releases 获取安装包。每次更新后，macOS 可能会再次要求确认。
+安装包可从 [GitHub Releases](https://github.com/nikolai1997/paimon-toolbox/releases/latest) 或[夸克网盘](https://pan.quark.cn/s/2c714884bcfa)获取。每次更新后，macOS 可能会再次要求确认。
 
 ## 许可证
 

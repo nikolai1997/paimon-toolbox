@@ -25,6 +25,11 @@ APP_ENTITLEMENTS="$ROOT_DIR/Entitlements/$APP_NAME.entitlements"
 EXTENSION_ENTITLEMENTS="$ROOT_DIR/Entitlements/$EXTENSION_NAME.entitlements"
 CODESIGN_IDENTITY="${CODESIGN_IDENTITY:--}"
 ARCH="${ARCH:-$(uname -m)}"
+if [[ "$ARCH" == "universal" ]]; then
+  BUILD_ARCH_ARGS=(-destination "generic/platform=macOS" "ARCHS=arm64 x86_64" ONLY_ACTIVE_ARCH=NO)
+else
+  BUILD_ARCH_ARGS=(-destination "platform=macOS,arch=$ARCH")
+fi
 DMG_STAGING="$WORK_DIR/dmg-staging"
 DMG_PATH="$DIST_DIR/$APP_NAME-$VERSION.dmg"
 TMP_DMG_PATH=""
@@ -60,6 +65,15 @@ sign_app_bundle() {
     codesign --force --sign "$CODESIGN_IDENTITY" "$dylib"
   done
 
+  local sparkle="$APP_BUNDLE/Contents/Frameworks/Sparkle.framework"
+  if [[ -d "$sparkle" ]]; then
+    codesign --force --sign "$CODESIGN_IDENTITY" "$sparkle/Versions/Current/Autoupdate"
+    find "$sparkle" -depth -type d \( -name '*.app' -o -name '*.xpc' \) -print0 | while IFS= read -r -d '' nested; do
+      codesign --force --sign "$CODESIGN_IDENTITY" --preserve-metadata=entitlements "$nested"
+    done
+    codesign --force --sign "$CODESIGN_IDENTITY" "$sparkle"
+  fi
+
   if [[ -d "$EXTENSION_BUNDLE" ]]; then
     codesign --force --sign "$CODESIGN_IDENTITY" --entitlements "$EXTENSION_ENTITLEMENTS" "$EXTENSION_BUNDLE"
   fi
@@ -71,13 +85,14 @@ sign_app_bundle() {
 cd "$ROOT_DIR"
 
 python3 "$ROOT_DIR/script/update_remote_data.py" --validate-public-dir "$ROOT_DIR/data/public"
+python3 "$ROOT_DIR/script/fetch_sparkle.py" >/dev/null
 "$ROOT_DIR/script/generate_xcode_project.py" >/dev/null
 
 xcodebuild \
   -project "$PROJECT_PATH" \
   -scheme "$APP_NAME" \
   -configuration Release \
-  -destination "platform=macOS,arch=$ARCH" \
+  "${BUILD_ARCH_ARGS[@]}" \
   -derivedDataPath "$DERIVED_DATA" \
   CODE_SIGNING_ALLOWED=NO \
   build

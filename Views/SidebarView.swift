@@ -5,6 +5,7 @@ struct SidebarView: View {
     private static let horizontalPadding: CGFloat = 14
 
     @Binding var selection: AppSection
+    @AppStorage(SidebarVisibility.key) private var hiddenSections = ""
     @State private var isPresentingDonation = false
 
     var body: some View {
@@ -12,7 +13,7 @@ struct SidebarView: View {
             Spacer()
                 .frame(height: 12)
 
-            ForEach(AppSection.allCases) { section in
+            ForEach(AppSection.allCases.filter { SidebarVisibility.isVisible($0, hidden: hiddenSections) }) { section in
                 sidebarButton(for: section)
             }
 
@@ -40,6 +41,16 @@ struct SidebarView: View {
         .frame(maxHeight: .infinity)
         .sheet(isPresented: $isPresentingDonation) {
             DonationSupportView()
+        }
+        .onAppear {
+            if !SidebarVisibility.isVisible(selection, hidden: hiddenSections) {
+                selection = .settings
+            }
+        }
+        .onChange(of: hiddenSections) { _, value in
+            if !SidebarVisibility.isVisible(selection, hidden: value) {
+                selection = .settings
+            }
         }
     }
 

@@ -2,6 +2,10 @@ import SwiftUI
 
 struct ContentView: View {
     @Bindable var store: AppStore
+    @State private var mapBrowser = OfficialMapBrowser()
+    @State private var mapFloatingWindow = MapFloatingWindowController()
+    @State private var cloudBrowser = CloudGameBrowser()
+    @State private var hasOpenedCloudGame = false
     private var trimmedSearchText: String {
         store.searchText.trimmingCharacters(in: .whitespacesAndNewlines)
     }
@@ -55,6 +59,16 @@ struct ContentView: View {
         .background {
             WindowGlassConfigurator()
         }
+        .onChange(of: store.accountStatus.accountID) { _, _ in
+            mapBrowser.invalidateSession(ifAccountChangedTo: store.accountStatus.accountID)
+            cloudBrowser.invalidateSession(ifAccountChangedTo: store.accountStatus.accountID)
+        }
+        .onChange(of: store.selectedSection) { _, section in
+            if section == .cloudGame && !hasOpenedCloudGame {
+                hasOpenedCloudGame = true
+                Task { await cloudBrowser.open(session: (try? store.mapWebSessionContext()) ?? .guest) }
+            }
+        }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
@@ -66,15 +80,25 @@ struct ContentView: View {
 
     @ViewBuilder
     private var detailView: some View {
-        if trimmedSearchText.isEmpty {
-            sectionView
-        } else {
-            GlobalSearchView(
-                query: trimmedSearchText,
-                results: globalSearchResults
-            ) { result in
-                store.selectedSection = result.section
-                store.searchText = ""
+        ZStack {
+            if trimmedSearchText.isEmpty {
+                sectionView
+            } else {
+                GlobalSearchView(
+                    query: trimmedSearchText,
+                    results: globalSearchResults
+                ) { result in
+                    store.selectedSection = result.section
+                    store.searchText = ""
+                }
+            }
+            if hasOpenedCloudGame {
+                CloudGameView(browser: cloudBrowser) {
+                    Task { await cloudBrowser.open(session: (try? store.mapWebSessionContext()) ?? .guest) }
+                }
+                .opacity(store.selectedSection == .cloudGame && trimmedSearchText.isEmpty ? 1 : 0)
+                .allowsHitTesting(store.selectedSection == .cloudGame && trimmedSearchText.isEmpty)
+                .accessibilityHidden(store.selectedSection != .cloudGame || !trimmedSearchText.isEmpty)
             }
         }
     }
@@ -90,6 +114,10 @@ struct ContentView: View {
             GachaLogView(store: store)
         case .planner:
             PlannerView(store: store)
+        case .map:
+            OfficialMapView(store: store, browser: mapBrowser, floatingWindow: mapFloatingWindow)
+        case .cloudGame:
+            Color.clear
         case .account:
             AccountView(store: store)
         case .settings:

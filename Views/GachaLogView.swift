@@ -61,7 +61,7 @@ private struct GachaLogHeader: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            HStack(alignment: .top) {
+            VStack(alignment: .leading, spacing: 16) {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 128), spacing: 12)], spacing: 12) {
                     GlassMetricCard(title: "总抽数", value: "\(store.gachaSummary.totalPulls)", systemImage: "number")
                     GlassMetricCard(title: "五星", value: "\(store.gachaSummary.fiveStarCount)", systemImage: "star.fill", tint: .orange)
@@ -69,9 +69,7 @@ private struct GachaLogHeader: View {
                     GlassMetricCard(title: "活动池垫数", value: "\(store.gachaSummary.activityPity)", systemImage: "person.crop.circle.badge.clock", tint: .green)
                     GlassMetricCard(title: "常驻池垫数", value: "\(store.gachaSummary.standardPity)", systemImage: "clock", tint: .blue)
                 }
-                .frame(maxWidth: 680, alignment: .leading)
-
-                Spacer(minLength: 16)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
                 HStack {
                     if store.availableGachaUIDs.count + (store.hasUnassignedGachaRecords ? 1 : 0) > 1 {
@@ -80,7 +78,7 @@ private struct GachaLogHeader: View {
                             set: { store.selectGachaUID($0) }
                         )) {
                             ForEach(store.availableGachaUIDs, id: \.self) { uid in
-                                Text("UID \(uid)").tag(Optional(uid))
+                                Text("UID \(PresentationPrivacy.identifier(uid))").tag(Optional(uid))
                             }
                             if store.hasUnassignedGachaRecords {
                                 Text("未归属记录").tag(String?.none)

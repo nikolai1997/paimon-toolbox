@@ -38,6 +38,15 @@ sign_app_bundle() {
     codesign --force --sign "$CODESIGN_IDENTITY" "$dylib" >/dev/null
   done
 
+  local sparkle="$APP_BUNDLE/Contents/Frameworks/Sparkle.framework"
+  if [[ -d "$sparkle" ]]; then
+    codesign --force --sign "$CODESIGN_IDENTITY" "$sparkle/Versions/Current/Autoupdate"
+    find "$sparkle" -depth -type d \( -name '*.app' -o -name '*.xpc' \) -print0 | while IFS= read -r -d '' nested; do
+      codesign --force --sign "$CODESIGN_IDENTITY" --preserve-metadata=entitlements "$nested"
+    done
+    codesign --force --sign "$CODESIGN_IDENTITY" "$sparkle"
+  fi
+
   if [[ -d "$EXTENSION_BUNDLE" ]]; then
     codesign --force --sign "$CODESIGN_IDENTITY" --entitlements "$EXTENSION_ENTITLEMENTS" "$EXTENSION_BUNDLE" >/dev/null
   fi
@@ -46,6 +55,7 @@ sign_app_bundle() {
   codesign --verify --deep --strict "$APP_BUNDLE"
 }
 
+python3 "$ROOT_DIR/script/fetch_sparkle.py" >/dev/null
 "$ROOT_DIR/script/generate_xcode_project.py" >/dev/null
 
 xcodebuild \

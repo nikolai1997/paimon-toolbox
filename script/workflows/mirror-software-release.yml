@@ -1,0 +1,34 @@
+name: Mirror software release
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "47 * * * *"
+  push:
+    branches: [main]
+    paths:
+      - "tools/mirror_software_release.py"
+      - ".github/workflows/mirror-software-release.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mirror-software-release
+  cancel-in-progress: false
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      JIANGUOYUN_USERNAME: ${{ secrets.JIANGUOYUN_USERNAME }}
+      JIANGUOYUN_APP_PASSWORD: ${{ secrets.JIANGUOYUN_APP_PASSWORD }}
+      JIANGUOYUN_SOFTWARE_WEBDAV_BASE_URL: https://dav.jianguoyun.com/dav/%E6%88%91%E7%9A%84%E5%9D%9A%E6%9E%9C%E4%BA%91/GenshinToolbox/SoftwareUpdates
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Mirror latest stable software package
+        run: python3 tools/mirror_software_release.py
