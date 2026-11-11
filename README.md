@@ -10,7 +10,7 @@
 
 ![派蒙工具箱总览](docs/assets/app-overview.png)
 
-祈愿记录统计（UID 已隐藏）：
+祈愿记录统计：
 
 ![祈愿记录统计](docs/assets/app-gacha.png)
 
