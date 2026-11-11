@@ -11,7 +11,8 @@ struct AppUpdateSettingsPanel: View {
                 Text("当前版本 \(AppVersion.current)").foregroundStyle(.secondary)
             }
             Toggle("自动更新软件", isOn: Binding(
-                get: { updater.automaticallyUpdates }, set: updater.setAutomaticUpdates
+                get: { updater.automaticallyUpdates },
+                set: { updater.setAutomaticUpdates($0) }
             ))
             HStack {
                 Button { updater.checkForUpdates() } label: {
