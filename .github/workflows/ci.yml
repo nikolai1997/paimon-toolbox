@@ -10,10 +10,16 @@ jobs:
     timeout-minutes: 30
     env:
       CLANG_MODULE_CACHE_PATH: /tmp/paimon-toolbox-clang-cache
+      DEVELOPER_DIR: /Applications/Xcode_26.2.app/Contents/Developer
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+
+      - name: Verify Xcode toolchain
+        run: |
+          xcodebuild -version
+          swift --version
 
       - name: Validate scripts and whitespace
         run: |
