@@ -1,10 +1,12 @@
 import AppKit
 import Observation
+import OSLog
 import Sparkle
 
 @MainActor
 @Observable
 final class AppUpdateController: NSObject, SPUUpdaterDelegate {
+    private static let logger = Logger(subsystem: "com.nikolai.paimon-toolbox", category: "SoftwareUpdate")
     private(set) var canCheckForUpdates = false
     private(set) var isPreparing = false
     private(set) var status = ""
@@ -17,6 +19,7 @@ final class AppUpdateController: NSObject, SPUUpdaterDelegate {
     @ObservationIgnored private var availabilityObservation: NSKeyValueObservation?
     @ObservationIgnored private var preparationTask: Task<Void, Never>?
     @ObservationIgnored private var started = false
+    @ObservationIgnored private var foundNewVersionInCycle = false
 
     init(configuration: AppUpdateConfiguration? = .bundled) {
         self.configuration = configuration
@@ -64,6 +67,7 @@ final class AppUpdateController: NSObject, SPUUpdaterDelegate {
         canCheckForUpdates = false
         status = "正在连接更新服务…"
         showsManualDownloadPrompt = false
+        foundNewVersionInCycle = false
         preparationTask = Task { [weak self] in
             let selected = try? await AppUpdateFeedResolver().resolve(configuration: configuration)
             guard !Task.isCancelled, let self else { return }
@@ -94,6 +98,7 @@ final class AppUpdateController: NSObject, SPUUpdaterDelegate {
     }
 
     func updater(_ updater: SPUUpdater, didFindValidUpdate item: SUAppcastItem) {
+        foundNewVersionInCycle = true
         status = "发现新版本 \(item.displayVersionString)"
     }
 
@@ -102,24 +107,37 @@ final class AppUpdateController: NSObject, SPUUpdaterDelegate {
     }
 
     func updater(_ updater: SPUUpdater, didFinishUpdateCycleFor updateCheck: SPUUpdateCheck, error: Error?) {
+        defer { foundNewVersionInCycle = false }
         canCheckForUpdates = updater.canCheckForUpdates
+        showsManualDownloadPrompt = false
         guard let error = error as NSError? else { return }
         if error.domain == SUSparkleErrorDomain && error.code == 1001 {
             status = "已是最新版本"
         } else if Self.isConnectionFailure(error) {
-            showConnectionFailure()
+            Self.logger.notice("Update check failed: type=\(updateCheck.rawValue), domain=\(error.domain, privacy: .public), code=\(error.code)")
+            if let underlying = error.userInfo[NSUnderlyingErrorKey] as? NSError {
+                Self.logger.notice("Underlying update error: domain=\(underlying.domain, privacy: .public), code=\(underlying.code)")
+            }
+            // A failed background probe is not evidence that a new version exists.
+            showConnectionFailure(allowPrompt: updateCheck == .updates || foundNewVersionInCycle)
         } else if !Self.isCancellation(error) {
             status = "更新未完成，请重试"
         }
     }
 
-    private func showConnectionFailure() {
+    private func showConnectionFailure(allowPrompt: Bool = true) {
+        guard allowPrompt else {
+            status = "自动检查未完成，将在下次检查时重试"
+            showsManualDownloadPrompt = false
+            return
+        }
         status = manualDownloadURL == nil ? "无法连接 GitHub 更新服务" : "GitHub 更新失败，可前往夸克下载"
         showsManualDownloadPrompt = manualDownloadURL != nil
     }
 
     nonisolated static func isCancellation(_ error: NSError) -> Bool {
         if error.domain == NSURLErrorDomain && error.code == NSURLErrorCancelled { return true }
+        if error.domain == SUSparkleErrorDomain && error.code == 4007 { return true }
         if let underlying = error.userInfo[NSUnderlyingErrorKey] as? NSError { return isCancellation(underlying) }
         return false
     }

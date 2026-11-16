@@ -1,7 +1,91 @@
 import XCTest
+import Sparkle
 @testable import PaimonToolbox
 
 final class AppUpdateTests: XCTestCase {
+    @MainActor
+    func testBackgroundCurrentVersionNeverShowsFallbackPrompt() {
+        let controller = AppUpdateController(configuration: configuration())
+        let native = SPUStandardUpdaterController(startingUpdater: false, updaterDelegate: nil, userDriverDelegate: nil)
+        controller.showsManualDownloadPrompt = true
+
+        controller.updater(native.updater, didFinishUpdateCycleFor: .updatesInBackground,
+                           error: NSError(domain: SUSparkleErrorDomain, code: 1001))
+
+        XCTAssertFalse(controller.showsManualDownloadPrompt)
+        XCTAssertEqual(controller.status, "已是最新版本")
+    }
+
+    @MainActor
+    func testBackgroundFeedFailuresStaySilentAndDoNotClaimCurrentVersion() {
+        let controller = AppUpdateController(configuration: configuration())
+        let native = SPUStandardUpdaterController(startingUpdater: false, updaterDelegate: nil, userDriverDelegate: nil)
+        let errors = [NSError(domain: NSURLErrorDomain, code: NSURLErrorTimedOut),
+                      NSError(domain: NSURLErrorDomain, code: NSURLErrorNotConnectedToInternet),
+                      NSError(domain: SUSparkleErrorDomain, code: 1002),
+                      NSError(domain: SUSparkleErrorDomain, code: 2001)]
+        for check in [SPUUpdateCheck.updatesInBackground, .updateInformation] {
+            for error in errors {
+                controller.updater(native.updater, didFinishUpdateCycleFor: check, error: error)
+                XCTAssertFalse(controller.showsManualDownloadPrompt)
+                XCTAssertEqual(controller.status, "自动检查未完成，将在下次检查时重试")
+            }
+        }
+    }
+
+    @MainActor
+    func testManualFailureStillOffersQuarkDownload() {
+        let controller = AppUpdateController(configuration: configuration())
+        let native = SPUStandardUpdaterController(startingUpdater: false, updaterDelegate: nil, userDriverDelegate: nil)
+        controller.updater(native.updater, didFinishUpdateCycleFor: .updates,
+                           error: NSError(domain: NSURLErrorDomain, code: NSURLErrorTimedOut))
+        XCTAssertTrue(controller.showsManualDownloadPrompt)
+    }
+
+    @MainActor
+    func testDownloadFailurePromptsOnlyAfterNewVersionWasFoundAndResetsNextCycle() throws {
+        let controller = AppUpdateController(configuration: configuration())
+        let native = SPUStandardUpdaterController(startingUpdater: false, updaterDelegate: nil, userDriverDelegate: nil)
+        let item = try XCTUnwrap(SUAppcastItem(dictionary: [
+            "sparkle:version": "999.0.0",
+            "enclosure": ["url": "https://example.com/update.dmg", "length": "100"]
+        ]))
+        controller.updater(native.updater, didFindValidUpdate: item)
+        controller.updater(native.updater, didFinishUpdateCycleFor: .updatesInBackground,
+                           error: NSError(domain: SUSparkleErrorDomain, code: 2001))
+        XCTAssertTrue(controller.showsManualDownloadPrompt)
+
+        controller.updater(native.updater, didFinishUpdateCycleFor: .updatesInBackground,
+                           error: NSError(domain: SUSparkleErrorDomain, code: 1002))
+        XCTAssertFalse(controller.showsManualDownloadPrompt)
+    }
+
+    @MainActor
+    func testSuccessfulCycleClearsOldPrompt() {
+        let controller = AppUpdateController(configuration: configuration())
+        let native = SPUStandardUpdaterController(startingUpdater: false, updaterDelegate: nil, userDriverDelegate: nil)
+        controller.showsManualDownloadPrompt = true
+        controller.updater(native.updater, didFinishUpdateCycleFor: .updatesInBackground, error: nil)
+        XCTAssertFalse(controller.showsManualDownloadPrompt)
+    }
+
+    @MainActor
+    func testSignatureFailureAndCancellationNeverShowFallbackPrompt() {
+        let controller = AppUpdateController(configuration: configuration())
+        let native = SPUStandardUpdaterController(startingUpdater: false, updaterDelegate: nil, userDriverDelegate: nil)
+        let errors = [NSError(domain: SUSparkleErrorDomain, code: 3001),
+                      NSError(domain: SUSparkleErrorDomain, code: 3002),
+                      NSError(domain: SUSparkleErrorDomain, code: 4007),
+                      NSError(domain: NSURLErrorDomain, code: NSURLErrorCancelled)]
+        for check in [SPUUpdateCheck.updates, .updatesInBackground] {
+            for error in errors {
+                controller.showsManualDownloadPrompt = true
+                controller.updater(native.updater, didFinishUpdateCycleFor: check, error: error)
+                XCTAssertFalse(controller.showsManualDownloadPrompt)
+            }
+        }
+    }
+
     @MainActor
     func testAutomaticUpdateSwitchPersistsBothPreferencesAcrossControllerRecreation() throws {
         guard Bundle.main.bundleIdentifier != "com.nikolai.paimon-toolbox" else {
